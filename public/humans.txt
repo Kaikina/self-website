@@ -1,0 +1,22 @@
+/* TEAM */
+
+  Developer:  Tom Girou
+  Role:       Senior Lead Web Developer
+  Site:       https://tom-girou.dev
+  LinkedIn:   https://www.linkedin.com/in/tgirou
+  GitHub:     https://github.com/Kaikina
+  Location:   Loire region, France
+
+/* SITE */
+
+  Last update:  2026-05-25
+  Languages:    English · Français · Español
+  Doctype:      HTML5
+  Standards:    HTML5, CSS3, ES2024, JSON-LD (Schema.org)
+  Stack:        Astro 6, TypeScript
+  Hosting:      Self-hosted (Docker + nginx behind Cloudflare Tunnel)
+
+/* THANKS */
+
+  PrestaShop community
+  Evolutive, Thermcross, Emagineurs, Wedoogift / Pluxee teams

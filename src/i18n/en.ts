@@ -1,0 +1,349 @@
+import type { Translation } from "./types";
+
+const en: Translation = {
+  meta: {
+    title: "Tom Girou — Senior Lead Dev",
+    description:
+      "Senior Lead Dev — PHP, Symfony & PrestaShop. I help companies cut backlogs from 200+ tickets to under 50 and finally breathe between sprints.",
+    ogImageAlt: "Tom Girou — Senior Lead Dev portfolio",
+  },
+  nav: {
+    about: "About",
+    work: "Work",
+    stack: "Stack",
+    experience: "Experience",
+    words: "Words",
+    faq: "FAQ",
+    connect: "Connect on LinkedIn",
+    menuOpen: "Open menu",
+    menuClose: "Close menu",
+  },
+  hero: {
+    currently: "Currently",
+    available: "Available",
+    portfolioYear: "Portfolio / 2026",
+    nameSmall: "Tom Girou",
+    titleLine1: "Senior",
+    titleLine2: "Lead Dev",
+    blurb:
+      "I help companies cut their backlog from 200+ tickets to under 50 — and finally breathe between sprints.",
+    cta: "Let's Talk",
+    portraitAlt: "Portrait of Tom Girou",
+  },
+  about: {
+    label: "[ 01 / About ]",
+    quote:
+      "Turning sprawling backlogs into shippable apps — one cleanly factored module at a time.",
+    headingHtml:
+      "Hi, I'm Tom — a <em>Senior Lead Dev</em> who treats clean code as the shortest path between a brief and a shipped feature.",
+    stats: {
+      years: "Years of Experience",
+      projects: "Shipped Projects",
+      clients: "Clients Served",
+    },
+  },
+  work: {
+    label: "[ 02 / Selected Work ]",
+    titleHtml: 'Recent <em style="color:var(--red);font-style:italic">work</em>.',
+    blurb:
+      "A decade of e‑commerce platforms, gift-card systems, and ERP-bound systems — each one shipped, audited, and quietly humming in production.",
+    items: [
+      {
+        idx: "01",
+        title: "Tactical Sports Marketplace",
+        client: "DG-Airsoft",
+        stack: ["PrestaShop", "PHP"],
+        url: "https://www.destockage-games.com/",
+        caseStudySlug: "dg-airsoft",
+      },
+      {
+        idx: "02",
+        title: "Footwear E-commerce",
+        client: "Les Tropéziennes",
+        stack: ["PrestaShop", "PHP"],
+        url: "https://www.lestropeziennes.fr/fr/",
+        caseStudySlug: "les-tropeziennes",
+      },
+      {
+        idx: "03",
+        title: "Apparel E-commerce",
+        client: "E-habillement",
+        stack: ["PrestaShop", "PHP"],
+        url: "https://habillement.defense.gouv.fr/connexion",
+        caseStudySlug: "e-habillement",
+      },
+      {
+        idx: "04",
+        title: "Collectibles Marketplace",
+        client: "Sylvanian Families",
+        stack: ["PrestaShop", "PHP"],
+        url: "https://sylvanianfamilies-boutique.fr/",
+        caseStudySlug: "sylvanian-families",
+      },
+      {
+        idx: "05",
+        title: "Cakes Storefront",
+        client: "Maison Colibri",
+        stack: ["PrestaShop", "PHP"],
+        url: "https://www.maison-colibri.com/fr/",
+        caseStudySlug: "maison-colibri",
+      },
+      {
+        idx: "06",
+        title: "Wellness & Herbalism Shop",
+        client: "Herbiolys",
+        stack: ["PrestaShop", "PHP"],
+        url: "https://www.herbiolys.fr/fr/",
+        caseStudySlug: "herbiolys",
+      },
+      {
+        idx: "07",
+        title: "E-commerce Suite",
+        client: "Thermcross",
+        stack: ["PrestaShop", "PHP"],
+        url: "https://www.thermcross.fr/fr/",
+        caseStudySlug: "thermcross",
+      },
+      {
+        idx: "08",
+        title: "Gift Card Platform",
+        client: "Wedoogift · Pluxee",
+        stack: ["Java", "Spring Boot", "Angular"],
+        caseStudySlug: "wedoogift",
+      },
+      {
+        idx: "09",
+        title: "WordPress Site Generator",
+        client: "Wedoogift · Pluxee",
+        stack: ["WordPress", "PHP", "Bash"],
+        caseStudySlug: "wordpress-site-generator",
+      },
+    ],
+  },
+  stack: {
+    label: "[ 03 / Core Stack ]",
+    titleHtml:
+      'What I <em style="color:var(--red);font-style:italic">build</em> with.',
+    blurb:
+      "A pragmatic stack — PHP at the core, JavaScript at the surface, and the right glue in between. No buzzwords, just tools that ship.",
+    items: [
+      { glyph: "P", name: "PHP" },
+      { glyph: "My", name: "MySQL" },
+      { glyph: "Pg", name: "Postgres" },
+      { glyph: "Sf", name: "Symfony" },
+      { glyph: "Js", name: "JavaScript" },
+      { glyph: "Sc", name: "SCSS" },
+    ],
+  },
+  experience: {
+    label: "[ 04 / Experience ]",
+    titleHtml:
+      "Where I've <em style=\"color:var(--red);font-style:italic\">built</em>.",
+    blurb:
+      "From startup to web agencies. Each role sharpened a different muscle — from cloud infra and CI/CD to leading PrestaShop core integrations.",
+    nowLabel: "2023 — Now",
+    rows: [
+      {
+        when: "2023 — Now",
+        isNow: true,
+        role: "PHP Developer · Tech Lead",
+        co: "Evolutive",
+        desc:
+          "Technical leadership and full-stack PrestaShop core & module development. Resource planning, Agile estimations, robust API/ERP integrations, and CI/CD quality assurance.",
+      },
+      {
+        when: "2022 — 2023",
+        role: "PHP Developer",
+        co: "Thermcross",
+        desc:
+          "Full-stack e-commerce and backend development specializing in PrestaShop integration, custom PHP/PIM applications, and automated ERP data-sync pipelines — all under Agile.",
+      },
+      {
+        when: "2020 — 2022",
+        role: "R&D Engineer",
+        co: "Emagineurs",
+        desc:
+          "Full-stack development, API integration and security engineering across TYPO3, WordPress, and Ruby — specializing in financial tools, automation, and web application security.",
+      },
+      {
+        when: "2018 — 2019",
+        role: "Fullstack Web Developer",
+        co: "Wedoogift",
+        desc:
+          "Full-stack & DevOps using Angular, Spring Boot, and AWS — built CI/CD pipelines, shipped under Agile, and authored the documentation that scaled with the team.",
+      },
+    ],
+  },
+  testimonials: {
+    label: "[ 05 / Words ]",
+    titleHtml:
+      'Kind <em style="color:var(--red);font-style:italic">words</em>.',
+    blurb:
+      "Words from people I've worked with, in their own voice.",
+    feedbackLabel: "[ feedback ]",
+    subheadHtml:
+      "Genuine words from teams who <em>actually shipped</em>.",
+    items: [
+      {
+        q:
+          "I had the chance to manage Tom for a year. His is a very operational profile, involved as much in production work as in technical estimation and internal R&D.\n\nBeyond his technical skills, I particularly valued his commitment and his drive to grow the teams around him. We notably worked together on rolling out a continuous-integration process in a complex setting — a project he carried through to production with seriousness and persistence.\n\nTom has a frankness that can be surprising at first, but it's also what makes him transparent and honest. As long as the relationship is grounded in rigor, leading by example, and trust, he knows how to question himself and remains someone deeply reliable.\n\nHe's the kind of profile you can count on to move things forward, take responsibility, and deliver.",
+        n: "Noël Peix Boisdon",
+        r: "IT Manager · Moufly",
+        attributable: {
+          jobTitle: "IT Manager",
+          sameAs: [
+            "https://www.linkedin.com/in/no%C3%ABl-peix-boisdon-05183a80/",
+            "https://www.moufly.io/",
+          ],
+          datePublished: "2026-05-24",
+        },
+      },
+    ],
+    prevAria: "Previous",
+    nextAria: "Next",
+  },
+  openSource: {
+    label: "[ 06 / Open Source ]",
+    titleHtml:
+      'Contributing to <em style="color:var(--red);font-style:italic">PrestaShop</em>.',
+    blurb:
+      "Beyond client work, I give back to the platform I build on every day — patching core, reviewing PRs, and helping move PrestaShop forward in the open.",
+    cardAlt: "PrestaShop contribution summary for @Kaikina",
+    repoLabel: "Repository",
+    repoLinkText: "prestashop/prestashop",
+  },
+  certifications: {
+    label: "[ 07 / Certifications ]",
+    titleHtml:
+      'Certified <em style="color:var(--red);font-style:italic">PrestaShop Expert</em>.',
+    blurb:
+      "Two official PrestaShop Expert certifications — Core for backend and module work, Front for theme and storefront work. Both verifiable on Procertif.",
+    issuedByLabel: "Issued by",
+    verifyOnLabel: "Verify on",
+    statusLabel: "Certified",
+    items: [
+      {
+        name: "PrestaShop Expert — Core Skills",
+        issuer: "PrestaShop",
+        via: "Procertif",
+        url: "https://app.procertif.com/parchment/2511TOMGIR400/check",
+      },
+      {
+        name: "PrestaShop Expert — Front Skills",
+        issuer: "PrestaShop",
+        via: "Procertif",
+        url: "https://app.procertif.com/parchment/2602TOMGIR716/check",
+      },
+    ],
+  },
+  sideProjects: {
+    label: "[ 08 / Side Projects ]",
+    titleHtml:
+      'Things I <em style="color:var(--red);font-style:italic">build</em> on the side.',
+    blurb:
+      "Personal apps I ship and run in production — usually to scratch my own itch, sometimes turning into tools other developers can plug into too.",
+    items: [
+      {
+        name: "RepoWrapped",
+        tagline: "Spotify-Wrapped-style stats for any GitHub repo",
+        description:
+          "Sign in with GitHub, point at any public owner/repo, and get a shareable stats page — commits, lines added & removed, first commit date, your activity on the repo — plus a live-refreshing SVG card you can drop into your profile README. A two-tier Redis + Postgres cache keeps stats fresh without burning the GitHub API on every render. The card embedded in the Open Source section above is generated by this app.",
+        stack: ["Laravel", "PHP", "Postgres", "Redis", "Tailwind"],
+        status: "Live",
+        liveUrl: "https://repo-wrapped.tom-girou.dev",
+        liveLabel: "Open the app",
+        sourceUrl: "https://github.com/Kaikina/repo-wrapped",
+        sourceLabel: "Source on GitHub",
+      },
+      {
+        name: "Forgemage.com",
+        tagline: "An async marketplace for Dofus item enchanters",
+        description:
+          "A fansite for the Dofus MMORPG community — think Malt, but for smithmaguses. Players drop an enchant request online with the stats they want; experienced smithmagus profiles browse open jobs, claim one, and chat in-app to plan a meet in-game. Reviews and ratings build reputation after every job. The whole point is async: instead of standing around trade hubs hoping someone competent is logged in, you file the request, build your gear, and let the right person find you. Smithmagus profiles keep being discoverable even while they're offline in the game.",
+        stack: ["Symfony 7", "PHP 8.4", "PostgreSQL", "Mercure", "FrankenPHP", "Stimulus"],
+        status: "In development",
+      },
+    ],
+  },
+  footer: {
+    label: "[ 10 / Get in touch ]",
+    headingHtml: "Let's build something <em>worth shipping</em>.",
+    sub:
+      "Open to senior & lead roles, freelance briefs, and the occasional rescue mission. The fastest way to me is LinkedIn — I read every message.",
+    cta: "Reach out on LinkedIn",
+    rights: "© 2026 · Tom Girou · All rights reserved",
+    build: "v1.0 / Built in France",
+    linkedinAria: "LinkedIn",
+    githubAria: "GitHub",
+  },
+  caseStudy: {
+    backToWork: "Selected Work",
+    visitLiveSite: "Visit live site",
+    backToAllWork: "Back to all work",
+    outcomeLabel: "— Outcome",
+    roleLabel: "Role",
+    durationLabel: "Duration",
+    stackLabel: "Stack",
+  },
+  faq: {
+    label: "[ 09 / FAQ ]",
+    titleHtml:
+      'Frequently asked <em style="color:var(--red);font-style:italic">questions</em>.',
+    blurb:
+      "The questions that come up most often when someone is considering working with me — answered straight, in my own voice.",
+    items: [
+      {
+        q: "What does Tom Girou do?",
+        a:
+          "I'm a Senior Lead Web Developer based in France, with 7+ years across PHP, Symfony, and PrestaShop. I help e-commerce companies rescue stalled migrations, integrate ERPs, build custom modules, and bring sprawling backlogs back under control. I'm currently at Evolutive in France; recent client work is documented in the case studies on this site.",
+      },
+      {
+        q: "What's your background?",
+        a:
+          "I started as a helpdesk agent at Wedoogift (now Pluxee) in 2016 while finishing my development degree, then moved into full-stack Java / Spring Boot / Angular work there as a work-study developer. After graduating I joined Emagineurs as R&D engineer (TYPO3, WordPress, Ruby, security), then Thermcross as in-house PHP developer on a large-scale PrestaShop migration and ERP integration. Since 2023 I've been at Evolutive as PHP Developer and Tech Lead, focused on PrestaShop core and module work for e-commerce clients.",
+      },
+      {
+        q: "Do you specialize in PrestaShop?",
+        a:
+          "Yes — PrestaShop is where I spend most of my time. I work on PrestaShop core and module development across 1.7, 8, and the current 9 release, including custom modules, multishop adaptations, ERP integrations, theme work, performance, and security. I contribute to PrestaShop core under @Kaikina on GitHub. Most of the case studies on this site are PrestaShop projects: airsoft, footwear, apparel, collectibles, herbal medicine, HVAC parts.",
+      },
+      {
+        q: "Can you handle PrestaShop migrations (1.5 → 1.7 → 8 → 9)?",
+        a:
+          "Yes. I've shipped multi-step PrestaShop migrations across several real projects — large multi-shop migrations, major-version upgrades that required deep core-level work, and concurrent maintenance of legacy installs alongside new builds. The same approach extends to PrestaShop 9, the current major release. The hard part of a PrestaShop migration is rarely the version bump itself — it's the modules, the ERP sync, the theme assumptions, and the years of business rules buried in the database. That's where most of the work lands.",
+      },
+      {
+        q: "What about ERP integrations?",
+        a:
+          "Most of the PrestaShop work I do touches an ERP or third-party system at some point. I've integrated storefronts with ERPs, market-data feeds, and support tooling using synchronous webservice calls, scheduled cron-driven batches, and queued asynchronous pipelines. Which shape is right depends on the data volume and the SLAs — I've shipped all three patterns.",
+      },
+      {
+        q: "Do you work with non-PrestaShop stacks?",
+        a:
+          "Yes. Outside PrestaShop I've shipped production work in Symfony, Java with Spring Boot, AngularJS and modern Angular, Perl (data integration), Slim Framework (greenfield PIM), WordPress with WP-CLI and AWS CloudFormation, TYPO3, and Ruby. AWS infrastructure has been part of several projects — EC2, RDS, S3, CloudFormation, Route 53, Certificate Manager — and I've configured CI/CD pipelines on Jenkins, GitLab, and similar. The case studies cover the non-PrestaShop work in detail.",
+      },
+      {
+        q: "Are you available for freelance briefs or new roles?",
+        a:
+          "Yes — I'm open to senior and lead roles, freelance briefs, and the occasional rescue mission on a stalled PrestaShop project. The fastest way to start a conversation is LinkedIn; I read every message. I can engage on short or long missions, remote-first, with on-site possible for the right scope. A typical engagement starts with a 30-minute call to understand the scope and the existing state of the codebase.",
+      },
+      {
+        q: "Where are you based and what languages do you work in?",
+        a:
+          "I'm based in France, in the Loire region (between Lyon and Saint-Étienne). I work in French (native), English (fluent, daily for technical and business communication), and Spanish (working professional, comfortable for written content). Remote-first across France, the EU, and remote-friendly time zones. On-site is possible only around the Lyon / Saint-Étienne area.",
+      },
+      {
+        q: "What's the fastest way to reach you?",
+        a:
+          "LinkedIn — linkedin.com/in/tgirou — is the fastest path. I read every message and reply within a few working days. If LinkedIn isn't your channel, my GitHub is github.com/Kaikina, and my personal site (tom-girou.dev) carries the latest case studies. For sensitive matters, ask for an email address through LinkedIn and we'll move from there.",
+      },
+      {
+        q: "Do you contribute to PrestaShop open source?",
+        a:
+          "Yes — I contribute to PrestaShop core under @Kaikina on GitHub. Most of my contributions land where I find friction in client work: bug fixes around invoice numbering concurrency, theme cache issues in multishop, and the kind of long-standing edge cases that aren't worth a full ticket for one team but matter for everyone running PrestaShop. The commit history lives at github.com/PrestaShop/PrestaShop/commits?author=Kaikina.",
+      },
+    ],
+  },
+};
+
+export default en;
