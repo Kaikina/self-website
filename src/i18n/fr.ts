@@ -297,7 +297,7 @@ const fr: Translation = {
       {
         q: "Que fait Tom Girou ?",
         a:
-          "Je suis Senior Lead Web Developer basé en France, avec plus de 7 ans d'expérience en PHP, Symfony et PrestaShop. J'aide les entreprises e-commerce à reprendre des migrations qui s'enlisent, à intégrer des ERP, à développer des modules sur mesure et à reprendre la main sur des backlogs qui ont débordé. Je suis actuellement chez Evolutive en France ; les case studies sur ce site documentent mes missions récentes.",
+          "Je suis Senior Lead Web Developer basé en France, avec plus de 7 ans d'expérience en PHP, Symfony et PrestaShop. J'aide les entreprises e-commerce à reprendre des migrations qui s'enlisent, à intégrer des ERP, à développer des modules sur mesure et à reprendre la main sur des backlogs qui ont débordé. Je suis actuellement chez Evolutive en France ; les projets listés sur ce site documentent mes missions récentes.",
       },
       {
         q: "Quel est ton parcours ?",
@@ -307,7 +307,7 @@ const fr: Translation = {
       {
         q: "Es-tu spécialisé en PrestaShop ?",
         a:
-          "Oui — PrestaShop, c'est là où passe la majorité de mon temps. Je travaille sur le core et les modules PrestaShop en 1.7, en 8 et sur la version 9 actuelle, sur des modules sur mesure, des adaptations multishop, des intégrations ERP, du thème, de la performance et de la sécurité. Je contribue au core PrestaShop sous le pseudo @Kaikina sur GitHub. La majorité des case studies de ce site sont des projets PrestaShop : airsoft, chaussures, textile, collection, phytothérapie, pièces CVC.",
+          "Oui — PrestaShop, c'est là où passe la majorité de mon temps. Je travaille sur le core et les modules PrestaShop en 1.7, en 8 et sur la version 9 actuelle, sur des modules sur mesure, des adaptations multishop, des intégrations ERP, du thème, de la performance et de la sécurité. Je contribue au core PrestaShop sous le pseudo @Kaikina sur GitHub. La majorité des projets listés sur ce site sont des projets PrestaShop : airsoft, chaussures, textile, collection, phytothérapie, pièces CVC.",
       },
       {
         q: "Peux-tu prendre en charge une migration PrestaShop (1.5 → 1.7 → 8 → 9) ?",
@@ -322,7 +322,7 @@ const fr: Translation = {
       {
         q: "Travailles-tu avec d'autres stacks que PrestaShop ?",
         a:
-          "Oui. En dehors de PrestaShop, j'ai livré en production sur Symfony, Java + Spring Boot, AngularJS et Angular moderne, Perl (intégration de données), Slim Framework (PIM greenfield), WordPress avec WP-CLI et AWS CloudFormation, TYPO3 et Ruby. L'infrastructure AWS a fait partie de plusieurs projets — EC2, RDS, S3, CloudFormation, Route 53, Certificate Manager — et j'ai configuré des pipelines CI/CD sur Jenkins, GitLab et équivalents. Les case studies couvrent le travail non-PrestaShop en détail.",
+          "Oui. En dehors de PrestaShop, j'ai livré en production sur Symfony, Java + Spring Boot, AngularJS et Angular moderne, Perl (intégration de données), Slim Framework (PIM greenfield), WordPress avec WP-CLI et AWS CloudFormation, TYPO3 et Ruby. L'infrastructure AWS a fait partie de plusieurs projets — EC2, RDS, S3, CloudFormation, Route 53, Certificate Manager — et j'ai configuré des pipelines CI/CD sur Jenkins, GitLab et équivalents.",
       },
       {
         q: "Es-tu disponible pour des missions freelance ou de nouveaux postes ?",
@@ -337,7 +337,7 @@ const fr: Translation = {
       {
         q: "Quel est le moyen le plus rapide pour me joindre ?",
         a:
-          "LinkedIn — linkedin.com/in/tgirou — c'est le canal le plus rapide. Je lis chaque message et je réponds sous quelques jours ouvrés. Si LinkedIn n'est pas ton canal, mon GitHub est github.com/Kaikina, et mon site perso (tom-girou.dev) regroupe les dernières case studies. Pour les sujets sensibles, demande une adresse email via LinkedIn et on bascule depuis là.",
+          "LinkedIn — linkedin.com/in/tgirou — c'est le canal le plus rapide. Je lis chaque message et je réponds sous quelques jours ouvrés. Si LinkedIn n'est pas ton canal, mon GitHub est github.com/Kaikina, et mon site perso (tom-girou.dev) regroupe mes derniers projets. Pour les sujets sensibles, demande une adresse email via LinkedIn et on bascule depuis là.",
       },
       {
         q: "Contribues-tu à PrestaShop en open source ?",

@@ -295,7 +295,7 @@ const en: Translation = {
       {
         q: "What does Tom Girou do?",
         a:
-          "I'm a Senior Lead Web Developer based in France, with 7+ years across PHP, Symfony, and PrestaShop. I help e-commerce companies rescue stalled migrations, integrate ERPs, build custom modules, and bring sprawling backlogs back under control. I'm currently at Evolutive in France; recent client work is documented in the case studies on this site.",
+          "I'm a Senior Lead Web Developer based in France, with 7+ years across PHP, Symfony, and PrestaShop. I help e-commerce companies rescue stalled migrations, integrate ERPs, build custom modules, and bring sprawling backlogs back under control. I'm currently at Evolutive in France; recent client work is listed on this site.",
       },
       {
         q: "What's your background?",
@@ -305,7 +305,7 @@ const en: Translation = {
       {
         q: "Do you specialize in PrestaShop?",
         a:
-          "Yes — PrestaShop is where I spend most of my time. I work on PrestaShop core and module development across 1.7, 8, and the current 9 release, including custom modules, multishop adaptations, ERP integrations, theme work, performance, and security. I contribute to PrestaShop core under @Kaikina on GitHub. Most of the case studies on this site are PrestaShop projects: airsoft, footwear, apparel, collectibles, herbal medicine, HVAC parts.",
+          "Yes — PrestaShop is where I spend most of my time. I work on PrestaShop core and module development across 1.7, 8, and the current 9 release, including custom modules, multishop adaptations, ERP integrations, theme work, performance, and security. I contribute to PrestaShop core under @Kaikina on GitHub. Most of the projects listed on this site are PrestaShop projects: airsoft, footwear, apparel, collectibles, herbal medicine, HVAC parts.",
       },
       {
         q: "Can you handle PrestaShop migrations (1.5 → 1.7 → 8 → 9)?",
@@ -320,7 +320,7 @@ const en: Translation = {
       {
         q: "Do you work with non-PrestaShop stacks?",
         a:
-          "Yes. Outside PrestaShop I've shipped production work in Symfony, Java with Spring Boot, AngularJS and modern Angular, Perl (data integration), Slim Framework (greenfield PIM), WordPress with WP-CLI and AWS CloudFormation, TYPO3, and Ruby. AWS infrastructure has been part of several projects — EC2, RDS, S3, CloudFormation, Route 53, Certificate Manager — and I've configured CI/CD pipelines on Jenkins, GitLab, and similar. The case studies cover the non-PrestaShop work in detail.",
+          "Yes. Outside PrestaShop I've shipped production work in Symfony, Java with Spring Boot, AngularJS and modern Angular, Perl (data integration), Slim Framework (greenfield PIM), WordPress with WP-CLI and AWS CloudFormation, TYPO3, and Ruby. AWS infrastructure has been part of several projects — EC2, RDS, S3, CloudFormation, Route 53, Certificate Manager — and I've configured CI/CD pipelines on Jenkins, GitLab, and similar.",
       },
       {
         q: "Are you available for freelance briefs or new roles?",
@@ -335,7 +335,7 @@ const en: Translation = {
       {
         q: "What's the fastest way to reach you?",
         a:
-          "LinkedIn — linkedin.com/in/tgirou — is the fastest path. I read every message and reply within a few working days. If LinkedIn isn't your channel, my GitHub is github.com/Kaikina, and my personal site (tom-girou.dev) carries the latest case studies. For sensitive matters, ask for an email address through LinkedIn and we'll move from there.",
+          "LinkedIn — linkedin.com/in/tgirou — is the fastest path. I read every message and reply within a few working days. If LinkedIn isn't your channel, my GitHub is github.com/Kaikina, and my personal site (tom-girou.dev) has the latest on my work. For sensitive matters, ask for an email address through LinkedIn and we'll move from there.",
       },
       {
         q: "Do you contribute to PrestaShop open source?",

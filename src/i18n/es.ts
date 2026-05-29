@@ -297,7 +297,7 @@ const es: Translation = {
       {
         q: "¿Qué hace Tom Girou?",
         a:
-          "Soy Senior Lead Web Developer basado en Francia, con más de 7 años en PHP, Symfony y PrestaShop. Ayudo a empresas de e-commerce a rescatar migraciones que se han estancado, integrar ERPs, construir módulos a medida y retomar el control de backlogs desbordados. Actualmente estoy en Evolutive (Francia); las case studies de este sitio documentan mis misiones recientes.",
+          "Soy Senior Lead Web Developer basado en Francia, con más de 7 años en PHP, Symfony y PrestaShop. Ayudo a empresas de e-commerce a rescatar migraciones que se han estancado, integrar ERPs, construir módulos a medida y retomar el control de backlogs desbordados. Actualmente estoy en Evolutive (Francia); los proyectos listados en este sitio documentan mis misiones recientes.",
       },
       {
         q: "¿Cuál es tu trayectoria?",
@@ -307,7 +307,7 @@ const es: Translation = {
       {
         q: "¿Estás especializado en PrestaShop?",
         a:
-          "Sí — PrestaShop es donde paso la mayor parte del tiempo. Trabajo sobre el core y los módulos PrestaShop en 1.7, en 8 y sobre la versión 9 actual, en módulos a medida, adaptaciones multishop, integraciones ERP, tema, rendimiento y seguridad. Contribuyo al core de PrestaShop bajo el alias @Kaikina en GitHub. La mayoría de las case studies de este sitio son proyectos PrestaShop: airsoft, calzado, textil, coleccionables, fitoterapia, piezas HVAC.",
+          "Sí — PrestaShop es donde paso la mayor parte del tiempo. Trabajo sobre el core y los módulos PrestaShop en 1.7, en 8 y sobre la versión 9 actual, en módulos a medida, adaptaciones multishop, integraciones ERP, tema, rendimiento y seguridad. Contribuyo al core de PrestaShop bajo el alias @Kaikina en GitHub. La mayoría de los proyectos listados en este sitio son proyectos PrestaShop: airsoft, calzado, textil, coleccionables, fitoterapia, piezas HVAC.",
       },
       {
         q: "¿Puedes encargarte de una migración PrestaShop (1.5 → 1.7 → 8 → 9)?",
@@ -322,7 +322,7 @@ const es: Translation = {
       {
         q: "¿Trabajas con stacks que no sean PrestaShop?",
         a:
-          "Sí. Fuera de PrestaShop he entregado en producción sobre Symfony, Java con Spring Boot, AngularJS y Angular moderno, Perl (integración de datos), Slim Framework (PIM greenfield), WordPress con WP-CLI y AWS CloudFormation, TYPO3 y Ruby. La infraestructura AWS ha formado parte de varios proyectos — EC2, RDS, S3, CloudFormation, Route 53, Certificate Manager — y he configurado pipelines CI/CD sobre Jenkins, GitLab y equivalentes. Las case studies cubren el trabajo no-PrestaShop en detalle.",
+          "Sí. Fuera de PrestaShop he entregado en producción sobre Symfony, Java con Spring Boot, AngularJS y Angular moderno, Perl (integración de datos), Slim Framework (PIM greenfield), WordPress con WP-CLI y AWS CloudFormation, TYPO3 y Ruby. La infraestructura AWS ha formado parte de varios proyectos — EC2, RDS, S3, CloudFormation, Route 53, Certificate Manager — y he configurado pipelines CI/CD sobre Jenkins, GitLab y equivalentes.",
       },
       {
         q: "¿Estás disponible para misiones freelance o nuevos puestos?",
@@ -337,7 +337,7 @@ const es: Translation = {
       {
         q: "¿Cuál es la vía más rápida para contactarte?",
         a:
-          "LinkedIn — linkedin.com/in/tgirou — es la vía más rápida. Leo cada mensaje y respondo en unos días laborables. Si LinkedIn no es tu canal, mi GitHub es github.com/Kaikina, y mi sitio personal (tom-girou.dev) recoge las últimas case studies. Para temas sensibles, pide una dirección de email por LinkedIn y movemos la conversación desde ahí.",
+          "LinkedIn — linkedin.com/in/tgirou — es la vía más rápida. Leo cada mensaje y respondo en unos días laborables. Si LinkedIn no es tu canal, mi GitHub es github.com/Kaikina, y mi sitio personal (tom-girou.dev) recoge mis últimos proyectos. Para temas sensibles, pide una dirección de email por LinkedIn y movemos la conversación desde ahí.",
       },
       {
         q: "¿Contribuyes a PrestaShop en open source?",
