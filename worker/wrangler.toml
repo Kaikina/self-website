@@ -1,0 +1,9 @@
+name = "tom-girou-locale-router"
+main = "src/locale-router.js"
+compatibility_date = "2026-01-01"
+
+# Exact-match route so the Worker only runs on the homepage, not on every
+# request to the zone. /fr/, /es/, /work/* etc. bypass the Worker entirely.
+routes = [
+  { pattern = "tom-girou.dev/", zone_name = "tom-girou.dev" }
+]
