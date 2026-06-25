@@ -1,0 +1,643 @@
+---
+import { getCollection, render } from "astro:content";
+import { Image } from "astro:assets";
+import portrait from "../../../assets/portrait.avif";
+import BlogLayout from "../../../layouts/BlogLayout.astro";
+import {
+  defaultLocale,
+  getTranslation,
+  localeHtmlLang,
+  locales,
+  type Locale,
+} from "../../../i18n";
+import {
+  blogPath,
+  buildToc,
+  formatDate,
+  getPreviousPost,
+  getRelatedPosts,
+  getPostTranslations,
+  parsePostId,
+  readingTime,
+  wordCount,
+  type BlogPost,
+} from "../../../lib/blog";
+import { buildBlogPostingGraph, type BlogPostMeta } from "../../../lib/schema";
+
+export async function getStaticPaths() {
+  const isProd = import.meta.env.PROD;
+  const all = await getCollection("blog", (p) => !p.data.draft || !isProd);
+  return all.map((entry) => {
+    const { locale, slug } = parsePostId(entry.id);
+    return {
+      params: { lang: locale === defaultLocale ? undefined : locale, slug },
+      props: { entry, locale },
+    };
+  });
+}
+
+const { entry, locale } = Astro.props as { entry: BlogPost; locale: Locale };
+const t = getTranslation(locale);
+
+const { Content, headings } = await render(entry);
+const toc = buildToc(headings);
+const minutes = readingTime(entry.body ?? "");
+const words = wordCount(entry.body ?? "");
+
+const { data } = entry;
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+
+// Social-card image: prefer an explicit `ogImage`, else the `cover` when it's a
+// raster (SVG/AVIF don't render in OG/Twitter previews), else the site OG image.
+const OG_RASTER = new Set(["png", "jpg", "jpeg", "webp", "gif"]);
+const ogSource = [data.ogImage, data.cover].find(
+  (img) => img && OG_RASTER.has(img.format),
+);
+const ogImage = ogSource
+  ? new URL(ogSource.src, Astro.site).href
+  : new URL("/og-image.jpg", Astro.site).href;
+const ogImageWidth = ogSource ? ogSource.width : 1200;
+const ogImageHeight = ogSource ? ogSource.height : 630;
+
+const rssHref = locale === defaultLocale ? "/rss.xml" : `/${locale}/rss.xml`;
+
+const translations = await getPostTranslations(entry);
+const related = await getRelatedPosts(entry, 3);
+const previous = await getPreviousPost(entry);
+
+// Only surface locales that actually have a translation of this post.
+const langLinks = locales
+  .filter((l) => translations.has(l))
+  .map((l) => {
+    const e = translations.get(l)!;
+    return {
+      locale: l,
+      href: blogPath(l, parsePostId(e.id).slug),
+      active: l === locale,
+    };
+  });
+
+const alternates = locales
+  .filter((l) => translations.has(l))
+  .map((l) => {
+    const e = translations.get(l)!;
+    return {
+      hrefLang: localeHtmlLang[l],
+      href: new URL(blogPath(l, parsePostId(e.id).slug), Astro.site).href,
+    };
+  });
+const enEntry = translations.get(defaultLocale);
+if (enEntry) {
+  alternates.push({
+    hrefLang: "x-default",
+    href: new URL(blogPath(defaultLocale, parsePostId(enEntry.id).slug), Astro.site).href,
+  });
+}
+
+const postMeta: BlogPostMeta = {
+  url: canonical,
+  title: data.title,
+  description: data.description,
+  datePublished: data.pubDate.toISOString().slice(0, 10),
+  dateModified: data.updatedDate?.toISOString().slice(0, 10),
+  tags: data.tags,
+  wordCount: words,
+};
+const schemaJson = JSON.stringify(
+  buildBlogPostingGraph(locale, t, canonical, ogImage, postMeta),
+);
+
+const pageTitle = `${data.title} — Tom Girou`;
+const blogIndexHref = blogPath(locale);
+const publishedDate = formatDate(data.pubDate, locale);
+const updatedDate = data.updatedDate ? formatDate(data.updatedDate, locale) : null;
+
+const relatedCards = related.map((p) => ({
+  href: blogPath(locale, parsePostId(p.id).slug),
+  title: p.data.title,
+  description: p.data.description,
+  date: formatDate(p.data.pubDate, locale),
+}));
+const prevCard = previous
+  ? {
+      href: blogPath(locale, parsePostId(previous.id).slug),
+      title: previous.data.title,
+      date: formatDate(previous.data.pubDate, locale),
+    }
+  : null;
+---
+
+<BlogLayout
+  locale={locale}
+  title={pageTitle}
+  description={data.description}
+  canonical={canonical}
+  ogImage={ogImage}
+  ogImageAlt={data.coverAlt ?? data.title}
+  ogImageWidth={ogImageWidth}
+  ogImageHeight={ogImageHeight}
+  ogType="article"
+  alternates={alternates}
+  langLinks={langLinks}
+  schemaJson={schemaJson}
+  rssHref={rssHref}
+  publishedTime={data.pubDate.toISOString()}
+  modifiedTime={data.updatedDate?.toISOString()}
+  tags={data.tags}
+>
+  <article class="post">
+    <div class="wrap post-head-wrap">
+      <a class="back-link mono" href={blogIndexHref}>← {t.blog.backToBlog}</a>
+
+      <div class="post-meta mono">
+        <time datetime={data.pubDate.toISOString()}>{publishedDate}</time>
+        <span aria-hidden="true">·</span>
+        <span>{minutes} {t.blog.minRead}</span>
+        {updatedDate && (
+          <>
+            <span aria-hidden="true">·</span>
+            <span>{t.blog.updatedLabel} {updatedDate}</span>
+          </>
+        )}
+      </div>
+
+      <h1 class="post-title">{data.title}</h1>
+      <p class="post-lede">{data.description}</p>
+
+      {data.tags.length > 0 && (
+        <ul class="tag-row">
+          {data.tags.map((tag) => <li class="tag">{tag}</li>)}
+        </ul>
+      )}
+
+      <div class="byline">
+        <Image class="byline-avatar" src={portrait} width={44} height={44} alt="Tom Girou"/>
+        <div class="byline-meta">
+          <span class="byline-name">{t.blog.writtenBy} Tom Girou</span>
+          <span class="byline-role mono">{t.blog.authorRole}</span>
+        </div>
+        <div class="byline-links">
+          <a href="https://www.linkedin.com/in/tgirou" target="_blank" rel="noopener">LinkedIn</a>
+          <a href="https://github.com/Kaikina" target="_blank" rel="noopener">GitHub</a>
+          <a href={rssHref}>{t.blog.rssLabel}</a>
+        </div>
+      </div>
+    </div>
+
+    {data.cover && (
+      <div class="wrap">
+        <figure class="post-cover">
+          <img src={data.cover.src} width={data.cover.width} height={data.cover.height} alt={data.coverAlt ?? ""}/>
+        </figure>
+      </div>
+    )}
+
+    <div class="wrap post-grid">
+      <div class="post-content">
+        <Content />
+      </div>
+
+      {toc.length > 0 && (
+        <aside class="post-toc">
+          <div class="toc-inner">
+            <div class="mono toc-label">{t.blog.tableOfContents}</div>
+            <nav>
+              <ul>
+                {toc.map((h) => (
+                  <li class:list={["toc-item", { sub: h.depth === 3 }]}>
+                    <a href={`#${h.slug}`}>{h.text}</a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          </div>
+        </aside>
+      )}
+    </div>
+
+    {(prevCard || relatedCards.length > 0) && (
+      <div class="wrap post-foot">
+        {relatedCards.length > 0 && (
+          <section class="related">
+            <div class="mono section-label">{t.blog.relatedPosts}</div>
+            <ul class="related-grid">
+              {relatedCards.map((c) => (
+                <li class="related-card">
+                  <a href={c.href}>
+                    <span class="related-date mono">{c.date}</span>
+                    <span class="related-title">{c.title}</span>
+                    <span class="related-desc">{c.description}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+
+        {prevCard && (
+          <a class="prev-post" href={prevCard.href}>
+            <span class="mono prev-label">← {t.blog.previousPost}</span>
+            <span class="prev-title">{prevCard.title}</span>
+            <span class="mono prev-date">{prevCard.date}</span>
+          </a>
+        )}
+      </div>
+    )}
+  </article>
+</BlogLayout>
+
+<style>
+  .post-head-wrap {
+    padding-top: 150px;
+    max-width: 880px;
+  }
+
+  .back-link {
+    display: inline-block;
+    color: var(--ink-dim);
+    margin-bottom: 36px;
+    transition: color .25s;
+  }
+
+  .back-link:hover {
+    color: var(--red-soft);
+  }
+
+  .post-meta {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    color: var(--ink-soft);
+  }
+
+  .post-title {
+    margin-top: 20px;
+    font-family: var(--display);
+    font-weight: 800;
+    letter-spacing: -.03em;
+    line-height: 1.02;
+    font-size: clamp(34px, 5.2vw, 62px);
+    text-wrap: balance;
+  }
+
+  .post-lede {
+    margin-top: 24px;
+    color: var(--ink-dim);
+    font-size: clamp(17px, 1.6vw, 21px);
+    line-height: 1.55;
+    max-width: 62ch;
+  }
+
+  .tag-row {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 26px;
+  }
+
+  .tag {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--ink-dim);
+    border: 1px solid var(--line);
+    padding: 4px 9px;
+  }
+
+  .byline {
+    margin-top: 34px;
+    padding-top: 28px;
+    border-top: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+
+  .byline-avatar {
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid var(--line-strong);
+  }
+
+  .byline-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .byline-name {
+    font-weight: 600;
+  }
+
+  .byline-links {
+    margin-left: auto;
+    display: flex;
+    gap: 18px;
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: .08em;
+  }
+
+  .byline-links a {
+    color: var(--ink-dim);
+    border-bottom: 1px solid transparent;
+    padding-bottom: 2px;
+    transition: color .25s, border-color .25s;
+  }
+
+  .byline-links a:hover {
+    color: var(--ink);
+    border-color: var(--red);
+  }
+
+  @media (max-width: 560px) {
+    .byline-links {
+      margin-left: 0;
+      width: 100%;
+    }
+  }
+
+  .post-cover {
+    margin: 48px 0 8px;
+    border: 1px solid var(--line);
+    overflow: hidden;
+  }
+
+  .post-cover img {
+    width: 100%;
+    height: auto;
+  }
+
+  /* two-column: content + sticky TOC */
+  .post-grid {
+    margin-top: 48px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 240px;
+    gap: 64px;
+    align-items: start;
+  }
+
+  @media (max-width: 980px) {
+    .post-grid {
+      grid-template-columns: 1fr;
+      gap: 40px;
+    }
+  }
+
+  .post-toc {
+    position: sticky;
+    top: 110px;
+  }
+
+  @media (max-width: 980px) {
+    .post-toc {
+      position: static;
+      order: -1;
+      border: 1px solid var(--line);
+      padding: 20px 22px;
+      background: var(--bg-2);
+    }
+  }
+
+  .toc-label {
+    margin-bottom: 16px;
+    color: var(--ink-soft);
+  }
+
+  .post-toc ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+    border-left: 1px solid var(--line);
+  }
+
+  @media (max-width: 980px) {
+    .post-toc ul {
+      border-left: none;
+    }
+  }
+
+  .toc-item a {
+    display: block;
+    padding-left: 16px;
+    margin-left: -1px;
+    border-left: 1px solid transparent;
+    color: var(--ink-dim);
+    font-size: 14px;
+    line-height: 1.4;
+    transition: color .25s, border-color .25s;
+  }
+
+  .toc-item.sub a {
+    padding-left: 30px;
+    font-size: 13px;
+    color: var(--ink-soft);
+  }
+
+  .toc-item a:hover,
+  .toc-item a.active {
+    color: var(--ink);
+    border-color: var(--red);
+  }
+
+  .toc-item.sub a.active {
+    color: var(--ink);
+  }
+
+  /* ───────── prose ───────── */
+  .post-content {
+    max-width: 72ch;
+    font-size: 17px;
+    line-height: 1.75;
+    color: var(--ink);
+  }
+
+  .post-content :global(h2) {
+    font-family: var(--display);
+    font-weight: 800;
+    letter-spacing: -.02em;
+    line-height: 1.12;
+    font-size: clamp(26px, 3vw, 34px);
+    margin: 56px 0 18px;
+    scroll-margin-top: 100px;
+  }
+
+  .post-content :global(h3) {
+    font-family: var(--display);
+    font-weight: 700;
+    letter-spacing: -.01em;
+    font-size: clamp(20px, 2.2vw, 24px);
+    margin: 40px 0 14px;
+    scroll-margin-top: 100px;
+  }
+
+  .post-content :global(p) {
+    margin: 0 0 22px;
+  }
+
+  .post-content :global(a) {
+    color: var(--red-soft);
+    border-bottom: 1px solid rgba(242, 84, 56, .35);
+    transition: border-color .25s;
+  }
+
+  .post-content :global(a:hover) {
+    border-color: var(--red-soft);
+  }
+
+  .post-content :global(strong) {
+    color: #fff;
+    font-weight: 700;
+  }
+
+  .post-content :global(ul),
+  .post-content :global(ol) {
+    margin: 0 0 22px;
+    padding-left: 24px;
+  }
+
+  .post-content :global(li) {
+    margin: 0 0 10px;
+  }
+
+  .post-content :global(li::marker) {
+    color: var(--red-soft);
+  }
+
+  .post-content :global(blockquote) {
+    margin: 32px 0;
+    padding: 6px 0 6px 24px;
+    border-left: 3px solid var(--red);
+    color: var(--ink-dim);
+    font-style: italic;
+  }
+
+  .post-content :global(hr) {
+    border: none;
+    border-top: 1px solid var(--line);
+    margin: 48px 0;
+  }
+
+  .post-content :global(code) {
+    font-family: var(--mono);
+    font-size: .88em;
+    background: var(--bg-3);
+    border: 1px solid var(--line);
+    padding: 2px 6px;
+    border-radius: 3px;
+  }
+
+  .post-content :global(pre) {
+    margin: 28px 0;
+    padding: 20px 22px;
+    overflow-x: auto;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .post-content :global(pre code) {
+    background: none;
+    border: none;
+    padding: 0;
+    font-size: inherit;
+  }
+
+  .post-content :global(img) {
+    margin: 32px 0;
+    border: 1px solid var(--line);
+  }
+
+  /* ───────── footer of post ───────── */
+  .post-foot {
+    margin-top: 80px;
+    padding-top: 48px;
+    border-top: 1px solid var(--line);
+    display: flex;
+    flex-direction: column;
+    gap: 56px;
+  }
+
+  .section-label {
+    color: var(--ink-soft);
+    margin-bottom: 24px;
+  }
+
+  .related-grid {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+  }
+
+  .related-card a {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    height: 100%;
+    padding: 22px;
+    border: 1px solid var(--line);
+    background: var(--bg-2);
+    transition: border-color .3s, transform .3s, background .3s;
+  }
+
+  .related-card a:hover {
+    border-color: var(--line-strong);
+    transform: translateY(-3px);
+    background: var(--bg-3);
+  }
+
+  .related-date {
+    color: var(--ink-soft);
+  }
+
+  .related-title {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 19px;
+    letter-spacing: -.01em;
+    line-height: 1.2;
+  }
+
+  .related-desc {
+    color: var(--ink-dim);
+    font-size: 14px;
+    line-height: 1.55;
+  }
+
+  .prev-post {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 26px 28px;
+    border: 1px solid var(--line);
+    background: var(--bg-2);
+    transition: border-color .3s, background .3s;
+  }
+
+  .prev-post:hover {
+    border-color: var(--line-strong);
+    background: var(--bg-3);
+  }
+
+  .prev-label {
+    color: var(--red-soft);
+  }
+
+  .prev-title {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 22px;
+    letter-spacing: -.02em;
+  }
+
+  .prev-date {
+    color: var(--ink-soft);
+  }
+</style>

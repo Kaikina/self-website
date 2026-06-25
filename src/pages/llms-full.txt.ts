@@ -1,5 +1,6 @@
 import type { APIRoute } from "astro";
 import en from "../i18n/en";
+import { blogPath, getPostsByLocale, parsePostId } from "../lib/blog";
 
 const SITE = "https://tom-girou.dev";
 
@@ -7,9 +8,10 @@ function stripHtml(s: string): string {
   return s.replace(/<[^>]+>/g, "");
 }
 
-export const GET: APIRoute = () => {
+export const GET: APIRoute = async () => {
   const t = en;
   const lines: string[] = [];
+  const posts = await getPostsByLocale("en");
 
   lines.push("# Tom Girou — Senior Lead Web Developer");
   lines.push("");
@@ -112,6 +114,30 @@ export const GET: APIRoute = () => {
     lines.push("");
     lines.push(item.a);
     lines.push("");
+  }
+
+  if (posts.length > 0) {
+    lines.push("## Blog");
+    lines.push("");
+    lines.push(t.blog.metaDescription);
+    lines.push("");
+    lines.push(`Feed: ${SITE}/rss.xml`);
+    lines.push("");
+    for (const p of posts) {
+      const url = `${SITE}${blogPath("en", parsePostId(p.id).slug)}`;
+      const date = p.data.pubDate.toISOString().slice(0, 10);
+      lines.push(`### ${p.data.title}`);
+      lines.push("");
+      lines.push(`Published: ${date} · URL: ${url}`);
+      if (p.data.tags.length > 0) lines.push(`Tags: ${p.data.tags.join(", ")}`);
+      lines.push("");
+      lines.push(p.data.description);
+      lines.push("");
+      if (p.body) {
+        lines.push(p.body.trim());
+        lines.push("");
+      }
+    }
   }
 
   lines.push("## Contact");

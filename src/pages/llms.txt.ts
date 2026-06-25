@@ -1,11 +1,13 @@
 import type { APIRoute } from "astro";
 import en from "../i18n/en";
+import { blogPath, getPostsByLocale, parsePostId } from "../lib/blog";
 
 const SITE = "https://tom-girou.dev";
 
-export const GET: APIRoute = () => {
+export const GET: APIRoute = async () => {
   const t = en;
   const lines: string[] = [];
+  const posts = await getPostsByLocale("en");
 
   lines.push("# Tom Girou");
   lines.push("");
@@ -58,6 +60,21 @@ export const GET: APIRoute = () => {
     "- PrestaShop core contributor as @Kaikina: https://github.com/PrestaShop/PrestaShop/commits?author=Kaikina",
   );
   lines.push("");
+
+  if (posts.length > 0) {
+    lines.push("## Blog");
+    lines.push("");
+    lines.push(t.blog.metaDescription);
+    lines.push("");
+    for (const p of posts) {
+      const url = `${SITE}${blogPath("en", parsePostId(p.id).slug)}`;
+      const date = p.data.pubDate.toISOString().slice(0, 10);
+      lines.push(`- [${p.data.title}](${url}) (${date}): ${p.data.description}`);
+    }
+    lines.push("");
+    lines.push(`Feed: ${SITE}/rss.xml`);
+    lines.push("");
+  }
 
   lines.push("## Certifications");
   lines.push("");

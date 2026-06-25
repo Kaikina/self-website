@@ -68,6 +68,7 @@ export type Translation = {
     experience: string;
     words: string;
     faq: string;
+    blog: string;
     connect: string;
     menuOpen: string;
     menuClose: string;
@@ -177,6 +178,32 @@ export type Translation = {
     titleHtml: string;
     blurb: string;
     items: { q: string; a: string }[];
+  };
+  blog: {
+    /** Page <title> / meta */
+    metaTitle: string;
+    metaDescription: string;
+    /** Index hero */
+    label: string;
+    titleHtml: string;
+    blurb: string;
+    /** Author byline */
+    authorRole: string;
+    writtenBy: string;
+    /** Post chrome */
+    backToBlog: string;
+    allPosts: string;
+    tableOfContents: string;
+    minRead: string;
+    publishedLabel: string;
+    updatedLabel: string;
+    tagsLabel: string;
+    relatedPosts: string;
+    previousPost: string;
+    readMore: string;
+    rssLabel: string;
+    /** Empty state on the index */
+    empty: string;
   };
 };
 

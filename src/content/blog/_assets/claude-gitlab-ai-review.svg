@@ -1,0 +1,59 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Automated code review pipeline">
+  <defs>
+    <radialGradient id="glow" cx="82%" cy="22%" r="60%">
+      <stop offset="0%" stop-color="#E63A1F" stop-opacity="0.55"/>
+      <stop offset="45%" stop-color="#B82712" stop-opacity="0.20"/>
+      <stop offset="100%" stop-color="#0A0A0A" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glow2" cx="12%" cy="92%" r="55%">
+      <stop offset="0%" stop-color="#9C1E0F" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#0A0A0A" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="line" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#6B6760"/>
+      <stop offset="50%" stop-color="#E63A1F"/>
+      <stop offset="100%" stop-color="#2DD4BF"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="#0A0A0A"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+  <rect width="1200" height="630" fill="url(#glow2)"/>
+
+  <!-- faint grid -->
+  <g stroke="#FFFFFF" stroke-opacity="0.045" stroke-width="1">
+    <path d="M0 158 H1200 M0 315 H1200 M0 472 H1200"/>
+    <path d="M200 0 V630 M400 0 V630 M600 0 V630 M800 0 V630 M1000 0 V630"/>
+  </g>
+
+  <!-- pipeline spine -->
+  <path d="M210 360 H990" stroke="url(#line)" stroke-width="3" stroke-linecap="round"/>
+
+  <!-- stage: build -->
+  <circle cx="210" cy="360" r="13" fill="#0A0A0A" stroke="#6B6760" stroke-width="3"/>
+  <text x="210" y="408" fill="#9A958B" font-family="'JetBrains Mono', ui-monospace, monospace" font-size="18" letter-spacing="2" text-anchor="middle">BUILD</text>
+
+  <!-- stage: review (AI) -->
+  <circle cx="600" cy="360" r="40" fill="#0A0A0A" stroke="#E63A1F" stroke-width="3"/>
+  <g stroke="#E63A1F" stroke-width="3.2" stroke-linecap="round">
+    <path d="M600 332 V388"/>
+    <path d="M572 360 H628"/>
+    <path d="M581 341 L619 379"/>
+    <path d="M619 341 L581 379"/>
+  </g>
+  <circle cx="600" cy="360" r="6" fill="#E63A1F"/>
+  <text x="600" y="438" fill="#EDEAE3" font-family="'JetBrains Mono', ui-monospace, monospace" font-size="18" letter-spacing="2" text-anchor="middle">AI&#160;REVIEW</text>
+
+  <!-- stage: gate (shield + check) -->
+  <path d="M990 326 L1018 338 V362 C1018 382 1006 396 990 404 C974 396 962 382 962 362 V338 Z" fill="#0A0A0A" stroke="#2DD4BF" stroke-width="3"/>
+  <path d="M978 362 L988 372 L1006 350" stroke="#2DD4BF" stroke-width="3.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="990" y="438" fill="#9A958B" font-family="'JetBrains Mono', ui-monospace, monospace" font-size="18" letter-spacing="2" text-anchor="middle">GATE</text>
+
+  <!-- trust boundary divider -->
+  <path d="M790 150 V570" stroke="#FFFFFF" stroke-opacity="0.14" stroke-width="1.5" stroke-dasharray="6 8"/>
+  <text x="500" y="170" fill="#6B6760" font-family="'JetBrains Mono', ui-monospace, monospace" font-size="15" letter-spacing="3" text-anchor="middle">UNTRUSTED&#160;·&#160;NO&#160;TOKEN</text>
+  <text x="990" y="170" fill="#6B6760" font-family="'JetBrains Mono', ui-monospace, monospace" font-size="15" letter-spacing="3" text-anchor="middle">TRUSTED</text>
+
+  <!-- wordmark -->
+  <text x="80" y="92" fill="#EDEAE3" font-family="'JetBrains Mono', ui-monospace, monospace" font-size="20" letter-spacing="4">TOM&#160;GIROU<tspan fill="#E63A1F">.</tspan></text>
+</svg>

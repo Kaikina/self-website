@@ -14,6 +14,7 @@ const en: Translation = {
     experience: "Experience",
     words: "Words",
     faq: "FAQ",
+    blog: "Blog",
     connect: "Connect on LinkedIn",
     menuOpen: "Open menu",
     menuClose: "Close menu",
@@ -335,6 +336,30 @@ const en: Translation = {
           "Yes — I contribute to PrestaShop core under @Kaikina on GitHub. Most of my contributions land where I find friction in client work: bug fixes around invoice numbering concurrency, theme cache issues in multishop, and the kind of long-standing edge cases that aren't worth a full ticket for one team but matter for everyone running PrestaShop. The commit history lives at github.com/PrestaShop/PrestaShop/commits?author=Kaikina.",
       },
     ],
+  },
+  blog: {
+    metaTitle: "Blog — Tom Girou",
+    metaDescription:
+      "Notes from the trenches on PHP, Symfony, PrestaShop, CI/CD, and shipping production software — by Tom Girou, Senior Lead Dev.",
+    label: "[ Blog ]",
+    titleHtml:
+      'Notes from the <em style="color:var(--red);font-style:italic">trenches</em>.',
+    blurb:
+      "Field notes on PHP, Symfony, PrestaShop, CI/CD, and the unglamorous engineering that keeps production quiet. No fluff — just what actually worked, and why.",
+    authorRole: "Senior Lead Dev",
+    writtenBy: "Written by",
+    backToBlog: "Back to the blog",
+    allPosts: "All posts",
+    tableOfContents: "On this page",
+    minRead: "min read",
+    publishedLabel: "Published",
+    updatedLabel: "Updated",
+    tagsLabel: "Topics",
+    relatedPosts: "Related posts",
+    previousPost: "Previous post",
+    readMore: "Read article",
+    rssLabel: "RSS",
+    empty: "No posts yet — the first one is on its way.",
   },
 };
 

@@ -1,0 +1,332 @@
+---
+import { Image } from "astro:assets";
+import portrait from "../../../assets/portrait.avif";
+import BlogLayout from "../../../layouts/BlogLayout.astro";
+import {
+  defaultLocale,
+  getTranslation,
+  localeHtmlLang,
+  locales,
+  type Locale,
+} from "../../../i18n";
+import {
+  blogPath,
+  formatDate,
+  getPostsByLocale,
+  parsePostId,
+  readingTime,
+} from "../../../lib/blog";
+import { buildBlogIndexGraph, type BlogPostMeta } from "../../../lib/schema";
+
+export function getStaticPaths() {
+  return [
+    { params: { lang: undefined }, props: { locale: "en" as const } },
+    { params: { lang: "fr" }, props: { locale: "fr" as const } },
+    { params: { lang: "es" }, props: { locale: "es" as const } },
+  ];
+}
+
+const { locale } = Astro.props as { locale: Locale };
+const t = getTranslation(locale);
+
+const posts = await getPostsByLocale(locale);
+
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const ogImage = new URL("/og-image.jpg", Astro.site).href;
+const rssHref = locale === defaultLocale ? "/rss.xml" : `/${locale}/rss.xml`;
+
+const alternates = [
+  ...locales.map((l) => ({
+    hrefLang: localeHtmlLang[l],
+    href: new URL(blogPath(l), Astro.site).href,
+  })),
+  { hrefLang: "x-default", href: new URL(blogPath(defaultLocale), Astro.site).href },
+];
+
+const langLinks = locales.map((l) => ({
+  locale: l,
+  href: blogPath(l),
+  active: l === locale,
+}));
+
+const postsMeta: BlogPostMeta[] = posts.map((p) => {
+  const { slug } = parsePostId(p.id);
+  return {
+    url: new URL(blogPath(locale, slug), Astro.site).href,
+    title: p.data.title,
+    description: p.data.description,
+    datePublished: p.data.pubDate.toISOString().slice(0, 10),
+    dateModified: p.data.updatedDate?.toISOString().slice(0, 10),
+    tags: p.data.tags,
+  };
+});
+
+const schemaJson = JSON.stringify(
+  buildBlogIndexGraph(locale, t, canonical, ogImage, postsMeta),
+);
+
+const cards = posts.map((p) => ({
+  href: blogPath(locale, parsePostId(p.id).slug),
+  data: p.data,
+  date: formatDate(p.data.pubDate, locale),
+  minutes: readingTime(p.body ?? ""),
+}));
+---
+
+<BlogLayout
+  locale={locale}
+  title={t.blog.metaTitle}
+  description={t.blog.metaDescription}
+  canonical={canonical}
+  ogImage={ogImage}
+  ogImageAlt={t.meta.ogImageAlt}
+  ogType="website"
+  alternates={alternates}
+  langLinks={langLinks}
+  schemaJson={schemaJson}
+  rssHref={rssHref}
+>
+  <header class="blog-hero">
+    <div class="wrap">
+      <div class="mono blog-label">{t.blog.label}</div>
+      <h1 set:html={t.blog.titleHtml}></h1>
+      <p class="blog-blurb">{t.blog.blurb}</p>
+      <div class="byline">
+        <Image class="byline-avatar" src={portrait} width={44} height={44} alt="Tom Girou"/>
+        <div class="byline-meta">
+          <span class="byline-name">Tom Girou</span>
+          <span class="byline-role mono">{t.blog.authorRole}</span>
+        </div>
+        <div class="byline-links">
+          <a href="https://www.linkedin.com/in/tgirou" target="_blank" rel="noopener">LinkedIn</a>
+          <a href="https://github.com/Kaikina" target="_blank" rel="noopener">GitHub</a>
+          <a href={rssHref}>{t.blog.rssLabel}</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section class="blog-list wrap">
+    {cards.length === 0 ? (
+      <p class="blog-empty">{t.blog.empty}</p>
+    ) : (
+      <ul class="post-grid">
+        {cards.map((c) => (
+          <li class="post-card">
+            <a href={c.href} class="post-card-link">
+              {c.data.cover && (
+                <div class="post-card-cover">
+                  <Image src={c.data.cover} alt={c.data.coverAlt ?? ""} width={760} height={399} loading="lazy"/>
+                </div>
+              )}
+              <div class="post-card-body">
+                <div class="post-card-meta mono">
+                  <time datetime={c.data.pubDate.toISOString()}>{c.date}</time>
+                  <span aria-hidden="true">·</span>
+                  <span>{c.minutes} {t.blog.minRead}</span>
+                </div>
+                <h2 class="post-card-title">{c.data.title}</h2>
+                <p class="post-card-desc">{c.data.description}</p>
+                {c.data.tags.length > 0 && (
+                  <ul class="tag-row">
+                    {c.data.tags.map((tag) => <li class="tag">{tag}</li>)}
+                  </ul>
+                )}
+                <span class="post-card-cta">{t.blog.readMore} <span class="arrow">↗</span></span>
+              </div>
+            </a>
+          </li>
+        ))}
+      </ul>
+    )}
+  </section>
+</BlogLayout>
+
+<style>
+  .blog-hero {
+    padding: 168px 0 56px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .blog-label {
+    margin-bottom: 22px;
+  }
+
+  .blog-hero h1 {
+    font-family: var(--display);
+    font-weight: 800;
+    letter-spacing: -.03em;
+    line-height: .98;
+    font-size: clamp(44px, 7vw, 92px);
+    text-wrap: balance;
+  }
+
+  .blog-blurb {
+    margin-top: 26px;
+    max-width: 60ch;
+    color: var(--ink-dim);
+    font-size: clamp(16px, 1.4vw, 19px);
+    line-height: 1.6;
+  }
+
+  .byline {
+    margin-top: 40px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+
+  .byline-avatar {
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid var(--line-strong);
+  }
+
+  .byline-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .byline-name {
+    font-weight: 600;
+  }
+
+  .byline-role {
+    margin: 0;
+  }
+
+  .byline-links {
+    margin-left: auto;
+    display: flex;
+    gap: 18px;
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: .08em;
+  }
+
+  .byline-links a {
+    color: var(--ink-dim);
+    border-bottom: 1px solid transparent;
+    transition: color .25s, border-color .25s;
+    padding-bottom: 2px;
+  }
+
+  .byline-links a:hover {
+    color: var(--ink);
+    border-color: var(--red);
+  }
+
+  @media (max-width: 560px) {
+    .byline-links {
+      margin-left: 0;
+      width: 100%;
+    }
+  }
+
+  .blog-list {
+    padding-top: 56px;
+  }
+
+  .blog-empty {
+    color: var(--ink-dim);
+    font-size: 18px;
+  }
+
+  .post-grid {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 28px;
+  }
+
+  .post-card {
+    border: 1px solid var(--line);
+    background: var(--bg-2);
+    transition: border-color .3s, transform .3s, background .3s;
+  }
+
+  .post-card:hover {
+    border-color: var(--line-strong);
+    transform: translateY(-3px);
+    background: var(--bg-3);
+  }
+
+  .post-card-cover {
+    aspect-ratio: 760 / 399;
+    overflow: hidden;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .post-card-cover :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .post-card-body {
+    padding: 26px 26px 28px;
+  }
+
+  .post-card-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--ink-soft);
+  }
+
+  .post-card-title {
+    margin-top: 14px;
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 24px;
+    letter-spacing: -.02em;
+    line-height: 1.12;
+  }
+
+  .post-card-desc {
+    margin-top: 12px;
+    color: var(--ink-dim);
+    line-height: 1.6;
+    font-size: 15px;
+  }
+
+  .tag-row {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 18px;
+  }
+
+  .tag {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--ink-dim);
+    border: 1px solid var(--line);
+    padding: 4px 9px;
+  }
+
+  .post-card-cta {
+    margin-top: 22px;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--red-soft);
+  }
+
+  .post-card:hover .post-card-cta .arrow {
+    transform: translate(3px, -3px);
+  }
+
+  .post-card-cta .arrow {
+    transition: transform .35s cubic-bezier(.2, .7, .2, 1);
+  }
+</style>

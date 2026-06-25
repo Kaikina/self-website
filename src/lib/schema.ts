@@ -443,3 +443,171 @@ export function buildSchemaGraph(
     ],
   };
 }
+
+// ───────────────────────── Blog ─────────────────────────
+
+const BLOG_ID = `${SITE}/blog#blog`;
+
+export type BlogPostMeta = {
+  url: string;
+  title: string;
+  description: string;
+  datePublished: string; // ISO (YYYY-MM-DD)
+  dateModified?: string;
+  tags: string[];
+  wordCount?: number;
+};
+
+/** Compact Person node reused across blog pages (the homepage carries the full one). */
+function compactPerson(ogImage: string): Record<string, unknown> {
+  return {
+    "@type": "Person",
+    "@id": PERSON_ID,
+    name: "Tom Girou",
+    url: `${SITE}/`,
+    jobTitle: "Senior Lead Web Developer",
+    image: { "@type": "ImageObject", url: ogImage },
+    sameAs: ["https://www.linkedin.com/in/tgirou", "https://github.com/Kaikina"],
+  };
+}
+
+function websiteNode(t: Translation): Record<string, unknown> {
+  return {
+    "@type": "WebSite",
+    "@id": WEBSITE_ID,
+    url: `${SITE}/`,
+    name: "Tom Girou — Senior Lead Dev",
+    description: t.meta.description,
+    publisher: { "@id": PERSON_ID },
+    inLanguage: ["en", "fr", "es"],
+  };
+}
+
+function blogNode(t: Translation): Record<string, unknown> {
+  return {
+    "@type": "Blog",
+    "@id": BLOG_ID,
+    url: `${SITE}/blog/`,
+    name: t.blog.metaTitle,
+    description: t.blog.metaDescription,
+    inLanguage: ["en", "fr", "es"],
+    author: { "@id": PERSON_ID },
+    publisher: { "@id": PERSON_ID },
+  };
+}
+
+/** JSON-LD @graph for the blog index (CollectionPage + Blog with its posts). */
+export function buildBlogIndexGraph(
+  locale: Locale,
+  t: Translation,
+  canonical: string,
+  ogImage: string,
+  posts: BlogPostMeta[],
+): Record<string, unknown> {
+  const lang = localeHtmlLang[locale];
+
+  const blog = {
+    ...blogNode(t),
+    blogPost: posts.map((p) => ({
+      "@type": "BlogPosting",
+      "@id": `${p.url}#article`,
+      headline: p.title,
+      description: p.description,
+      url: p.url,
+      datePublished: p.datePublished,
+      ...(p.dateModified ? { dateModified: p.dateModified } : {}),
+      author: { "@id": PERSON_ID },
+      keywords: p.tags.join(", "),
+    })),
+  };
+
+  const collectionPage = {
+    "@type": "CollectionPage",
+    "@id": `${canonical}#webpage`,
+    url: canonical,
+    name: t.blog.metaTitle,
+    description: t.blog.metaDescription,
+    isPartOf: { "@id": WEBSITE_ID },
+    about: { "@id": PERSON_ID },
+    inLanguage: lang,
+    breadcrumb: { "@id": `${canonical}#breadcrumb` },
+  };
+
+  const breadcrumb = {
+    "@type": "BreadcrumbList",
+    "@id": `${canonical}#breadcrumb`,
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: `${SITE}/` },
+      { "@type": "ListItem", position: 2, name: "Blog", item: `${SITE}/blog/` },
+    ],
+  };
+
+  return {
+    "@context": "https://schema.org",
+    "@graph": [compactPerson(ogImage), websiteNode(t), blog, collectionPage, breadcrumb],
+  };
+}
+
+/** JSON-LD @graph for a single blog post (BlogPosting linked to the Person). */
+export function buildBlogPostingGraph(
+  locale: Locale,
+  t: Translation,
+  canonical: string,
+  ogImage: string,
+  post: BlogPostMeta,
+): Record<string, unknown> {
+  const lang = localeHtmlLang[locale];
+  const articleId = `${canonical}#article`;
+
+  const blogPosting: Record<string, unknown> = {
+    "@type": "BlogPosting",
+    "@id": articleId,
+    headline: post.title,
+    description: post.description,
+    url: canonical,
+    datePublished: post.datePublished,
+    dateModified: post.dateModified ?? post.datePublished,
+    author: { "@id": PERSON_ID },
+    publisher: { "@id": PERSON_ID },
+    mainEntityOfPage: { "@id": `${canonical}#webpage` },
+    image: { "@type": "ImageObject", url: ogImage },
+    inLanguage: lang,
+    isPartOf: { "@id": BLOG_ID },
+    keywords: post.tags.join(", "),
+    articleSection: post.tags,
+  };
+  if (post.wordCount) blogPosting.wordCount = post.wordCount;
+
+  const webpage = {
+    "@type": "WebPage",
+    "@id": `${canonical}#webpage`,
+    url: canonical,
+    name: post.title,
+    isPartOf: { "@id": WEBSITE_ID },
+    primaryImageOfPage: { "@type": "ImageObject", url: ogImage },
+    inLanguage: lang,
+    breadcrumb: { "@id": `${canonical}#breadcrumb` },
+  };
+
+  const breadcrumb = {
+    "@type": "BreadcrumbList",
+    "@id": `${canonical}#breadcrumb`,
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: `${SITE}/` },
+      { "@type": "ListItem", position: 2, name: "Blog", item: `${SITE}/blog/` },
+      { "@type": "ListItem", position: 3, name: post.title, item: canonical },
+    ],
+  };
+
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      compactPerson(ogImage),
+      websiteNode(t),
+      blogNode(t),
+      webpage,
+      blogPosting,
+      breadcrumb,
+    ],
+  };
+}
