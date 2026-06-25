@@ -105,3 +105,47 @@ export async function getPreviousPost(post: BlogPost): Promise<BlogPost | null> 
   const idx = posts.findIndex((p) => p.id === post.id);
   return idx >= 0 && idx + 1 < posts.length ? posts[idx + 1] : null;
 }
+
+// ───────────────────────── Tags ─────────────────────────
+
+/** URL-safe slug for a tag ("CI/CD" -> "ci-cd", "Code Review" -> "code-review"). */
+export function tagSlug(tag: string): string {
+  return tag
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+/** Locale-aware URL for a tag page. */
+export function tagPath(locale: Locale, slug: string): string {
+  return `${blogPath(locale)}tag/${slug}/`;
+}
+
+/** Unique tags used by a locale's posts, with display label, slug and count. */
+export async function getTagsByLocale(
+  locale: Locale,
+): Promise<{ tag: string; slug: string; count: number }[]> {
+  const posts = await getPostsByLocale(locale);
+  const map = new Map<string, { tag: string; count: number }>();
+  for (const p of posts) {
+    for (const tag of p.data.tags) {
+      const slug = tagSlug(tag);
+      const existing = map.get(slug);
+      if (existing) existing.count++;
+      else map.set(slug, { tag, count: 1 });
+    }
+  }
+  return [...map.entries()]
+    .map(([slug, v]) => ({ slug, tag: v.tag, count: v.count }))
+    .sort((a, b) => b.count - a.count || a.tag.localeCompare(b.tag));
+}
+
+/** Posts in a locale carrying the given tag slug, newest first. */
+export async function getPostsByTag(
+  locale: Locale,
+  slug: string,
+): Promise<BlogPost[]> {
+  const posts = await getPostsByLocale(locale);
+  return posts.filter((p) => p.data.tags.some((t) => tagSlug(t) === slug));
+}

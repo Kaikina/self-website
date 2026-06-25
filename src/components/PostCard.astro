@@ -1,0 +1,174 @@
+---
+import { Image } from "astro:assets";
+import type { Locale, Translation } from "../i18n/types";
+import {
+  blogPath,
+  formatDate,
+  parsePostId,
+  readingTime,
+  tagPath,
+  tagSlug,
+  type BlogPost,
+} from "../lib/blog";
+
+interface Props {
+  post: BlogPost;
+  locale: Locale;
+  t: Translation;
+  /** When set, the matching tag chip is rendered as "active". */
+  activeTag?: string;
+}
+
+const { post, locale, t, activeTag } = Astro.props;
+const { slug } = parsePostId(post.id);
+const href = blogPath(locale, slug);
+const date = formatDate(post.data.pubDate, locale);
+const minutes = readingTime(post.body ?? "");
+const { cover, coverAlt, title, description, tags, pubDate } = post.data;
+const activeSlug = activeTag ? tagSlug(activeTag) : null;
+---
+
+<li class="post-card">
+  <a href={href} class="post-card-link">
+    {cover && (
+      <div class="post-card-cover">
+        <Image src={cover} alt={coverAlt ?? ""} width={760} height={399} loading="lazy"/>
+      </div>
+    )}
+    <div class="post-card-body">
+      <div class="post-card-meta mono">
+        <time datetime={pubDate.toISOString()}>{date}</time>
+        <span aria-hidden="true">·</span>
+        <span>{minutes} {t.blog.minRead}</span>
+      </div>
+      <h2 class="post-card-title">{title}</h2>
+      <p class="post-card-desc">{description}</p>
+      <span class="post-card-cta">{t.blog.readMore} <span class="arrow">↗</span></span>
+    </div>
+  </a>
+  {tags.length > 0 && (
+    <ul class="tag-row">
+      {tags.map((tag) => (
+        <li>
+          <a
+            href={tagPath(locale, tagSlug(tag))}
+            class:list={["tag", { active: activeSlug === tagSlug(tag) }]}
+          >{tag}</a>
+        </li>
+      ))}
+    </ul>
+  )}
+</li>
+
+<style>
+  .post-card {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--line);
+    background: var(--bg-2);
+    transition: border-color .3s, transform .3s, background .3s;
+  }
+
+  .post-card:hover {
+    border-color: var(--line-strong);
+    transform: translateY(-3px);
+    background: var(--bg-3);
+  }
+
+  .post-card-link {
+    display: block;
+    flex: 1;
+  }
+
+  .post-card-cover {
+    aspect-ratio: 760 / 399;
+    overflow: hidden;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .post-card-cover :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .post-card-body {
+    padding: 26px 26px 24px;
+  }
+
+  .post-card-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--ink-soft);
+  }
+
+  .post-card-title {
+    margin-top: 14px;
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 24px;
+    letter-spacing: -.02em;
+    line-height: 1.12;
+  }
+
+  .post-card-desc {
+    margin-top: 12px;
+    color: var(--ink-dim);
+    line-height: 1.6;
+    font-size: 15px;
+  }
+
+  .post-card-cta {
+    margin-top: 22px;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--red-soft);
+  }
+
+  .post-card:hover .post-card-cta .arrow {
+    transform: translate(3px, -3px);
+  }
+
+  .post-card-cta .arrow {
+    transition: transform .35s cubic-bezier(.2, .7, .2, 1);
+  }
+
+  /* Tag chips live outside the card link so they can be their own links. */
+  .tag-row {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 16px 26px 22px;
+    border-top: 1px solid var(--line);
+  }
+
+  .tag {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--ink-dim);
+    border: 1px solid var(--line);
+    padding: 4px 9px;
+    transition: color .2s, border-color .2s, background .2s;
+  }
+
+  .tag:hover {
+    color: var(--ink);
+    border-color: var(--red);
+  }
+
+  .tag.active {
+    color: #fff;
+    border-color: var(--red-deep);
+    background: var(--red-deep);
+  }
+</style>

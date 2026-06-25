@@ -2,6 +2,7 @@
 import { Image } from "astro:assets";
 import portrait from "../../../assets/portrait.avif";
 import BlogLayout from "../../../layouts/BlogLayout.astro";
+import PostCard from "../../../components/PostCard.astro";
 import {
   defaultLocale,
   getTranslation,
@@ -9,13 +10,7 @@ import {
   locales,
   type Locale,
 } from "../../../i18n";
-import {
-  blogPath,
-  formatDate,
-  getPostsByLocale,
-  parsePostId,
-  readingTime,
-} from "../../../lib/blog";
+import { blogPath, getPostsByLocale, parsePostId } from "../../../lib/blog";
 import { buildBlogIndexGraph, type BlogPostMeta } from "../../../lib/schema";
 
 export function getStaticPaths() {
@@ -64,13 +59,6 @@ const postsMeta: BlogPostMeta[] = posts.map((p) => {
 const schemaJson = JSON.stringify(
   buildBlogIndexGraph(locale, t, canonical, ogImage, postsMeta),
 );
-
-const cards = posts.map((p) => ({
-  href: blogPath(locale, parsePostId(p.id).slug),
-  data: p.data,
-  date: formatDate(p.data.pubDate, locale),
-  minutes: readingTime(p.body ?? ""),
-}));
 ---
 
 <BlogLayout
@@ -107,36 +95,11 @@ const cards = posts.map((p) => ({
   </header>
 
   <section class="blog-list wrap">
-    {cards.length === 0 ? (
+    {posts.length === 0 ? (
       <p class="blog-empty">{t.blog.empty}</p>
     ) : (
       <ul class="post-grid">
-        {cards.map((c) => (
-          <li class="post-card">
-            <a href={c.href} class="post-card-link">
-              {c.data.cover && (
-                <div class="post-card-cover">
-                  <Image src={c.data.cover} alt={c.data.coverAlt ?? ""} width={760} height={399} loading="lazy"/>
-                </div>
-              )}
-              <div class="post-card-body">
-                <div class="post-card-meta mono">
-                  <time datetime={c.data.pubDate.toISOString()}>{c.date}</time>
-                  <span aria-hidden="true">·</span>
-                  <span>{c.minutes} {t.blog.minRead}</span>
-                </div>
-                <h2 class="post-card-title">{c.data.title}</h2>
-                <p class="post-card-desc">{c.data.description}</p>
-                {c.data.tags.length > 0 && (
-                  <ul class="tag-row">
-                    {c.data.tags.map((tag) => <li class="tag">{tag}</li>)}
-                  </ul>
-                )}
-                <span class="post-card-cta">{t.blog.readMore} <span class="arrow">↗</span></span>
-              </div>
-            </a>
-          </li>
-        ))}
+        {posts.map((p) => <PostCard post={p} locale={locale} t={t} />)}
       </ul>
     )}
   </section>
@@ -239,94 +202,5 @@ const cards = posts.map((p) => ({
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
     gap: 28px;
-  }
-
-  .post-card {
-    border: 1px solid var(--line);
-    background: var(--bg-2);
-    transition: border-color .3s, transform .3s, background .3s;
-  }
-
-  .post-card:hover {
-    border-color: var(--line-strong);
-    transform: translateY(-3px);
-    background: var(--bg-3);
-  }
-
-  .post-card-cover {
-    aspect-ratio: 760 / 399;
-    overflow: hidden;
-    border-bottom: 1px solid var(--line);
-  }
-
-  .post-card-cover :global(img) {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  .post-card-body {
-    padding: 26px 26px 28px;
-  }
-
-  .post-card-meta {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    color: var(--ink-soft);
-  }
-
-  .post-card-title {
-    margin-top: 14px;
-    font-family: var(--display);
-    font-weight: 700;
-    font-size: 24px;
-    letter-spacing: -.02em;
-    line-height: 1.12;
-  }
-
-  .post-card-desc {
-    margin-top: 12px;
-    color: var(--ink-dim);
-    line-height: 1.6;
-    font-size: 15px;
-  }
-
-  .tag-row {
-    list-style: none;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-top: 18px;
-  }
-
-  .tag {
-    font-family: var(--mono);
-    font-size: 11px;
-    letter-spacing: .08em;
-    text-transform: uppercase;
-    color: var(--ink-dim);
-    border: 1px solid var(--line);
-    padding: 4px 9px;
-  }
-
-  .post-card-cta {
-    margin-top: 22px;
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-    font-family: var(--mono);
-    font-size: 12px;
-    letter-spacing: .1em;
-    text-transform: uppercase;
-    color: var(--red-soft);
-  }
-
-  .post-card:hover .post-card-cta .arrow {
-    transform: translate(3px, -3px);
-  }
-
-  .post-card-cta .arrow {
-    transition: transform .35s cubic-bezier(.2, .7, .2, 1);
   }
 </style>

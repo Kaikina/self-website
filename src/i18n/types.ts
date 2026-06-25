@@ -198,6 +198,7 @@ export type Translation = {
     publishedLabel: string;
     updatedLabel: string;
     tagsLabel: string;
+    taggedLabel: string;
     relatedPosts: string;
     previousPost: string;
     readMore: string;

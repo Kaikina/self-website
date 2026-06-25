@@ -1,0 +1,156 @@
+---
+import BlogLayout from "../../../../layouts/BlogLayout.astro";
+import PostCard from "../../../../components/PostCard.astro";
+import {
+  defaultLocale,
+  getTranslation,
+  localeHtmlLang,
+  locales,
+  type Locale,
+} from "../../../../i18n";
+import {
+  blogPath,
+  getPostsByTag,
+  getTagsByLocale,
+  parsePostId,
+  tagPath,
+} from "../../../../lib/blog";
+import { buildBlogIndexGraph, type BlogPostMeta } from "../../../../lib/schema";
+
+export async function getStaticPaths() {
+  const paths = [];
+  for (const locale of locales) {
+    for (const { tag, slug } of await getTagsByLocale(locale)) {
+      paths.push({
+        params: { lang: locale === defaultLocale ? undefined : locale, tag: slug },
+        props: { locale, tag, slug },
+      });
+    }
+  }
+  return paths;
+}
+
+const { locale, tag, slug } = Astro.props as {
+  locale: Locale;
+  tag: string;
+  slug: string;
+};
+const t = getTranslation(locale);
+
+const posts = await getPostsByTag(locale, slug);
+
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const ogImage = new URL("/og-image.jpg", Astro.site).href;
+const rssHref = locale === defaultLocale ? "/rss.xml" : `/${locale}/rss.xml`;
+
+// Surface this tag's page only in locales that actually have posts for it.
+const localesWithTag: Locale[] = [];
+for (const l of locales) {
+  if ((await getPostsByTag(l, slug)).length > 0) localesWithTag.push(l);
+}
+
+const langLinks = localesWithTag.map((l) => ({
+  locale: l,
+  href: tagPath(l, slug),
+  active: l === locale,
+}));
+
+const alternates = localesWithTag.map((l) => ({
+  hrefLang: localeHtmlLang[l],
+  href: new URL(tagPath(l, slug), Astro.site).href,
+}));
+if (localesWithTag.includes(defaultLocale)) {
+  alternates.push({
+    hrefLang: "x-default",
+    href: new URL(tagPath(defaultLocale, slug), Astro.site).href,
+  });
+}
+
+const postsMeta: BlogPostMeta[] = posts.map((p) => {
+  const { slug: postSlug } = parsePostId(p.id);
+  return {
+    url: new URL(blogPath(locale, postSlug), Astro.site).href,
+    title: p.data.title,
+    description: p.data.description,
+    datePublished: p.data.pubDate.toISOString().slice(0, 10),
+    dateModified: p.data.updatedDate?.toISOString().slice(0, 10),
+    tags: p.data.tags,
+  };
+});
+
+const pageTitle = `${t.blog.taggedLabel} ${tag} — Tom Girou`;
+const pageDescription = `${t.blog.taggedLabel} ${tag}.`;
+const schemaJson = JSON.stringify(
+  buildBlogIndexGraph(locale, t, canonical, ogImage, postsMeta),
+);
+---
+
+<BlogLayout
+  locale={locale}
+  title={pageTitle}
+  description={pageDescription}
+  canonical={canonical}
+  ogImage={ogImage}
+  ogImageAlt={t.meta.ogImageAlt}
+  ogType="website"
+  alternates={alternates}
+  langLinks={langLinks}
+  schemaJson={schemaJson}
+  rssHref={rssHref}
+>
+  <header class="tag-hero">
+    <div class="wrap">
+      <a class="back-link mono" href={blogPath(locale)}>← {t.blog.allPosts}</a>
+      <div class="mono tag-label">{t.blog.taggedLabel}</div>
+      <h1 class="tag-title">#{tag}</h1>
+    </div>
+  </header>
+
+  <section class="blog-list wrap">
+    <ul class="post-grid">
+      {posts.map((p) => <PostCard post={p} locale={locale} t={t} activeTag={tag} />)}
+    </ul>
+  </section>
+</BlogLayout>
+
+<style>
+  .tag-hero {
+    padding: 150px 0 48px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .back-link {
+    display: inline-block;
+    color: var(--ink-dim);
+    margin-bottom: 30px;
+    transition: color .25s;
+  }
+
+  .back-link:hover {
+    color: var(--red-soft);
+  }
+
+  .tag-label {
+    margin-bottom: 16px;
+  }
+
+  .tag-title {
+    font-family: var(--display);
+    font-weight: 800;
+    letter-spacing: -.03em;
+    line-height: 1;
+    font-size: clamp(40px, 6.5vw, 82px);
+    text-wrap: balance;
+  }
+
+  .blog-list {
+    padding-top: 56px;
+  }
+
+  .post-grid {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 28px;
+  }
+</style>

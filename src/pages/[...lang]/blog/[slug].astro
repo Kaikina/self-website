@@ -19,6 +19,8 @@ import {
   getPostTranslations,
   parsePostId,
   readingTime,
+  tagPath,
+  tagSlug,
   wordCount,
   type BlogPost,
 } from "../../../lib/blog";
@@ -166,7 +168,9 @@ const prevCard = previous
 
       {data.tags.length > 0 && (
         <ul class="tag-row">
-          {data.tags.map((tag) => <li class="tag">{tag}</li>)}
+          {data.tags.map((tag) => (
+            <li><a class="tag" href={tagPath(locale, tagSlug(tag))}>{tag}</a></li>
+          ))}
         </ul>
       )}
 
@@ -298,6 +302,7 @@ const prevCard = previous
   }
 
   .tag {
+    display: inline-block;
     font-family: var(--mono);
     font-size: 11px;
     letter-spacing: .08em;
@@ -305,6 +310,12 @@ const prevCard = previous
     color: var(--ink-dim);
     border: 1px solid var(--line);
     padding: 4px 9px;
+    transition: color .2s, border-color .2s;
+  }
+
+  .tag:hover {
+    color: var(--ink);
+    border-color: var(--red);
   }
 
   .byline {

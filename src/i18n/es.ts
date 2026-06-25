@@ -357,6 +357,7 @@ const es: Translation = {
     publishedLabel: "Publicado",
     updatedLabel: "Actualizado",
     tagsLabel: "Temas",
+    taggedLabel: "Artículos con el tag",
     relatedPosts: "Artículos relacionados",
     previousPost: "Artículo anterior",
     readMore: "Leer artículo",
