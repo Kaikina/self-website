@@ -362,6 +362,9 @@ const es: Translation = {
     previousPost: "Artículo anterior",
     readMore: "Leer artículo",
     rssLabel: "RSS",
+    kofiHeading: "¿Te resultó útil?",
+    kofiBlurb: "Si este artículo te ahorró tiempo, puedes invitarme a un café. Así sigo escribiendo.",
+    kofiButton: "Apóyame en Ko-fi",
     empty: "Aún no hay artículos — el primero está en camino.",
   },
 };

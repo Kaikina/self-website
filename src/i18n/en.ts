@@ -360,6 +360,9 @@ const en: Translation = {
     previousPost: "Previous post",
     readMore: "Read article",
     rssLabel: "RSS",
+    kofiHeading: "Found this useful?",
+    kofiBlurb: "If this article saved you some time, you can buy me a coffee. It keeps the writing coming.",
+    kofiButton: "Support me on Ko-fi",
     empty: "No posts yet — the first one is on its way.",
   },
 };

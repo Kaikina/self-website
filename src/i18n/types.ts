@@ -203,6 +203,10 @@ export type Translation = {
     previousPost: string;
     readMore: string;
     rssLabel: string;
+    /** Ko-fi support prompt at the foot of a post */
+    kofiHeading: string;
+    kofiBlurb: string;
+    kofiButton: string;
     /** Empty state on the index */
     empty: string;
   };

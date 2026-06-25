@@ -199,6 +199,23 @@ const prevCard = previous
     <div class="wrap post-grid">
       <div class="post-content">
         <Content />
+
+        <aside class="kofi">
+          <div class="kofi-text">
+            <h2 class="kofi-heading">{t.blog.kofiHeading}</h2>
+            <p class="kofi-blurb">{t.blog.kofiBlurb}</p>
+          </div>
+          <a class="kofi-btn" href="https://ko-fi.com/S6S24OE2J" target="_blank" rel="noopener">
+            <svg class="kofi-cup" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M4 7h13v6a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4V7Z" fill="currentColor" opacity=".18"/>
+              <path d="M4 7h13v6a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4V7Z" stroke="currentColor" stroke-width="1.6"/>
+              <path d="M17 8h2.2a2.3 2.3 0 0 1 0 4.6H17" stroke="currentColor" stroke-width="1.6"/>
+              <path d="M7.5 2.5c-.6.8-.6 1.5 0 2.3M10.5 2.5c-.6.8-.6 1.5 0 2.3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+            </svg>
+            <span>{t.blog.kofiButton}</span>
+            <span class="kofi-arrow" aria-hidden="true">↗</span>
+          </a>
+        </aside>
       </div>
 
       {toc.length > 0 && (
@@ -563,6 +580,81 @@ const prevCard = previous
   .post-content :global(img) {
     margin: 32px 0;
     border: 1px solid var(--line);
+  }
+
+  /* ───────── ko-fi support ───────── */
+  .kofi {
+    margin-top: 64px;
+    padding: 28px 30px;
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--red);
+    background: var(--bg-2);
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px 32px;
+  }
+
+  .kofi-text {
+    flex: 1 1 280px;
+    min-width: 0;
+  }
+
+  .kofi-heading {
+    font-family: var(--display);
+    font-weight: 800;
+    letter-spacing: -.01em;
+    font-size: 20px;
+    line-height: 1.2;
+  }
+
+  .kofi-blurb {
+    margin: 8px 0 0;
+    color: var(--ink-dim);
+    font-size: 15px;
+    line-height: 1.55;
+  }
+
+  /* Scoped under .post-content so these beat the prose-link rule
+     (.post-content :global(a)) on specificity — otherwise the button
+     text inherits --red-soft and reads red-on-red. */
+  .post-content .kofi-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+    padding: 13px 22px;
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: 15px;
+    color: #fff;
+    background: var(--red-deep);
+    border: 1.5px solid var(--red-deep);
+    transition: background .3s, color .3s, border-color .3s;
+  }
+
+  .kofi-btn .kofi-cup {
+    flex-shrink: 0;
+  }
+
+  .kofi-btn .kofi-arrow {
+    display: inline-block;
+    transition: transform .35s cubic-bezier(.2, .7, .2, 1);
+  }
+
+  .post-content .kofi-btn:hover {
+    background: #fff;
+    color: var(--red);
+    border-color: #fff;
+  }
+
+  .kofi-btn:focus-visible {
+    outline: 2px solid var(--teal);
+    outline-offset: 3px;
+  }
+
+  .kofi-btn:hover .kofi-arrow {
+    transform: translate(3px, -3px);
   }
 
   /* ───────── footer of post ───────── */
