@@ -1,0 +1,74 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A plain-language question becomes a read-only codebase analysis and a ready-to-file ticket">
+  <defs>
+    <radialGradient id="glow" cx="82%" cy="22%" r="60%">
+      <stop offset="0%" stop-color="#E63A1F" stop-opacity="0.55"/>
+      <stop offset="45%" stop-color="#B82712" stop-opacity="0.20"/>
+      <stop offset="100%" stop-color="#0A0A0A" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glow2" cx="12%" cy="92%" r="55%">
+      <stop offset="0%" stop-color="#0E5C53" stop-opacity="0.40"/>
+      <stop offset="100%" stop-color="#0A0A0A" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="line" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#6B6760"/>
+      <stop offset="50%" stop-color="#E63A1F"/>
+      <stop offset="100%" stop-color="#2DD4BF"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="#0A0A0A"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+  <rect width="1200" height="630" fill="url(#glow2)"/>
+
+  <!-- faint grid -->
+  <g stroke="#FFFFFF" stroke-opacity="0.045" stroke-width="1">
+    <path d="M0 158 H1200 M0 315 H1200 M0 472 H1200"/>
+    <path d="M200 0 V630 M400 0 V630 M600 0 V630 M800 0 V630 M1000 0 V630"/>
+  </g>
+
+  <!-- flow spine -->
+  <path d="M250 360 H950" stroke="url(#line)" stroke-width="3" stroke-linecap="round"/>
+
+  <!-- stage 1: plain-language question (chat bubble) -->
+  <g>
+    <rect x="186" y="324" width="128" height="62" rx="14" fill="#0A0A0A" stroke="#6B6760" stroke-width="3"/>
+    <path d="M236 386 L250 408 L264 386 Z" fill="#0A0A0A" stroke="#6B6760" stroke-width="3" stroke-linejoin="round"/>
+    <rect x="236" y="386" width="28" height="6" fill="#0A0A0A"/>
+    <g fill="#9A958B">
+      <circle cx="220" cy="355" r="6"/>
+      <circle cx="250" cy="355" r="6"/>
+      <circle cx="280" cy="355" r="6"/>
+    </g>
+    <text x="250" y="446" fill="#9A958B" font-family="'JetBrains Mono', ui-monospace, monospace" font-size="18" letter-spacing="2" text-anchor="middle">QUESTION</text>
+  </g>
+
+  <!-- stage 2: read-only analyst (lens over code) -->
+  <g>
+    <circle cx="600" cy="360" r="46" fill="#0A0A0A" stroke="#E63A1F" stroke-width="3"/>
+    <g stroke="#E63A1F" stroke-width="3.4" stroke-linecap="round">
+      <path d="M581 346 H619"/>
+      <path d="M581 360 H611"/>
+      <path d="M581 374 H607"/>
+    </g>
+    <path d="M634 394 L660 420" stroke="#E63A1F" stroke-width="5" stroke-linecap="round"/>
+    <text x="600" y="446" fill="#EDEAE3" font-family="'JetBrains Mono', ui-monospace, monospace" font-size="18" letter-spacing="2" text-anchor="middle">READ&#8209;ONLY&#160;ANALYST</text>
+  </g>
+
+  <!-- stage 3: ready-to-file ticket -->
+  <g>
+    <rect x="918" y="320" width="92" height="80" rx="10" fill="#0A0A0A" stroke="#2DD4BF" stroke-width="3"/>
+    <g stroke="#2DD4BF" stroke-opacity="0.6" stroke-width="3" stroke-linecap="round">
+      <path d="M934 344 H994"/>
+      <path d="M934 360 H994"/>
+      <path d="M934 376 H974"/>
+    </g>
+    <path d="M952 376 L962 386 L982 360" stroke="#2DD4BF" stroke-width="3.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="964" y="446" fill="#9A958B" font-family="'JetBrains Mono', ui-monospace, monospace" font-size="18" letter-spacing="2" text-anchor="middle">TICKET</text>
+  </g>
+
+  <!-- grounding cue -->
+  <text x="600" y="510" fill="#6B6760" font-family="'JetBrains Mono', ui-monospace, monospace" font-size="15" letter-spacing="3" text-anchor="middle">GROUNDED&#160;IN&#160;CODE&#160;·&#160;NEVER&#160;WRITES&#160;·&#160;CITES&#160;file:line</text>
+
+  <!-- wordmark -->
+  <text x="80" y="92" fill="#EDEAE3" font-family="'JetBrains Mono', ui-monospace, monospace" font-size="20" letter-spacing="4">TOM&#160;GIROU<tspan fill="#E63A1F">.</tspan></text>
+</svg>
