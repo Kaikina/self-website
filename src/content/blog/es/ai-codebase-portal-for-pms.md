@@ -1,11 +1,11 @@
 ---
 title: "Dejar que jefes de proyecto no técnicos consulten la codebase en lenguaje natural"
-description: "Por qué construí un analista de IA en modo solo lectura que permite a los jefes de proyecto hacer preguntas sobre una codebase y marcharse con un ticket listo para crear — y por qué todo funciona solo porque la IA puede leer pero nunca escribir."
+description: "Por qué construí un analista de IA en modo solo lectura que permite a los jefes de proyecto hacer preguntas sobre una codebase y marcharse con un ticket de Jira creado automáticamente — y por qué todo funciona solo porque la IA puede leer pero nunca escribir."
 pubDate: 2026-06-29
 tags: ["Claude", "Agent SDK", "Developer Tools", "Jira", "PrestaShop"]
 cover: ../_assets/ai-codebase-portal-for-pms.svg
 ogImage: ../_assets/ai-codebase-portal-for-pms.png
-coverAlt: "Una pregunta en lenguaje natural entra en un analista de codebase en solo lectura y sale como un ticket listo para crear"
+coverAlt: "Una pregunta en lenguaje natural entra en un analista de codebase en solo lectura y sale como un ticket de Jira creado automáticamente"
 translationKey: "ai-codebase-portal-for-pms"
 ---
 
@@ -29,7 +29,7 @@ El objetivo era deliberadamente estrecho: dejar que un PM haga una pregunta con 
 
 Primero, una **respuesta en lenguaje natural anclada en el código real.** No una suposición segura de sí misma, ni un genérico «así es como suele funcionar PrestaShop» — una respuesta que apunte a archivos reales y líneas reales en el repo de *este* cliente en concreto, y que lo diga cuándo el código no permite concluir de verdad.
 
-Segundo, esa respuesta **con forma de ticket**: comportamiento observado, causa sospechada, archivos implicados, qué habría que cambiar. Lo bastante cerca para soltarla directamente en Jira, de modo que la investigación sobreviva.
+Segundo, **esa respuesta creada como un ticket de Jira real** — directamente en el proyecto de Jira, no copiada a mano: comportamiento observado, causa sospechada, archivos implicados, qué habría que cambiar. El jefe de proyecto la aprueba, la herramienta se encarga de crearla, y la investigación sobrevive como un ticket de verdad.
 
 Si lograba esas dos cosas de forma fiable, la interrupción del dev desaparece en gran parte, y los tickets que llegan al equipo arrancan con ventaja en lugar de partir de cero.
 
@@ -53,7 +53,7 @@ Unas pocas decisiones de diseño convierten «una IA que puede leer código» en
 
 **Traduce, en lugar de explicar.** El público es explícitamente un jefe de proyecto no técnico. Así que la respuesta no es un recorrido por el código; es el business impact en lenguaje claro, con el detalle técnico disponible pero no atravesado en el camino. «Esto afecta a todos los clientes que usan un código de descuento en el checkout» da en el blanco; «hay un off-by-one en el bucle de las cart rules» no.
 
-**Pasa el relevo limpiamente a Jira.** Como la respuesta ya está estructurada como un ticket — comportamiento observado, causa sospechada, archivos implicados, cambio propuesto — convertirla en un ticket de Jira real es un paso, no una reescritura. La investigación que se evaporaba de pie junto a un escritorio ahora se vuelve un ticket duradero, con las rutas de archivos ya dentro.
+**Crea el ticket ella misma.** La respuesta ya está estructurada como un ticket — comportamiento observado, causa sospechada, archivos implicados, cambio propuesto — y en cuanto el jefe de proyecto la aprueba, la herramienta crea la incidencia directamente en Jira a través de la integración Rovo (MCP) de Atlassian. Sin copiar y pegar, sin reescribir en un formulario: el borrador estructurado se envía directamente al proyecto correcto, con los campos rellenados. La investigación que se evaporaba de pie junto a un escritorio ahora se vuelve un ticket duradero, con las rutas de archivos ya dentro.
 
 **Todo queda logueado.** Cada pregunta, cada archivo que la IA consultó, cada ticket que redactó queda registrado. En parte por higiene, para todo lo que toca código de cliente; en parte para que yo pueda ver de verdad cómo se usa la herramienta y dónde se tuercen sus respuestas.
 

@@ -1,11 +1,11 @@
 ---
 title: "Letting Non-Technical PMs Query the Codebase in Plain Language"
-description: "Why I built a read-only AI analyst that lets project managers ask questions about a codebase and walk away with a ready-to-file ticket — and why the whole thing only works because the AI can read but never write."
+description: "Why I built a read-only AI analyst that lets project managers ask questions about a codebase and have a Jira ticket filed for them automatically — and why the whole thing only works because the AI can read but never write."
 pubDate: 2026-06-29
 tags: ["Claude", "Agent SDK", "Developer Tools", "Jira", "PrestaShop"]
 cover: ../_assets/ai-codebase-portal-for-pms.svg
 ogImage: ../_assets/ai-codebase-portal-for-pms.png
-coverAlt: "A plain-language question flows into a read-only codebase analyst and out as a ready-to-file ticket"
+coverAlt: "A plain-language question flows into a read-only codebase analyst and out as a Jira ticket filed automatically"
 translationKey: "ai-codebase-portal-for-pms"
 ---
 
@@ -29,7 +29,7 @@ The goal was deliberately narrow: let a PM ask a question in their own words and
 
 First, a **plain-language answer grounded in the real code.** Not a confident guess, and not a generic "here's how PrestaShop usually works" — an answer that points at real files and real lines in *this* client's repository, and that says so when the code doesn't actually support a conclusion.
 
-Second, that answer **shaped like a ticket**: observed behaviour, suspected cause, the files involved, what would need to change. Close enough to drop straight into Jira, so the investigation survives.
+Second, **that answer filed as a real Jira ticket** — created directly in the project's Jira, not copy-pasted by hand: observed behaviour, suspected cause, the files involved, what would need to change. The PM approves it, the tool does the filing, and the investigation survives as a proper ticket.
 
 If I could get those two things reliably, the developer interruption mostly disappears, and the tickets that reach the dev team arrive with a head start instead of from zero.
 
@@ -53,7 +53,7 @@ A few design choices turn "an AI that can read code" into something a PM can act
 
 **It translates, instead of explaining.** The audience is explicitly a non-technical PM. So the answer isn't a code walkthrough; it's the business impact in plain language, with the technical detail available but not in the way. "This affects every customer using a discount code at checkout" lands; "there's an off-by-one in the cart rule loop" does not.
 
-**It hands off cleanly to Jira.** Because the answer is already structured like a ticket — observed behaviour, suspected cause, files involved, proposed change — turning it into a real Jira issue is one step, not a re-write. The investigation that used to evaporate at someone's desk now becomes a durable ticket with file paths already in it.
+**It files the ticket itself.** The answer is already structured like a ticket — observed behaviour, suspected cause, files involved, proposed change — and once the PM approves it, the tool creates the issue directly in Jira through Atlassian's Rovo (MCP) integration. No copy-paste, no re-typing into a form: the structured draft is pushed straight into the right project with its fields filled in. The investigation that used to evaporate at someone's desk now becomes a durable ticket with file paths already in it.
 
 **Everything is logged.** Every question, every file the AI looked at, every ticket it drafted is recorded. Partly that's good hygiene for anything touching client code; partly it's so I can actually see how the tool is being used and where its answers go wrong.
 

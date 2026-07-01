@@ -1,11 +1,11 @@
 ---
 title: "Permettre à des chefs de projet non-techniques d'interroger la codebase en langage naturel"
-description: "Pourquoi j'ai construit un analyste IA en lecture seule qui laisse les chefs de projet poser des questions sur une codebase et repartir avec un ticket prêt à créer — et pourquoi tout ne tient que parce que l'IA peut lire mais jamais écrire."
+description: "Pourquoi j'ai construit un analyste IA en lecture seule qui laisse les chefs de projet poser des questions sur une codebase et repartir avec un ticket Jira créé automatiquement — et pourquoi tout ne tient que parce que l'IA peut lire mais jamais écrire."
 pubDate: 2026-06-29
 tags: ["Claude", "Agent SDK", "Developer Tools", "Jira", "PrestaShop"]
 cover: ../_assets/ai-codebase-portal-for-pms.svg
 ogImage: ../_assets/ai-codebase-portal-for-pms.png
-coverAlt: "Une question en langage naturel passe dans un analyste de codebase en lecture seule et ressort en ticket prêt à créer"
+coverAlt: "Une question en langage naturel passe dans un analyste de codebase en lecture seule et ressort en ticket Jira créé automatiquement"
 translationKey: "ai-codebase-portal-for-pms"
 ---
 
@@ -29,7 +29,7 @@ L'objectif était volontairement étroit : laisser un PM poser une question avec
 
 D'abord, une **réponse en langage naturel ancrée dans le code réel.** Pas une supposition assurée, ni un générique « voici comment PrestaShop fonctionne d'habitude » — une réponse qui pointe vers de vrais fichiers et de vraies lignes dans le repo de *ce* client-là, et qui le dit quand le code ne permet pas vraiment de conclure.
 
-Ensuite, cette réponse **mise en forme comme un ticket** : comportement observé, cause suspectée, fichiers concernés, ce qu'il faudrait changer. Assez proche pour la déposer directement dans Jira, pour que l'investigation survive.
+Ensuite, **cette réponse créée comme un vrai ticket Jira** — directement dans le projet Jira, pas recopiée à la main : comportement observé, cause suspectée, fichiers concernés, ce qu'il faudrait changer. Le chef de projet valide, l'outil se charge de la création, et l'investigation survit sous forme de vrai ticket.
 
 Si j'arrivais à obtenir ces deux choses de façon fiable, l'interruption du dev disparaît en grande partie, et les tickets qui atterrissent dans l'équipe arrivent avec une longueur d'avance au lieu de partir de zéro.
 
@@ -53,7 +53,7 @@ Quelques choix de design transforment « une IA qui peut lire du code » en quel
 
 **Il traduit, au lieu d'expliquer.** Le public est explicitement un chef de projet non-technique. Donc la réponse n'est pas une visite guidée du code ; c'est le business impact en langage clair, avec le détail technique disponible mais pas en travers du chemin. « Ça affecte tous les clients qui utilisent un code promo au checkout » fait mouche ; « il y a un off-by-one dans la boucle des cart rules » non.
 
-**Il passe le relais proprement à Jira.** Comme la réponse est déjà structurée comme un ticket — comportement observé, cause suspectée, fichiers concernés, changement proposé — la transformer en vrai ticket Jira est une étape, pas une réécriture. L'investigation qui s'évaporait debout à côté d'un bureau devient désormais un ticket durable, avec les chemins de fichiers déjà dedans.
+**Il crée le ticket lui-même.** La réponse est déjà structurée comme un ticket — comportement observé, cause suspectée, fichiers concernés, changement proposé — et une fois que le chef de projet valide, l'outil crée l'issue directement dans Jira via l'intégration Rovo (MCP) d'Atlassian. Pas de copier-coller, pas de ressaisie dans un formulaire : le brouillon structuré est poussé directement dans le bon projet, champs remplis. L'investigation qui s'évaporait debout à côté d'un bureau devient désormais un ticket durable, avec les chemins de fichiers déjà dedans.
 
 **Tout est loggé.** Chaque question, chaque fichier que l'IA a consulté, chaque ticket qu'elle a rédigé est enregistré. En partie par hygiène, pour tout ce qui touche au code client ; en partie pour que je puisse réellement voir comment l'outil est utilisé et où ses réponses dérapent.
 
