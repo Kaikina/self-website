@@ -1,0 +1,65 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A terminal-style stats readout for a GitHub repo: a large commit figure, a weekly-activity sparkline, and an embeddable SVG badge">
+  <defs>
+    <radialGradient id="rwglow" cx="86%" cy="16%" r="62%">
+      <stop offset="0%" stop-color="#2DD26B" stop-opacity="0.28"/>
+      <stop offset="55%" stop-color="#12351F" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#0C1116" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="rwbars" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0%" stop-color="#2DD26B" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#7CE38B"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="#0C1116"/>
+  <rect width="1200" height="630" fill="url(#rwglow)"/>
+
+  <!-- faint grid -->
+  <g stroke="#FFFFFF" stroke-opacity="0.04" stroke-width="1">
+    <path d="M0 158 H1200 M0 315 H1200 M0 472 H1200"/>
+    <path d="M200 0 V630 M400 0 V630 M600 0 V630 M800 0 V630 M1000 0 V630"/>
+  </g>
+
+  <!-- wordmark -->
+  <text x="80" y="92" fill="#EDEAE3" font-family="'IBM Plex Mono','JetBrains Mono',ui-monospace,monospace" font-size="20" letter-spacing="4">TOM&#160;GIROU<tspan fill="#7CE38B">.</tspan></text>
+
+  <!-- prompt line -->
+  <text x="80" y="190" font-family="'IBM Plex Mono','JetBrains Mono',ui-monospace,monospace" font-size="24" letter-spacing="1">
+    <tspan fill="#7CE38B">$ </tspan><tspan fill="#EDEAE3">repo-wrapped </tspan><tspan fill="#8A9199">laravel/framework taylorotwell</tspan><tspan fill="#7CE38B"> &#9646;</tspan>
+  </text>
+
+  <!-- hero commit figure (ink, not green — data is the hero) -->
+  <text x="76" y="388" fill="#EDEAE3" font-family="'IBM Plex Mono','JetBrains Mono',ui-monospace,monospace" font-size="176" font-weight="700" letter-spacing="-2">3,481</text>
+  <text x="82" y="440" fill="#7CE38B" font-family="'IBM Plex Mono','JetBrains Mono',ui-monospace,monospace" font-size="22" letter-spacing="6">COMMITS</text>
+
+  <!-- stat strip -->
+  <g font-family="'IBM Plex Mono','JetBrains Mono',ui-monospace,monospace" font-size="22" letter-spacing="1">
+    <text x="82" y="516"><tspan fill="#7CE38B">+128,204</tspan><tspan fill="#565E66"> / </tspan><tspan fill="#8A9199">&#8722;52,910</tspan></text>
+    <text x="440" y="516" fill="#565E66">·</text>
+    <text x="480" y="516"><tspan fill="#565E66">rank </tspan><tspan fill="#EDEAE3">#1</tspan><tspan fill="#565E66"> of 100</tspan></text>
+    <text x="720" y="516" fill="#565E66">·</text>
+    <text x="760" y="516"><tspan fill="#565E66">since </tspan><tspan fill="#EDEAE3">2011</tspan></text>
+  </g>
+
+  <!-- weekly-activity sparkline card (embeddable badge) -->
+  <g>
+    <rect x="812" y="150" width="308" height="196" rx="10" fill="#0F151B" stroke="#28323B" stroke-width="1.5"/>
+    <text x="836" y="184" fill="#565E66" font-family="'IBM Plex Mono','JetBrains Mono',ui-monospace,monospace" font-size="15" letter-spacing="3"># weekly activity</text>
+    <g fill="url(#rwbars)">
+      <rect x="836" y="286" width="16" height="30" rx="2"/>
+      <rect x="860" y="262" width="16" height="54" rx="2"/>
+      <rect x="884" y="238" width="16" height="78" rx="2"/>
+      <rect x="908" y="274" width="16" height="42" rx="2"/>
+      <rect x="932" y="216" width="16" height="100" rx="2"/>
+      <rect x="956" y="248" width="16" height="68" rx="2"/>
+      <rect x="980" y="204" width="16" height="112" rx="2"/>
+      <rect x="1004" y="230" width="16" height="86" rx="2"/>
+      <rect x="1028" y="270" width="16" height="46" rx="2"/>
+      <rect x="1052" y="252" width="16" height="64" rx="2"/>
+      <rect x="1076" y="290" width="16" height="26" rx="2"/>
+    </g>
+  </g>
+
+  <!-- baseline caption -->
+  <text x="82" y="566" fill="#565E66" font-family="'IBM Plex Mono','JetBrains Mono',ui-monospace,monospace" font-size="15" letter-spacing="3">READ&#160;FROM&#160;THE&#160;GIT&#160;LOG&#160;·&#160;SELF-CONTAINED&#160;SVG&#160;BADGE&#160;·&#160;/card/owner/repo/username</text>
+</svg>
