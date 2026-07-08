@@ -19,6 +19,11 @@ export default defineConfig({
     inlineStylesheets: "always",
   },
 
+  // Astro 7 changed the default to "jsx", which drops spaces between inline
+  // elements (e.g. "Senior Lead Dev" → "SeniorLead Dev"). Keep the v6
+  // HTML-aware compression.
+  compressHTML: true,
+
   fonts: [
     {
       provider: fontProviders.google(),
