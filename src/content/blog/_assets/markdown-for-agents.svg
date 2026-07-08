@@ -1,0 +1,87 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A curl request asking for text/markdown next to an HTML document converted into a clean markdown rendition, 87% smaller">
+  <defs>
+    <radialGradient id="mdglow" cx="84%" cy="18%" r="64%">
+      <stop offset="0%" stop-color="#5B9DFF" stop-opacity="0.26"/>
+      <stop offset="55%" stop-color="#16283F" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#0C1116" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="mdbar" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#5B9DFF" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#A8CBFF" stop-opacity="0.55"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="#0C1116"/>
+  <rect width="1200" height="630" fill="url(#mdglow)"/>
+
+  <!-- faint grid -->
+  <g stroke="#FFFFFF" stroke-opacity="0.04" stroke-width="1">
+    <path d="M0 158 H1200 M0 315 H1200 M0 472 H1200"/>
+    <path d="M200 0 V630 M400 0 V630 M600 0 V630 M800 0 V630 M1000 0 V630"/>
+  </g>
+
+  <!-- wordmark -->
+  <text x="80" y="92" fill="#EDEAE3" font-family="'IBM Plex Mono','JetBrains Mono',ui-monospace,monospace" font-size="20" letter-spacing="4">TOM&#160;GIROU<tspan fill="#8FBAFF">.</tspan></text>
+
+  <!-- prompt line -->
+  <text x="80" y="190" font-family="'IBM Plex Mono','JetBrains Mono',ui-monospace,monospace" font-size="24" letter-spacing="1">
+    <tspan fill="#8FBAFF">$ </tspan><tspan fill="#EDEAE3">curl -H </tspan><tspan fill="#8A9199">"Accept: text/markdown"</tspan><tspan fill="#8FBAFF"> &#9646;</tspan>
+  </text>
+
+  <!-- hero figure: the size cut -->
+  <text x="76" y="388" fill="#EDEAE3" font-family="'IBM Plex Mono','JetBrains Mono',ui-monospace,monospace" font-size="150" font-weight="700" letter-spacing="-2">-87%</text>
+  <text x="82" y="440" fill="#8FBAFF" font-family="'IBM Plex Mono','JetBrains Mono',ui-monospace,monospace" font-size="22" letter-spacing="6">BYTES&#160;·&#160;SAME&#160;URL</text>
+
+  <!-- stat strip -->
+  <g font-family="'IBM Plex Mono','JetBrains Mono',ui-monospace,monospace" font-size="22" letter-spacing="1">
+    <text x="82" y="516"><tspan fill="#8FBAFF">1</tspan><tspan fill="#8A9199"> subscriber</tspan></text>
+    <text x="352" y="516" fill="#565E66">·</text>
+    <text x="392" y="516"><tspan fill="#8FBAFF">144</tspan><tspan fill="#8A9199"> lines</tspan></text>
+    <text x="604" y="516" fill="#565E66">·</text>
+    <text x="644" y="516"><tspan fill="#565E66">Vary: </tspan><tspan fill="#EDEAE3">Accept</tspan></text>
+  </g>
+
+  <!-- document card: HTML in, markdown out -->
+  <g>
+    <rect x="856" y="128" width="272" height="392" rx="18" fill="#0F151B" stroke="#28323B" stroke-width="1.5"/>
+
+    <!-- html half: tag noise -->
+    <g font-family="'IBM Plex Mono','JetBrains Mono',ui-monospace,monospace" font-size="16" fill="#565E66" letter-spacing="0.5">
+      <text x="882" y="176">&lt;div class="col-lg-6"&gt;</text>
+      <text x="882" y="202">&lt;nav&gt;&#160;&lt;span&gt;&#160;&lt;svg&gt;</text>
+      <text x="882" y="228">&lt;footer&gt;&#160;&lt;script&gt;</text>
+    </g>
+    <text x="882" y="258" fill="#8A9199" font-family="'IBM Plex Mono','JetBrains Mono',ui-monospace,monospace" font-size="15" letter-spacing="2">59,432&#160;B</text>
+
+    <!-- conversion arrow -->
+    <g stroke="#5B9DFF" stroke-opacity="0.7" stroke-width="1.5" stroke-linecap="round">
+      <path d="M992 282 V318"/>
+      <path d="M984 310 L992 318 L1000 310"/>
+    </g>
+
+    <!-- markdown half: clean content -->
+    <g font-family="'IBM Plex Mono','JetBrains Mono',ui-monospace,monospace" font-size="17">
+      <text x="882" y="356"><tspan fill="#8FBAFF"># </tspan><tspan fill="#EDEAE3">Forgemage</tspan></text>
+    </g>
+    <g fill="#28323B">
+      <rect x="882" y="374" width="210" height="10" rx="3"/>
+      <rect x="882" y="396" width="168" height="10" rx="3"/>
+    </g>
+    <g font-family="'IBM Plex Mono','JetBrains Mono',ui-monospace,monospace" font-size="17">
+      <text x="882" y="438"><tspan fill="#8FBAFF">- </tspan><tspan fill="#8A9199">trusted smiths</tspan></text>
+      <text x="882" y="464"><tspan fill="#8FBAFF">- </tspan><tspan fill="#8A9199">per server</tspan></text>
+    </g>
+    <rect x="882" y="480" width="140" height="10" rx="3" fill="url(#mdbar)"/>
+    <text x="1030" y="491" fill="#8FBAFF" font-family="'IBM Plex Mono','JetBrains Mono',ui-monospace,monospace" font-size="15" letter-spacing="2">7,670&#160;B</text>
+  </g>
+
+  <!-- negotiation link: hero to card -->
+  <g stroke="#5B9DFF" stroke-opacity="0.5" stroke-width="1.5" stroke-dasharray="2 7" stroke-linecap="round">
+    <path d="M700 340 C 770 320, 790 320, 852 330"/>
+  </g>
+  <circle cx="700" cy="340" r="4" fill="#8FBAFF"/>
+  <circle cx="852" cy="330" r="4" fill="#8FBAFF"/>
+
+  <!-- baseline caption -->
+  <text x="82" y="566" fill="#565E66" font-family="'IBM Plex Mono','JetBrains Mono',ui-monospace,monospace" font-size="15" letter-spacing="3">CONTENT&#160;NEGOTIATION&#160;·&#160;KERNEL.RESPONSE&#160;·&#160;LEAGUE/HTML-TO-MARKDOWN&#160;·&#160;RFC&#160;9110</text>
+</svg>

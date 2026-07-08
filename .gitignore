@@ -30,3 +30,6 @@ pnpm-debug.log*
 .vscode/
 .claude/
 CLAUDE.md
+
+# syndicated copies (dev.to, etc.) — canonical lives in src/content/blog
+syndication/
