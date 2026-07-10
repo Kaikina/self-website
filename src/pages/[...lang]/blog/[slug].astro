@@ -411,7 +411,10 @@ const prevCard = previous
 
   @media (max-width: 980px) {
     .post-grid {
-      grid-template-columns: 1fr;
+      /* minmax(0, 1fr) — not 1fr — so the track can shrink below its
+         content's min-content width. Plain `1fr` lets a long code line or
+         URL grow the column past the viewport, forcing horizontal scroll. */
+      grid-template-columns: minmax(0, 1fr);
       gap: 40px;
     }
   }
@@ -483,6 +486,9 @@ const prevCard = previous
     font-size: 17px;
     line-height: 1.75;
     color: var(--ink);
+    /* Break long inline code / bare URLs instead of letting them overflow
+       the narrow column on small phones. */
+    overflow-wrap: break-word;
   }
 
   .post-content :global(h2) {
