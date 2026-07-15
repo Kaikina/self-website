@@ -250,12 +250,14 @@ const fr: Translation = {
         sourceLabel: "Sources sur GitHub",
       },
       {
-        name: "Forgemage.com",
+        name: "Forgemage.net",
         tagline: "Une marketplace async pour les forgemages de Dofus",
         description:
           "Un fansite pour la communauté du MMORPG Dofus — version Malt, mais pour les forgemages. Les joueurs déposent en ligne leur demande de forgemagie avec les stats visées ; les profils forgemages parcourent les jobs ouverts, en claim un, et chattent dans l'app pour planifier un RDV in-game. Reviews et ratings construisent la réputation après chaque job. L'idée, c'est tout l'async : plutôt que de squatter Astrub à espérer qu'un forgemage compétent soit connecté, tu drop ta requête, tu prépares ton stuff, et la bonne personne te contacte. Les profils forgemages restent trouvables sur le site même quand ils sont offline en jeu.",
         stack: ["Symfony 7", "PHP 8.4", "PostgreSQL", "Mercure", "FrankenPHP", "Stimulus"],
-        status: "En cours de dev",
+        status: "En ligne",
+        liveUrl: "https://forgemage.net",
+        liveLabel: "Ouvrir l'app",
       },
     ],
   },

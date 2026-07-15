@@ -249,12 +249,14 @@ const en: Translation = {
         sourceLabel: "Source on GitHub",
       },
       {
-        name: "Forgemage.com",
+        name: "Forgemage.net",
         tagline: "An async marketplace for Dofus item enchanters",
         description:
           "A fansite for the Dofus MMORPG community — think Malt, but for smithmaguses. Players drop an enchant request online with the stats they want; experienced smithmagus profiles browse open jobs, claim one, and chat in-app to plan a meet in-game. Reviews and ratings build reputation after every job. The whole point is async: instead of standing around trade hubs hoping someone competent is logged in, you file the request, build your gear, and let the right person find you. Smithmagus profiles keep being discoverable even while they're offline in the game.",
         stack: ["Symfony 7", "PHP 8.4", "PostgreSQL", "Mercure", "FrankenPHP", "Stimulus"],
-        status: "In development",
+        status: "Live",
+        liveUrl: "https://forgemage.net",
+        liveLabel: "Open the app",
       },
     ],
   },
