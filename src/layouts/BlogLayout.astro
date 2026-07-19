@@ -21,6 +21,8 @@ interface Props {
   ogImageWidth?: number;
   ogImageHeight?: number;
   ogType?: "website" | "article";
+  /** `robots` meta content; override to noindex thin pages (e.g. sparse tags). */
+  robots?: string;
   /** hreflang alternates, including x-default. */
   alternates: { hrefLang: string; href: string }[];
   /** Per-locale links for the in-nav language switcher. */
@@ -42,6 +44,7 @@ const {
   ogImageWidth = 1200,
   ogImageHeight = 630,
   ogType = "website",
+  robots = "index,follow,max-image-preview:large",
   alternates,
   langLinks,
   schemaJson,
@@ -64,7 +67,7 @@ const blogIndexHref = blogPath(locale);
     <title>{title}</title>
     <meta name="description" content={description}/>
     <meta name="author" content="Tom Girou"/>
-    <meta name="robots" content="index,follow,max-image-preview:large"/>
+    <meta name="robots" content={robots}/>
     <meta name="theme-color" content="#0A0A0A"/>
     <meta name="generator" content={Astro.generator}/>
     <link rel="canonical" href={canonical}/>

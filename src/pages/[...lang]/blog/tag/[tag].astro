@@ -12,6 +12,7 @@ import {
   blogPath,
   getPostsByTag,
   getTagsByLocale,
+  INDEX_TAG_MIN_POSTS,
   parsePostId,
   tagPath,
 } from "../../../../lib/blog";
@@ -38,6 +39,14 @@ const { locale, tag, slug } = Astro.props as {
 const t = getTranslation(locale);
 
 const posts = await getPostsByTag(locale, slug);
+
+// Sparse tag archives (one post) are thin content: keep them reachable via the
+// in-post tag chips but tell crawlers not to index them. Matches the sitemap
+// exclusion in astro.config.mjs — both gate on INDEX_TAG_MIN_POSTS.
+const robots =
+  posts.length < INDEX_TAG_MIN_POSTS
+    ? "noindex,follow,max-image-preview:large"
+    : "index,follow,max-image-preview:large";
 
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 const ogImage = new URL("/og-image.jpg", Astro.site).href;
@@ -93,6 +102,7 @@ const schemaJson = JSON.stringify(
   ogImage={ogImage}
   ogImageAlt={t.meta.ogImageAlt}
   ogType="website"
+  robots={robots}
   alternates={alternates}
   langLinks={langLinks}
   schemaJson={schemaJson}

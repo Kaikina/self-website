@@ -1,6 +1,10 @@
 import { getCollection, type CollectionEntry } from "astro:content";
 import type { MarkdownHeading } from "astro";
 import { getLocalizedPath, type Locale } from "../i18n/types";
+import { tagSlug } from "./tags";
+
+export { tagSlug } from "./tags";
+export { INDEX_TAG_MIN_POSTS } from "./tags";
 
 export type BlogPost = CollectionEntry<"blog">;
 
@@ -107,15 +111,6 @@ export async function getPreviousPost(post: BlogPost): Promise<BlogPost | null> 
 }
 
 // ───────────────────────── Tags ─────────────────────────
-
-/** URL-safe slug for a tag ("CI/CD" -> "ci-cd", "Code Review" -> "code-review"). */
-export function tagSlug(tag: string): string {
-  return tag
-    .toLowerCase()
-    .trim()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "");
-}
 
 /** Locale-aware URL for a tag page. */
 export function tagPath(locale: Locale, slug: string): string {
