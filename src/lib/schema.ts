@@ -490,6 +490,9 @@ function websiteNode(t: Translation): Record<string, unknown> {
     name: "Tom Girou — Senior Lead Dev",
     description: t.meta.description,
     publisher: { "@id": PERSON_ID },
+    author: { "@id": PERSON_ID },
+    copyrightHolder: { "@id": PERSON_ID },
+    copyrightYear: 2026,
     inLanguage: ["en", "fr", "es"],
   };
 }
