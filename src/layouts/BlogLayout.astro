@@ -163,6 +163,7 @@ const blogIndexHref = blogPath(locale);
         <div class="foot-bar">
             <span class="mono">{t.footer.rights}</span>
             <span class="mono">{t.footer.build}</span>
+            <a class="mono foot-link" href="/llms.txt">llms.txt</a>
             <div class="socials">
                 <a href="https://www.linkedin.com/in/tgirou" target="_blank" rel="noopener" aria-label={t.footer.linkedinAria}>
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false">
@@ -460,6 +461,17 @@ const blogIndexHref = blogPath(locale);
         flex-wrap: wrap;
         align-items: center;
         gap: 18px 28px;
+    }
+
+    .foot-bar .foot-link {
+        color: var(--ink-dim);
+        border-bottom: 1px solid transparent;
+        transition: color .25s, border-color .25s;
+    }
+
+    .foot-bar .foot-link:hover {
+        color: var(--red-soft);
+        border-color: var(--red-soft);
     }
 
     .foot-bar .socials {

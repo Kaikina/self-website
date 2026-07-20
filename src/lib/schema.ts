@@ -5,6 +5,10 @@ export const SITE = "https://tom-girou.dev";
 export const PERSON_ID = `${SITE}/#person`;
 export const WEBSITE_ID = `${SITE}/#website`;
 const TECH_STACK_ID = `${SITE}/#tech-stack`;
+const PRESTASHOP_ID = `${SITE}/#org-prestashop`;
+// Dedicated headshot for the Person entity — distinct from the og-image banner,
+// which stays the page-level social card. Stable public URL (see /public).
+const PERSON_IMAGE = `${SITE}/portrait.jpg`;
 
 export function projectIdFromIdx(idx: string): string {
   return `${SITE}/#project-${idx}`;
@@ -179,12 +183,8 @@ export function buildSchemaGraph(
     name: cert.name,
     credentialCategory: "Professional certification",
     url: cert.url,
-    recognizedBy: {
-      "@type": "Organization",
-      name: cert.issuer,
-      url: "https://www.prestashop.com",
-    },
-    about: { "@id": `${SITE}/#org-prestashop` },
+    recognizedBy: { "@id": PRESTASHOP_ID },
+    about: { "@id": PRESTASHOP_ID },
     inLanguage: lang,
   }));
 
@@ -198,9 +198,9 @@ export function buildSchemaGraph(
     mainEntityOfPage: { "@id": webpageId },
     image: {
       "@type": "ImageObject",
-      url: ogImage,
+      url: PERSON_IMAGE,
       width: 1200,
-      height: 630,
+      height: 676,
     },
     jobTitle: "Senior Lead Web Developer",
     description: t.meta.description,
@@ -243,8 +243,10 @@ export function buildSchemaGraph(
   };
 
   const prestashopOrg: Record<string, unknown> = {
-    "@type": "SoftwareApplication",
-    "@id": `${SITE}/#org-prestashop`,
+    // Multi-typed: the credential's `recognizedBy` resolves it as the issuing
+    // Organization, while `about` + `contributor` keep the SoftwareApplication sense.
+    "@type": ["Organization", "SoftwareApplication"],
+    "@id": PRESTASHOP_ID,
     name: "PrestaShop",
     url: "https://www.prestashop.com",
     applicationCategory: "BusinessApplication",
@@ -463,14 +465,14 @@ export type BlogPostMeta = {
 };
 
 /** Compact Person node reused across blog pages (the homepage carries the full one). */
-function compactPerson(ogImage: string): Record<string, unknown> {
+function compactPerson(): Record<string, unknown> {
   return {
     "@type": "Person",
     "@id": PERSON_ID,
     name: "Tom Girou",
     url: `${SITE}/`,
     jobTitle: "Senior Lead Web Developer",
-    image: { "@type": "ImageObject", url: ogImage },
+    image: { "@type": "ImageObject", url: PERSON_IMAGE },
     sameAs: [
       "https://www.linkedin.com/in/tgirou",
       "https://github.com/Kaikina",
@@ -515,7 +517,6 @@ export function buildBlogIndexGraph(
   locale: Locale,
   t: Translation,
   canonical: string,
-  ogImage: string,
   posts: BlogPostMeta[],
 ): Record<string, unknown> {
   const lang = localeHtmlLang[locale];
@@ -558,7 +559,7 @@ export function buildBlogIndexGraph(
 
   return {
     "@context": "https://schema.org",
-    "@graph": [compactPerson(ogImage), websiteNode(t), blog, collectionPage, breadcrumb],
+    "@graph": [compactPerson(), websiteNode(t), blog, collectionPage, breadcrumb],
   };
 }
 
@@ -588,7 +589,6 @@ export function buildBlogPostingGraph(
     inLanguage: lang,
     isPartOf: { "@id": BLOG_ID },
     keywords: post.tags.join(", "),
-    articleSection: post.tags,
   };
   if (post.wordCount) blogPosting.wordCount = post.wordCount;
 
@@ -616,7 +616,7 @@ export function buildBlogPostingGraph(
   return {
     "@context": "https://schema.org",
     "@graph": [
-      compactPerson(ogImage),
+      compactPerson(),
       websiteNode(t),
       blogNode(t),
       webpage,

@@ -91,7 +91,7 @@ const postsMeta: BlogPostMeta[] = posts.map((p) => {
 const pageTitle = `${t.blog.taggedLabel} ${tag} — Tom Girou`;
 const pageDescription = `${t.blog.taggedLabel} ${tag}.`;
 const schemaJson = JSON.stringify(
-  buildBlogIndexGraph(locale, t, canonical, ogImage, postsMeta),
+  buildBlogIndexGraph(locale, t, canonical, postsMeta),
 );
 ---
 

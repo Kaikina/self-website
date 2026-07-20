@@ -146,6 +146,14 @@ export default defineConfig({
     serialize(item) {
       const lastmod = POST_LASTMODS.get(item.url);
       if (lastmod) item.lastmod = lastmod;
+      // @astrojs/sitemap emits per-locale <xhtml:link> alternates but no
+      // x-default; add one pointing at the EN (default-locale) URL of the group.
+      if (item.links) {
+        const en = item.links.find((l) => l.lang === "en");
+        if (en && !item.links.some((l) => l.lang === "x-default")) {
+          item.links.push({ lang: "x-default", url: en.url });
+        }
+      }
       return item;
     },
     i18n: {

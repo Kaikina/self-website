@@ -566,6 +566,7 @@ const schemaJson = JSON.stringify(schemaGraph);
         <div class="foot-bar">
             <span class="mono">{t.footer.rights}</span>
             <span class="mono">{t.footer.build}</span>
+            <a class="mono foot-link" href="/llms.txt">llms.txt</a>
             <div class="socials">
                 <a href="https://www.linkedin.com/in/tgirou" target="_blank" rel="noopener" aria-label={t.footer.linkedinAria}>
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false">
@@ -2387,6 +2388,17 @@ const schemaJson = JSON.stringify(schemaGraph);
 
     .foot-bar .mono {
         color: #fff
+    }
+
+    .foot-bar .foot-link {
+        color: var(--ink-dim);
+        border-bottom: 1px solid transparent;
+        transition: color .25s, border-color .25s;
+    }
+
+    .foot-bar .foot-link:hover {
+        color: var(--red-soft);
+        border-color: var(--red-soft);
     }
 
     .socials {
