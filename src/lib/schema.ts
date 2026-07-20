@@ -209,6 +209,10 @@ export function buildSchemaGraph(
     sameAs: [
       "https://www.linkedin.com/in/tgirou",
       "https://github.com/Kaikina",
+      "https://x.com/kaikina_art",
+      "https://www.youtube.com/@Kaikina",
+      "https://www.reddit.com/user/Kaikina/",
+      "https://forum.prestashop.com/profile/1776632-tom-girou/",
     ],
     nationality: { "@type": "Country", name: "France" },
     address: { "@type": "PostalAddress", addressCountry: "FR" },
@@ -467,7 +471,14 @@ function compactPerson(ogImage: string): Record<string, unknown> {
     url: `${SITE}/`,
     jobTitle: "Senior Lead Web Developer",
     image: { "@type": "ImageObject", url: ogImage },
-    sameAs: ["https://www.linkedin.com/in/tgirou", "https://github.com/Kaikina"],
+    sameAs: [
+      "https://www.linkedin.com/in/tgirou",
+      "https://github.com/Kaikina",
+      "https://x.com/kaikina_art",
+      "https://www.youtube.com/@Kaikina",
+      "https://www.reddit.com/user/Kaikina/",
+      "https://forum.prestashop.com/profile/1776632-tom-girou/",
+    ],
   };
 }
 

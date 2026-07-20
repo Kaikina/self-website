@@ -30,6 +30,10 @@ export const GET: APIRoute = async () => {
   lines.push("- Working languages: English, French, Spanish");
   lines.push("- LinkedIn: https://www.linkedin.com/in/tgirou");
   lines.push("- GitHub: https://github.com/Kaikina");
+  lines.push("- X: https://x.com/kaikina_art");
+  lines.push("- YouTube: https://www.youtube.com/@Kaikina");
+  lines.push("- Reddit: https://www.reddit.com/user/Kaikina/");
+  lines.push("- PrestaShop forum: https://forum.prestashop.com/profile/1776632-tom-girou/");
   lines.push("- Personal site: https://tom-girou.dev/");
   lines.push("- Availability: open to senior & lead roles, freelance briefs, and rescue missions");
   lines.push("");

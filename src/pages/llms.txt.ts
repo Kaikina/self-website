@@ -23,6 +23,10 @@ export const GET: APIRoute = async () => {
   lines.push(`- Site: ${SITE}/`);
   lines.push("- LinkedIn: https://www.linkedin.com/in/tgirou");
   lines.push("- GitHub: https://github.com/Kaikina");
+  lines.push("- X: https://x.com/kaikina_art");
+  lines.push("- YouTube: https://www.youtube.com/@Kaikina");
+  lines.push("- Reddit: https://www.reddit.com/user/Kaikina/");
+  lines.push("- PrestaShop forum: https://forum.prestashop.com/profile/1776632-tom-girou/");
   lines.push("- Location: France (Loire region)");
   lines.push("- Languages: English, French, Spanish");
   lines.push("");
