@@ -54,6 +54,53 @@ function thinTagUrls() {
 
 const THIN_TAG_URLS = thinTagUrls();
 
+/**
+ * Map of sitemap URL → `lastmod` ISO date, built from blog post frontmatter so
+ * the sitemap carries recrawl-prioritization hints (@astrojs/sitemap emits no
+ * `lastmod` on its own). Uses `updatedDate` when present, else `pubDate`.
+ *
+ * Runs outside the Astro runtime (no `astro:content`), so it parses frontmatter
+ * dates from the raw files — same convention as `thinTagUrls()`. Each post's URL
+ * follows the `getStaticPaths` shape in blog/[slug].astro (EN unprefixed, fr/es
+ * prefixed, trailing slash). The blog index per locale gets the newest post date.
+ */
+function postLastmods() {
+  const map = new Map();
+  const newestByLocale = new Map();
+  for (const locale of LOCALES) {
+    const dir = fileURLToPath(new URL(`./src/content/blog/${locale}/`, import.meta.url));
+    let files;
+    try {
+      files = readdirSync(dir).filter((f) => f.endsWith(".md"));
+    } catch {
+      continue;
+    }
+    const prefix = locale === "en" ? "" : `${locale}/`;
+    for (const file of files) {
+      const raw = readFileSync(`${dir}${file}`, "utf8");
+      if (/^draft:\s*true\b/m.test(raw)) continue;
+      const pub = raw.match(/^pubDate:\s*(.+)$/m)?.[1].trim();
+      const upd = raw.match(/^updatedDate:\s*(.+)$/m)?.[1].trim();
+      const stamp = upd || pub;
+      if (!stamp) continue;
+      const date = new Date(stamp.replace(/^["']|["']$/g, ""));
+      if (Number.isNaN(date.getTime())) continue;
+      const iso = date.toISOString();
+      const slug = file.replace(/\.md$/, "");
+      map.set(`${SITE}/${prefix}blog/${slug}/`, iso);
+      const prev = newestByLocale.get(locale);
+      if (!prev || iso > prev) newestByLocale.set(locale, iso);
+    }
+  }
+  for (const [locale, iso] of newestByLocale) {
+    const prefix = locale === "en" ? "" : `${locale}/`;
+    map.set(`${SITE}/${prefix}blog/`, iso);
+  }
+  return map;
+}
+
+const POST_LASTMODS = postLastmods();
+
 // https://astro.build/config
 export default defineConfig({
   site: "https://tom-girou.dev",
@@ -96,6 +143,11 @@ export default defineConfig({
 
   integrations: [sitemap({
     filter: (page) => !THIN_TAG_URLS.has(page),
+    serialize(item) {
+      const lastmod = POST_LASTMODS.get(item.url);
+      if (lastmod) item.lastmod = lastmod;
+      return item;
+    },
     i18n: {
       defaultLocale: "en",
       locales: { en: "en", fr: "fr", es: "es" },
