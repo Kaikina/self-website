@@ -1,0 +1,85 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A search page of profile cards each firing its own query, collapsing into one batched query per page: 168 queries down to 8">
+  <defs>
+    <radialGradient id="fgglow" cx="84%" cy="18%" r="64%">
+      <stop offset="0%" stop-color="#F2A65A" stop-opacity="0.24"/>
+      <stop offset="55%" stop-color="#3A2A16" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#0C1116" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="fgbar" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#F2A65A" stop-opacity="0.95"/>
+      <stop offset="100%" stop-color="#FFD8A8" stop-opacity="0.55"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="#0C1116"/>
+  <rect width="1200" height="630" fill="url(#fgglow)"/>
+
+  <!-- faint grid -->
+  <g stroke="#FFFFFF" stroke-opacity="0.04" stroke-width="1">
+    <path d="M0 158 H1200 M0 315 H1200 M0 472 H1200"/>
+    <path d="M200 0 V630 M400 0 V630 M600 0 V630 M800 0 V630 M1000 0 V630"/>
+  </g>
+
+  <!-- wordmark -->
+  <text x="80" y="92" fill="#EDEAE3" font-family="'IBM Plex Mono','JetBrains Mono',ui-monospace,monospace" font-size="20" letter-spacing="4">TOM&#160;GIROU<tspan fill="#FFC27A">.</tspan></text>
+
+  <!-- prompt line -->
+  <text x="80" y="190" xml:space="preserve" font-family="'IBM Plex Mono','JetBrains Mono',ui-monospace,monospace" font-size="24" letter-spacing="1">
+    <tspan fill="#FFC27A">$ </tspan><tspan fill="#EDEAE3">doctrine:query-count </tspan><tspan fill="#8A9199">--page=/s</tspan><tspan fill="#FFC27A"> &#9646;</tspan>
+  </text>
+
+  <!-- hero figure: the query cut -->
+  <text x="76" y="388" fill="#EDEAE3" font-family="'IBM Plex Mono','JetBrains Mono',ui-monospace,monospace" font-size="150" font-weight="700" letter-spacing="-2">-95%</text>
+  <text x="82" y="440" fill="#FFC27A" font-family="'IBM Plex Mono','JetBrains Mono',ui-monospace,monospace" font-size="22" letter-spacing="6">QUERIES&#160;·&#160;PER&#160;LISTING&#160;PAGE</text>
+
+  <!-- stat strip -->
+  <g font-family="'IBM Plex Mono','JetBrains Mono',ui-monospace,monospace" font-size="22" letter-spacing="1" xml:space="preserve">
+    <text x="82" y="516"><tspan fill="#FFC27A">24</tspan><tspan fill="#8A9199"> cards</tspan></text>
+    <text x="300" y="516" fill="#565E66">·</text>
+    <text x="340" y="516"><tspan fill="#8A9199">was </tspan><tspan fill="#EDEAE3">~168</tspan></text>
+    <text x="560" y="516" fill="#565E66">·</text>
+    <text x="600" y="516"><tspan fill="#8A9199">now </tspan><tspan fill="#FFC27A">8</tspan></text>
+  </g>
+
+  <!-- diagram card: N+1 fan-out collapsing to one batch -->
+  <g>
+    <rect x="856" y="128" width="272" height="392" rx="18" fill="#0F151B" stroke="#28323B" stroke-width="1.5"/>
+
+    <!-- before: a stack of cards, each with its own query dot -->
+    <g font-family="'IBM Plex Mono','JetBrains Mono',ui-monospace,monospace" font-size="15" letter-spacing="0.5">
+      <text x="882" y="172" fill="#565E66">card&#160;01</text><circle cx="1092" cy="167" r="4" fill="#565E66"/>
+      <text x="882" y="198" fill="#565E66">card&#160;02</text><circle cx="1092" cy="193" r="4" fill="#565E66"/>
+      <text x="882" y="224" fill="#565E66">card&#160;03</text><circle cx="1092" cy="219" r="4" fill="#565E66"/>
+      <text x="882" y="250" fill="#565E66">·&#160;·&#160;·</text><circle cx="1092" cy="245" r="4" fill="#565E66"/>
+      <text x="882" y="276" fill="#565E66">card&#160;24</text><circle cx="1092" cy="271" r="4" fill="#565E66"/>
+    </g>
+    <text x="882" y="304" fill="#8A9199" font-family="'IBM Plex Mono','JetBrains Mono',ui-monospace,monospace" font-size="15" letter-spacing="2">7&#160;×&#160;SELECT&#160;each</text>
+
+    <!-- collapse arrow -->
+    <g stroke="#F2A65A" stroke-opacity="0.75" stroke-width="1.5" stroke-linecap="round">
+      <path d="M992 322 V360"/>
+      <path d="M984 352 L992 360 L1000 352"/>
+    </g>
+
+    <!-- after: one batched query -->
+    <g font-family="'IBM Plex Mono','JetBrains Mono',ui-monospace,monospace" font-size="16" xml:space="preserve">
+      <text x="882" y="400"><tspan fill="#FFC27A">SELECT </tspan><tspan fill="#8A9199">… WHERE</tspan></text>
+      <text x="882" y="424"><tspan fill="#8A9199">id </tspan><tspan fill="#EDEAE3">IN </tspan><tspan fill="#8A9199">(:ids)</tspan></text>
+    </g>
+    <rect x="882" y="444" width="210" height="10" rx="3" fill="url(#fgbar)"/>
+    <g font-family="'IBM Plex Mono','JetBrains Mono',ui-monospace,monospace" font-size="15" letter-spacing="1">
+      <text x="882" y="486"><tspan fill="#FFC27A">warmForProfiles()</tspan></text>
+      <text x="882" y="506" fill="#565E66">1&#160;batch&#160;·&#160;whole&#160;page</text>
+    </g>
+  </g>
+
+  <!-- link: hero to card -->
+  <g stroke="#F2A65A" stroke-opacity="0.5" stroke-width="1.5" stroke-dasharray="2 7" stroke-linecap="round">
+    <path d="M700 340 C 770 320, 790 320, 852 330"/>
+  </g>
+  <circle cx="700" cy="340" r="4" fill="#FFC27A"/>
+  <circle cx="852" cy="330" r="4" fill="#FFC27A"/>
+
+  <!-- baseline caption -->
+  <text x="82" y="566" fill="#565E66" font-family="'IBM Plex Mono','JetBrains Mono',ui-monospace,monospace" font-size="15" letter-spacing="3">DOCTRINE&#160;IDENTITY&#160;MAP&#160;·&#160;PAGINATE-THEN-HYDRATE&#160;·&#160;REQUEST-SCOPED&#160;BATCH&#160;·&#160;SYMFONY&#160;CACHE</text>
+</svg>
