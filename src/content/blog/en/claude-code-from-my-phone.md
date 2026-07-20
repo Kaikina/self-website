@@ -15,13 +15,13 @@ Anthropic's answer to this is `/remote-control`, and it's good. But it kept bump
 
 ## What `/remote-control` gives you, and where it stops
 
-Quick credit first, because the built-in feature is genuinely useful. You type `/remote-control` (or `/rc`) in a running Claude Code session, scan a QR code, and that session mirrors to the Claude app on your phone. The machine at home keeps doing the work — nothing moves to the cloud — and you steer the conversation from wherever you are. You even get push notifications when the agent finishes or needs an answer. For the "did it stop to ask me something" problem, it's the right tool and I still use it.
+**What does `/remote-control` actually get you?** Quick credit first, because the built-in feature is genuinely useful. You type `/remote-control` (or `/rc`) in a running Claude Code session, scan a QR code, and that session mirrors to the Claude app on your phone. The machine at home keeps doing the work — nothing moves to the cloud — and you steer the conversation from wherever you are. You even get push notifications when the agent finishes or needs an answer. For the "did it stop to ask me something" problem, it's the right tool and I still use it.
 
 But it mirrors *a session*. One conversation, in one repo, that you started before leaving your desk. From the phone you can't `cd` into a different project. You can't check why a Docker container is eating CPU. You can't start a second Claude session on another codebase because an idea hit you on the train. The feature answers "let me steer what's already running" and nothing else — which is fair, that's its job. My problem was that once I could reach my machine from the couch, I kept wanting the rest of the machine.
 
 ## The setup is two apps and one flag
 
-The pieces: [Tailscale](https://tailscale.com) on the workstation and the phone, and [Termius](https://termius.com) as the SSH client on Android. Tailscale builds a private WireGuard mesh between your devices — your laptop and your phone end up on a small virtual network (a "tailnet") that follows them across Wi-Fi, 4G, whatever. No port forwarding, no dynamic DNS, no VPS relay to maintain.
+**What do you need to set this up?** The pieces: [Tailscale](https://tailscale.com) on the workstation and the phone, and [Termius](https://termius.com) as the SSH client on Android. Tailscale builds a private WireGuard mesh between your devices — your laptop and your phone end up on a small virtual network (a "tailnet") that follows them across Wi-Fi, 4G, whatever. No port forwarding, no dynamic DNS, no VPS relay to maintain.
 
 The part that surprised me is how little server-side setup there is, because of a feature called Tailscale SSH. Here's the state of my workstation, a Dell Precision 3570 running Linux:
 
@@ -38,7 +38,7 @@ That also kills the key-management chore. Authentication is "this device is logg
 
 ## Workstation side: one command
 
-Install Tailscale (their script, or your distro's package):
+**How do you set up the workstation?** Install Tailscale (their script, or your distro's package):
 
 ```bash
 curl -fsSL https://tailscale.com/install.sh | sh
@@ -74,7 +74,7 @@ Who may SSH into what is decided by the tailnet's ACL policy, in the admin conso
 
 ## Phone side: Termius and four special keys
 
-Install the Tailscale app on the phone, log into the same tailnet, done — the phone is now a peer on the mesh. Any SSH client works from there, but I landed on Termius for one specific reason: its extra-keys bar above the keyboard.
+**Why Termius on the phone?** Install the Tailscale app on the phone, log into the same tailnet, done — the phone is now a peer on the mesh. Any SSH client works from there, but I landed on Termius for one specific reason: its extra-keys bar above the keyboard.
 
 Claude Code is a terminal UI, and terminal UIs assume keys that touch keyboards forgot about. `Esc` interrupts the agent mid-turn. `Shift+Tab` cycles permission modes. `Ctrl+C`, arrows for history. Termius puts Esc, Ctrl, Tab and the arrows one tap away, which is the difference between actually steering Claude Code and just watching it scroll.
 
@@ -82,7 +82,7 @@ The host entry is unremarkable: address `tom-precision-3570` (Tailscale's MagicD
 
 ## tmux, so a dropped connection is a non-event
 
-A mobile SSH connection will drop. The elevator, the train tunnel, Android deciding Termius has had enough background time. And a plain SSH shell dies with its connection — the remote process gets hung up, and if Claude was mid-task, the in-flight turn dies with it. `claude --resume` would get the conversation back, but not the work the agent was doing when the line cut.
+**What happens when the connection drops?** A mobile SSH connection will drop. The elevator, the train tunnel, Android deciding Termius has had enough background time. And a plain SSH shell dies with its connection — the remote process gets hung up, and if Claude was mid-task, the in-flight turn dies with it. `claude --resume` would get the conversation back, but not the work the agent was doing when the line cut.
 
 tmux removes the problem instead of softening it. On the workstation, everything runs inside a multiplexer that doesn't care whether anyone is watching:
 
@@ -103,7 +103,7 @@ Mouse mode makes tmux's scrollback answer to touch — flick to scroll through w
 
 ## What a full shell unlocks
 
-The ladder, roughly in the order I climb it on a given evening:
+**What does a full shell unlock that mirroring can't?** The ladder, roughly in the order I climb it on a given evening:
 
 **Resume the desk session.** `cd` into the project and `claude --resume` picks the conversation I walked away from, exactly where it was. This alone replaces `/remote-control` for me most days.
 
@@ -117,7 +117,7 @@ The ladder, roughly in the order I climb it on a given evening:
 
 ## The honest limits
 
-Two, in the spirit of not writing a brochure.
+**Where does this setup fall short?** Two, in the spirit of not writing a brochure.
 
 **The workstation has to be awake.** It's a laptop. Lid closed, it suspends, and a suspended machine is not a tailnet peer. Mine mostly lives docked with suspend disabled, but if yours sleeps, that's a settings change to make before you leave the house, not after.
 
@@ -125,9 +125,11 @@ Two, in the spirit of not writing a brochure.
 
 ## Security, in one paragraph
 
-Nothing about this setup is reachable from the internet. There's no open port, no public endpoint, not even an SSH daemon — the attack surface is "be a device on my tailnet," which is exactly the list I control from the admin console and can prune in one click. The realistic risk moved to the phone itself, which is why the check-mode re-auth and Termius's app lock stay on despite the friction. Compare that to the classic answer — port 22 exposed, fail2ban, and hope — and this is not just more convenient. It's less exposed than what it replaced.
+**How exposed is any of this?** Nothing about this setup is reachable from the internet. There's no open port, no public endpoint, not even an SSH daemon — the attack surface is "be a device on my tailnet," which is exactly the list I control from the admin console and can prune in one click. The realistic risk moved to the phone itself, which is why the check-mode re-auth and Termius's app lock stay on despite the friction. Compare that to the classic answer — port 22 exposed, fail2ban, and hope — and this is not just more convenient. It's less exposed than what it replaced.
 
 ## Takeaways
+
+**What should you remember?**
 
 1. **`/remote-control` and SSH aren't competing — they're rungs.** Mirror a session when that's all you need; keep the full shell for when it isn't. I use both in the same evening.
 2. **Tailscale SSH means there is no server to harden.** No sshd, no open port, no keys. The SSH server is the mesh daemon, and only the mesh can see it.

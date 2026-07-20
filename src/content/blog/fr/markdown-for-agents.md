@@ -17,7 +17,7 @@ Sauf qu'il n'y a aucune magie Cloudflare dans ce contrat. C'est de la négociati
 
 ## Le contrat avant le code
 
-Les deux versions vivent à la même URL. Un navigateur qui demande `https://forgemage.net/` reçoit du HTML ; un agent qui envoie `Accept: text/markdown` reçoit du markdown. Pas de préfixe `/md/`, pas de suffixe `.md`, pas de route séparée à maintenir.
+**Comment servir du HTML et du markdown depuis la même URL ?** Les deux versions vivent à la même URL. Un navigateur qui demande `https://forgemage.net/` reçoit du HTML ; un agent qui envoie `Accept: text/markdown` reçoit du markdown. Pas de préfixe `/md/`, pas de suffixe `.md`, pas de route séparée à maintenir.
 
 Ça, c'est la partie agréable. Les règles de négociation sont l'endroit où les implémentations dérapent en silence :
 
@@ -59,7 +59,7 @@ La boucle manuelle plutôt que `$accept->get('text/markdown')` est délibérée 
 
 ## Où se brancher, et quoi garder
 
-Toute la feature est un subscriber `kernel.response`. Le controller rend son HTML exactement comme avant ; le subscriber décide ensuite s'il remplace le body. Aucun changement de controller, aucun changement de template, et supprimer la classe retire la feature proprement.
+**Où placer la conversion, et qu'est-ce qu'il faut protéger ?** Toute la feature est un subscriber `kernel.response`. Le controller rend son HTML exactement comme avant ; le subscriber décide ensuite s'il remplace le body. Aucun changement de controller, aucun changement de template, et supprimer la classe retire la feature proprement.
 
 Avant de convertir quoi que ce soit, il abandonne sauf si *tout* ceci est vrai : c'est la main request, la méthode est GET ou HEAD, la réponse est `text/html`, le statut est 200, et — le garde-fou qui compte le plus pour moi — la route est indexable.
 
@@ -76,7 +76,7 @@ Cet appel à `isIndexable()` réutilise le service qui construit déjà mon site
 
 ## Convertir du HTML qui n'a jamais été écrit pour être du markdown
 
-La conversion elle-même, c'est [`league/html-to-markdown`](https://github.com/thephpleague/html-to-markdown), configuré une fois et mis en cache dans le subscriber :
+**Que représente vraiment la conversion d'un HTML de page en markdown propre ?** La conversion elle-même, c'est [`league/html-to-markdown`](https://github.com/thephpleague/html-to-markdown), configuré une fois et mis en cache dans le subscriber :
 
 ```php
 $this->htmlConverter = new HtmlConverter([
@@ -93,7 +93,7 @@ Deux petites touches après conversion. Si le résultat ne commence pas par un t
 
 ## Les trois détails qui comptent vraiment
 
-Tout ce qui précède est direct. Ces trois-là sont la raison pour laquelle j'enverrais un collègue vers ce post plutôt que vers le README du package.
+**Quels détails d'implémentation piègent vraiment en production ?** Tout ce qui précède est direct. Ces trois-là sont la raison pour laquelle j'enverrais un collègue vers ce post plutôt que vers le README du package.
 
 **`Vary: Accept`, sur les deux versions.** Deux bodies différents vivent à une seule URL, donc chaque cache entre l'agent et l'app doit prendre le header Accept dans sa clé. Oubliez-le et un CDN met joyeusement la version markdown en cache, puis la sert au navigateur suivant. Le subscriber le pose avant même de vérifier si le markdown a été demandé, et avant le check du 200, parce que l'URL négocie quelle que soit la nature de cette réponse-là. Le `setVary('Accept', false)` de Symfony ajoute au lieu de remplacer, donc un `Vary` existant posé par un autre listener survit.
 
@@ -103,7 +103,7 @@ Tout ce qui précède est direct. Ces trois-là sont la raison pour laquelle j'e
 
 ## Prouver que ça marche
 
-Sept tests `WebTestCase` verrouillent la matrice de négociation : l'Accept d'un navigateur garde le HTML, `*/*` n'est pas un opt-in, `q=0` refuse, `Text/Markdown;variant=GFM` matche, HEAD porte les mêmes headers, et une requête connectée vers une route privée ne convertit jamais. La suite entière est ennuyeuse exprès — chaque test fait quatre lignes de « envoie ce header Accept, vérifie ce Content-Type ».
+**Comment prouver que la négociation fonctionne ?** Sept tests `WebTestCase` verrouillent la matrice de négociation : l'Accept d'un navigateur garde le HTML, `*/*` n'est pas un opt-in, `q=0` refuse, `Text/Markdown;variant=GFM` matche, HEAD porte les mêmes headers, et une requête connectée vers une route privée ne convertit jamais. La suite entière est ennuyeuse exprès — chaque test fait quatre lignes de « envoie ce header Accept, vérifie ce Content-Type ».
 
 Contre la production :
 
@@ -125,6 +125,8 @@ $ curl -so /dev/null -w "%{size_download}\n" -H "Accept: text/markdown" https://
 
 ## Les limites, honnêtement
 
+**Quand est-ce que servir du markdown comme ça montre ses limites ?**
+
 **Garbage in, garbage out.** Le convertisseur transforme votre HTML rendu ; il ne peut pas ajouter une structure que vos templates n'ont pas. Les templates Twig de Forgemage utilisent de vrais headings et des listes sémantiques, donc le markdown sort lisible. Un front-end en soupe de div produirait de la soupe de markdown.
 
 **Presque personne ne demande encore.** Je n'ai pas vu de crawler mainstream envoyer `Accept: text/markdown` spontanément. Les agents d'aujourd'hui récupèrent surtout du HTML et le convertissent côté client — l'outil WebFetch de Claude Code fait exactement ça. Cette feature est un pari que la convention poussée par Cloudflare devienne la norme, et la mise est faible : une dépendance, 144 lignes, aucun coût récurrent. Servir la conversion depuis l'origin veut aussi dire que le convertisseur de l'agent ne voit jamais mon bandeau cookies.
@@ -132,6 +134,8 @@ $ curl -so /dev/null -w "%{size_download}\n" -H "Accept: text/markdown" https://
 **Ça complète llms.txt, ça ne le remplace pas.** Ce site-ci a un `/llms.txt` — une carte éditorialisée pour les agents. La négociation de contenu répond à une autre question : « donne-moi *cette page*, pour pas cher ». L'un est une table des matières, l'autre est le livre imprimé dans une police lisible.
 
 ## À retenir
+
+**Qu'est-ce qui se transpose à votre propre stack ?**
 
 1. **Le Markdown for Agents de Cloudflare est un contrat, pas un produit.** `Accept: text/markdown` en entrée, body converti plus `Vary: Accept` en sortie. N'importe quel framework avec des events de réponse peut l'honorer.
 2. **Les cas limites de la négociation sont la feature.** Le wildcard n'est pas un opt-in, `q=0` veut dire jamais, le matching est insensible à la casse et tolérant aux paramètres. Ratez-les et les navigateurs voient du markdown.

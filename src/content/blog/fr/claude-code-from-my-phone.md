@@ -15,13 +15,13 @@ La réponse d'Anthropic à ça s'appelle `/remote-control`, et elle est bonne. M
 
 ## Ce que `/remote-control` te donne, et où ça s'arrête
 
-D'abord le crédit qui est dû, parce que la feature intégrée est réellement utile. Tu tapes `/remote-control` (ou `/rc`) dans une session Claude Code en cours, tu scannes un QR code, et cette session se mirror dans l'app Claude sur ton téléphone. La machine à la maison continue de bosser — rien ne part dans le cloud — et tu pilotes la conversation d'où tu veux. Tu reçois même des notifications push quand l'agent termine ou a besoin d'une réponse. Pour le problème « est-ce qu'il s'est arrêté pour me demander un truc », c'est le bon outil et je l'utilise encore.
+**Qu'est-ce que `/remote-control` te permet vraiment de faire ?** D'abord le crédit qui est dû, parce que la feature intégrée est réellement utile. Tu tapes `/remote-control` (ou `/rc`) dans une session Claude Code en cours, tu scannes un QR code, et cette session se mirror dans l'app Claude sur ton téléphone. La machine à la maison continue de bosser — rien ne part dans le cloud — et tu pilotes la conversation d'où tu veux. Tu reçois même des notifications push quand l'agent termine ou a besoin d'une réponse. Pour le problème « est-ce qu'il s'est arrêté pour me demander un truc », c'est le bon outil et je l'utilise encore.
 
 Mais ça mirror *une session*. Une conversation, dans un repo, que tu as lancée avant de quitter ton bureau. Depuis le téléphone, tu ne peux pas `cd` dans un autre projet. Tu ne peux pas regarder pourquoi un container Docker bouffe du CPU. Tu ne peux pas ouvrir une deuxième session Claude sur une autre codebase parce qu'une idée t'est venue dans le train. La feature répond à « laisse-moi piloter ce qui tourne déjà » et rien d'autre — ce qui est fair, c'est son job. Mon problème, c'est qu'une fois capable d'atteindre ma machine depuis le canapé, je voulais sans arrêt le reste de la machine.
 
 ## Le setup : deux apps et un flag
 
-Les pièces : [Tailscale](https://tailscale.com) sur la workstation et le téléphone, et [Termius](https://termius.com) comme client SSH sur Android. Tailscale construit un mesh WireGuard privé entre tes appareils — ton laptop et ton téléphone se retrouvent sur un petit réseau virtuel (un « tailnet ») qui les suit partout, Wi-Fi, 4G, peu importe. Pas de port forwarding, pas de DNS dynamique, pas de VPS relais à maintenir.
+**De quoi as-tu besoin pour monter ça ?** Les pièces : [Tailscale](https://tailscale.com) sur la workstation et le téléphone, et [Termius](https://termius.com) comme client SSH sur Android. Tailscale construit un mesh WireGuard privé entre tes appareils — ton laptop et ton téléphone se retrouvent sur un petit réseau virtuel (un « tailnet ») qui les suit partout, Wi-Fi, 4G, peu importe. Pas de port forwarding, pas de DNS dynamique, pas de VPS relais à maintenir.
 
 Ce qui m'a surpris, c'est le peu de setup côté serveur, grâce à une feature qui s'appelle Tailscale SSH. Voilà l'état de ma workstation, une Dell Precision 3570 sous Linux :
 
@@ -38,7 +38,7 @@ Il n'y a pas de serveur OpenSSH installé. Rien n'écoute sur le port 22. Et pou
 
 ## Côté workstation : une commande
 
-Installe Tailscale (leur script, ou le paquet de ta distro) :
+**Comment configurer la workstation ?** Installe Tailscale (leur script, ou le paquet de ta distro) :
 
 ```bash
 curl -fsSL https://tailscale.com/install.sh | sh
@@ -74,7 +74,7 @@ Qui peut SSH vers quoi, c'est la politique ACL du tailnet qui le décide, dans l
 
 ## Côté téléphone : Termius et quatre touches spéciales
 
-Installe l'app Tailscale sur le téléphone, connecte-toi au même tailnet, terminé — le téléphone est maintenant un pair du mesh. N'importe quel client SSH fait l'affaire à partir de là, mais j'ai fini sur Termius pour une raison précise : sa barre de touches supplémentaires au-dessus du clavier.
+**Pourquoi Termius sur le téléphone ?** Installe l'app Tailscale sur le téléphone, connecte-toi au même tailnet, terminé — le téléphone est maintenant un pair du mesh. N'importe quel client SSH fait l'affaire à partir de là, mais j'ai fini sur Termius pour une raison précise : sa barre de touches supplémentaires au-dessus du clavier.
 
 Claude Code est une UI de terminal, et les UI de terminal supposent des touches que les claviers tactiles ont oubliées. `Esc` interrompt l'agent en plein tour. `Shift+Tab` fait tourner les modes de permission. `Ctrl+C`, les flèches pour l'historique. Termius met Esc, Ctrl, Tab et les flèches à un tap, et c'est la différence entre réellement piloter Claude Code et juste le regarder scroller.
 
@@ -82,7 +82,7 @@ L'entrée d'hôte n'a rien de spécial : adresse `tom-precision-3570` (le MagicD
 
 ## tmux, pour qu'une coupure de connexion soit un non-événement
 
-Une connexion SSH mobile va couper. L'ascenseur, le tunnel du train, Android qui décide que Termius a eu assez de temps en arrière-plan. Et un shell SSH nu meurt avec sa connexion — le process distant se fait raccrocher au nez, et si Claude était en pleine tâche, le tour en cours meurt avec. `claude --resume` récupérerait la conversation, mais pas le travail que l'agent était en train de faire quand la ligne a coupé.
+**Que se passe-t-il quand la connexion coupe ?** Une connexion SSH mobile va couper. L'ascenseur, le tunnel du train, Android qui décide que Termius a eu assez de temps en arrière-plan. Et un shell SSH nu meurt avec sa connexion — le process distant se fait raccrocher au nez, et si Claude était en pleine tâche, le tour en cours meurt avec. `claude --resume` récupérerait la conversation, mais pas le travail que l'agent était en train de faire quand la ligne a coupé.
 
 tmux supprime le problème au lieu de l'adoucir. Sur la workstation, tout tourne dans un multiplexeur qui se fiche de savoir si quelqu'un regarde :
 
@@ -103,7 +103,7 @@ Le mode souris met le scrollback de tmux au tactile — tu balaies pour parcouri
 
 ## Ce qu'un vrai shell débloque
 
-L'échelle, à peu près dans l'ordre où je la grimpe un soir donné :
+**Qu'est-ce qu'un vrai shell débloque que le mirroring ne peut pas ?** L'échelle, à peu près dans l'ordre où je la grimpe un soir donné :
 
 **Reprendre la session du bureau.** Un `cd` dans le projet et `claude --resume` rouvre la conversation que j'ai laissée, exactement où elle en était. Rien que ça remplace `/remote-control` pour moi la plupart des jours.
 
@@ -117,7 +117,7 @@ L'échelle, à peu près dans l'ordre où je la grimpe un soir donné :
 
 ## Les limites, honnêtement
 
-Deux, dans l'esprit de ne pas écrire une brochure.
+**Où ce setup montre-t-il ses limites ?** Deux, dans l'esprit de ne pas écrire une brochure.
 
 **La workstation doit être réveillée.** C'est un laptop. Capot fermé, il se met en veille, et une machine en veille n'est pas un pair du tailnet. La mienne vit surtout sur son dock avec la veille désactivée, mais si la tienne dort, c'est un réglage à changer avant de quitter la maison, pas après.
 
@@ -125,9 +125,11 @@ Deux, dans l'esprit de ne pas écrire une brochure.
 
 ## La sécurité, en un paragraphe
 
-Rien dans ce setup n'est joignable depuis internet. Pas de port ouvert, pas d'endpoint public, même pas de daemon SSH — la surface d'attaque, c'est « être un appareil de mon tailnet », soit exactement la liste que je contrôle depuis la console d'admin et que je peux élaguer en un clic. Le risque réaliste s'est déplacé vers le téléphone lui-même, et c'est pour ça que la ré-auth du mode check et le verrouillage de Termius restent activés malgré la friction. Compare ça à la réponse classique — port 22 exposé, fail2ban, et l'espoir — et ce n'est pas juste plus pratique. C'est moins exposé que ce que ça remplace.
+**À quel point tout ça est-il exposé ?** Rien dans ce setup n'est joignable depuis internet. Pas de port ouvert, pas d'endpoint public, même pas de daemon SSH — la surface d'attaque, c'est « être un appareil de mon tailnet », soit exactement la liste que je contrôle depuis la console d'admin et que je peux élaguer en un clic. Le risque réaliste s'est déplacé vers le téléphone lui-même, et c'est pour ça que la ré-auth du mode check et le verrouillage de Termius restent activés malgré la friction. Compare ça à la réponse classique — port 22 exposé, fail2ban, et l'espoir — et ce n'est pas juste plus pratique. C'est moins exposé que ce que ça remplace.
 
 ## À retenir
+
+**Qu'est-ce qu'il faut retenir ?**
 
 1. **`/remote-control` et SSH ne sont pas concurrents — ce sont des barreaux.** Mirror une session quand ça suffit ; garde le shell complet pour quand ça ne suffit pas. J'utilise les deux dans la même soirée.
 2. **Tailscale SSH, ça veut dire qu'il n'y a pas de serveur à durcir.** Pas de sshd, pas de port ouvert, pas de clés. Le serveur SSH, c'est le daemon du mesh, et seul le mesh le voit.

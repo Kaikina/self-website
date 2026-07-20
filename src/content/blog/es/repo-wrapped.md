@@ -17,13 +17,13 @@ Es un cambio de aires respecto a los [artículos sobre seguridad de IA](/blog/cl
 
 ## La idea es trivial. El dato no.
 
-«Sacar las stats de commits de un repo» suena a un solo endpoint. No es un solo endpoint, y los que necesitas se comportan de una forma que solo cobra sentido una vez que te has quemado con ellos.
+**¿Por qué sacar las stats de un repo es más difícil de lo que suena?** «Sacar las stats de commits de un repo» suena a un solo endpoint. No es un solo endpoint, y los que necesitas se comportan de una forma que solo cobra sentido una vez que te has quemado con ellos.
 
 Esto es lo que quería por contributor: total de commits, líneas añadidas y borradas, un sparkline de actividad semanal, la fecha de su primer commit, y su puesto en el ranking del repo. Cuatro de esos cinco vienen de un único endpoint de GitHub — `/stats/contributors`. Ahí ocurre la mayor parte de esta historia, porque tiene dos trampas, y caí en las dos.
 
 ## Trampa uno: el 202 que significa «vuelve luego»
 
-La primera vez que pegas a `/stats/contributors` en un repo que GitHub no ha crunchado hace poco, no obtienes datos. Obtienes un `202 Accepted` y un body vacío. GitHub te está diciendo: he empezado a calcularlo, vuelve a pedirlo en un rato.
+**¿Qué haces cuando GitHub devuelve un 202 sin datos?** La primera vez que pegas a `/stats/contributors` en un repo que GitHub no ha crunchado hace poco, no obtienes datos. Obtienes un `202 Accepted` y un body vacío. GitHub te está diciendo: he empezado a calcularlo, vuelve a pedirlo en un rato.
 
 Vale. Así que reintentas. Pero «en un rato» no es una cifra, y en un repo grande puede tardar. Un bucle de retry ingenuo o se rinde demasiado pronto en un repo lento, o machaca uno rápido. Así que el fetch hace backoff — 1, 2, 4, 8, 16 segundos, cinco intentos — y la mayoría de los repos se resuelven dentro de esa ventana.
 
@@ -35,7 +35,7 @@ La lección no es sutil, pero es fácil saltársela cuando vas rápido: **cualqu
 
 ## Trampa dos: el muro del top 100
 
-La segunda trampa es más silenciosa, porque no da error. `/stats/contributors` devuelve los 100 primeros contributors por número de commits. Si la persona que estás wrapeando es el contributor 101, el endpoint devuelve una respuesta limpia y correcta — y simplemente no está en ella. Sin flag, sin aviso. Tu código parece funcionar, y luego alguien lo prueba en `laravel/framework` con un contributor de media tabla y se lleva una página llena de ceros.
+**¿Qué pasa cuando tu contributor está más allá del top 100?** La segunda trampa es más silenciosa, porque no da error. `/stats/contributors` devuelve los 100 primeros contributors por número de commits. Si la persona que estás wrapeando es el contributor 101, el endpoint devuelve una respuesta limpia y correcta — y simplemente no está en ella. Sin flag, sin aviso. Tu código parece funcionar, y luego alguien lo prueba en `laravel/framework` con un contributor de media tabla y se lleva una página llena de ceros.
 
 No hay un parámetro «dame el contributor 143». Así que el fallback es hacer a mano lo que el endpoint de stats habría hecho por ti: paginar los commits de ese usuario en el repo (`?author=username`), abrir cada uno, y sumar las adiciones y borrados a partir de los diffs de los commits individuales. Es un bucle N+1 y lo sé — una petición para listar, una por commit para los recuentos de líneas — así que está topado en 100 commits. No es perfecto. Pero «más o menos correcto para la cola larga» vale más que «cero con seguridad», y la alternativa era hacer como que el contributor 101 no existe.
 
@@ -43,7 +43,7 @@ Dejé en ese método un comentario que dice solo `// N+1 by design`. Algunos de 
 
 ## El truco del primer commit
 
-La quinta cifra — la fecha del *primer* commit de alguien — no tiene endpoint alguno. El enfoque obvio es paginar su historial de commits hasta el último del todo, lo que en un repo de larga vida son muchísimas peticiones para responder a «cuál es el más viejo».
+**¿Cómo encontrar el primer commit de alguien sin un endpoint para ello?** La quinta cifra — la fecha del *primer* commit de alguien — no tiene endpoint alguno. El enfoque obvio es paginar su historial de commits hasta el último del todo, lo que en un repo de larga vida son muchísimas peticiones para responder a «cuál es el más viejo».
 
 El endpoint de commits de GitHub está paginado, y las respuestas paginadas llevan un header `Link` con `rel="first"`, `rel="prev"`, `rel="next"`, y — el útil — `rel="last"`. Así que: pide la lista de commits con `per_page=1`, lee la URL `rel="last"` del header, y apunta directa a la última página, que es el commit más viejo. Una petición para encontrar la página, otra para traerla. Sin recorrer el historial.
 
@@ -51,13 +51,13 @@ Me sentí como si me estuviera colando. Pero es solo leer las propias instruccio
 
 ## El cache, porque la API tiene un presupuesto
 
-El rate limit de GitHub es real y, con el fan-out de ese fallback del top 100, más cercano de lo que crees. Así que nada se recalcula si no tiene que hacerlo. Los resultados viven en dos capas: Redis con un TTL de una hora para el camino rápido, y Postgres durante 24 horas como copia duradera. Una petición mira Redis, luego Postgres, y solo un miss de verdad dispatcha el job de cálculo y deja al visitante en una página de loading que hace polling a un endpoint `/status` hasta que el registro pasa a `fresh`.
+**¿Cómo mantenerse dentro del rate limit de GitHub?** El rate limit de GitHub es real y, con el fan-out de ese fallback del top 100, más cercano de lo que crees. Así que nada se recalcula si no tiene que hacerlo. Los resultados viven en dos capas: Redis con un TTL de una hora para el camino rápido, y Postgres durante 24 horas como copia duradera. Una petición mira Redis, luego Postgres, y solo un miss de verdad dispatcha el job de cálculo y deja al visitante en una página de loading que hace polling a un endpoint `/status` hasta que el registro pasa a `fresh`.
 
 Encima de eso hay un rate limiter de token-bucket delante del propio cliente de GitHub — 10 peticiones por segundo, 4.500 por hora, trackeado en Redis. La decisión de la que menos seguro estoy vive aquí: si Redis está caído, el limiter *bypasea* en vez de bloquear. Logea un warning y deja pasar la petición. Elegí «la app sigue funcionando y quizá molesto a GitHub» por encima de «Redis tose y todo el sitio se va a un 500». Para un proyecto personal es la decisión correcta. Para algo con un radio de daño real, querría el default contrario, y creo que esa es la forma honesta de describir un compromiso — no «este es el patrón correcto» sino «esto es para lo que optimicé, y esto es cuándo lo cambiaría».
 
 ## El badge tenía que caber en un solo archivo
 
-La parte de la que estoy calladamente más orgulloso es la tarjeta embebible. Pones esto en un README:
+**¿Por qué el badge de README tiene que caber en un solo archivo autónomo?** La parte de la que estoy calladamente más orgulloso es la tarjeta embebible. Pones esto en un README:
 
 ```markdown
 ![RepoWrapped](https://repo-wrapped.tom-girou.dev/card/laravel/framework/taylorotwell?theme=dark)
@@ -69,17 +69,19 @@ Así que la tarjeta tiene que ser genuinamente autónoma. Es un template Blade r
 
 ## El diseño, en breve
 
-Te ahorro el repaso completo, pero el look es deliberado: un informe de terminal. Canvas casi negro, IBM Plex Mono, un único acento verde fósforo mantenido por debajo del cinco por ciento de la pantalla, la cifra grande de commits en blanco simple porque el dato es la estrella y no necesita vestirse. Sin orbes en gradiente, sin glassmorphism, sin falso chrome de ventana con sus puntitos tipo semáforo. Se lee como un CLI imprimiendo tus stats, lo que, para una herramienta pensada para gente que vive en un terminal, parecía la única opción honesta.
+**¿Qué aspecto tiene la página, en realidad?** Te ahorro el repaso completo, pero el look es deliberado: un informe de terminal. Canvas casi negro, IBM Plex Mono, un único acento verde fósforo mantenido por debajo del cinco por ciento de la pantalla, la cifra grande de commits en blanco simple porque el dato es la estrella y no necesita vestirse. Sin orbes en gradiente, sin glassmorphism, sin falso chrome de ventana con sus puntitos tipo semáforo. Se lee como un CLI imprimiendo tus stats, lo que, para una herramienta pensada para gente que vive en un terminal, parecía la única opción honesta.
 
 ## Los trozos de los que no estoy orgulloso
 
-Dos, en el espíritu de no escribir un folleto comercial.
+**¿Qué seguiría cambiando?** Dos, en el espíritu de no escribir un folleto comercial.
 
 Hay una rama de staleness en el servicio de cache que comenté y *rodeé* en vez de atravesarla — el controller hace su propia comprobación de frescura antes para que el código comentado nunca muerda, pero cualquiera que lea el servicio aislado se perdería, y «confuso pero correcto» es una deuda que aún le debo a ese archivo.
 
 Y hay un bug de mayúsculas que conozco y no he arreglado: paso `owner` y `repo` a minúsculas antes de que toquen la clave de cache, pero no `username`. Así que `/u/laravel/framework/TaylorOtwell` y `/.../taylorotwell` son dos entradas de cache distintas y dos filas de base distintas para la misma persona. Todavía no ha causado problemas reales. Los causará seguro el día que alguien comparta una URL con mayúsculas distintas. Está anotado en las notas del proyecto justamente para que no se olvide — que es el estado honesto de la mayoría de los side-projects: una cosa que funciona con una lista corta de pecados que has decidido asumir por ahora.
 
 ## Para quedarse con
+
+**¿Qué conviene llevarse?**
 
 1. **La idea nunca es el trabajo.** «Spotify Wrapped para un repo» fue un fin de semana de UI. El proyecto de verdad fueron tres rarezas de un solo endpoint de GitHub. Cuando algo suena trivial, suele ser la fuente de datos la que esconde la ingeniería real.
 2. **Un 202 es una instrucción de diseño.** Cuando una API te dice que necesita tiempo, esa es tu señal para sacar el trabajo del camino de la petición y ponerlo en una queue — no para reintentar más fuerte en el controller.

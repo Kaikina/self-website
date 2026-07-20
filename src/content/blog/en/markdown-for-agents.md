@@ -17,7 +17,7 @@ The thing is, there's no Cloudflare magic in that contract. It's HTTP content ne
 
 ## The contract before the code
 
-Both renditions live at the same URL. A browser requesting `https://forgemage.net/` gets HTML; an agent sending `Accept: text/markdown` gets markdown. No `/md/` prefix, no `.md` suffix, no separate route to maintain.
+**How do you serve HTML and markdown from the same URL?** Both renditions live at the same URL. A browser requesting `https://forgemage.net/` gets HTML; an agent sending `Accept: text/markdown` gets markdown. No `/md/` prefix, no `.md` suffix, no separate route to maintain.
 
 That's the pleasant part. The negotiation rules are where implementations quietly go wrong:
 
@@ -59,7 +59,7 @@ The manual loop instead of `$accept->get('text/markdown')` is deliberate: it tol
 
 ## Where to hook it, and what to guard
 
-The whole feature is a `kernel.response` subscriber. The controller renders HTML exactly as before; the subscriber decides afterwards whether to swap the body. No controller changes, no template changes, and deleting the class removes the feature cleanly.
+**Where should the conversion live, and what has to be guarded?** The whole feature is a `kernel.response` subscriber. The controller renders HTML exactly as before; the subscriber decides afterwards whether to swap the body. No controller changes, no template changes, and deleting the class removes the feature cleanly.
 
 Before converting anything, it bails unless *all* of these hold: it's the main request, the method is GET or HEAD, the response is `text/html`, the status is 200, and — the guard I care most about — the route is indexable.
 
@@ -76,7 +76,7 @@ That `isIndexable()` call reuses the service that already builds my sitemap and 
 
 ## Converting HTML that was never written to be markdown
 
-The conversion itself is [`league/html-to-markdown`](https://github.com/thephpleague/html-to-markdown), configured once and cached in the subscriber:
+**What does turning page HTML into clean markdown actually involve?** The conversion itself is [`league/html-to-markdown`](https://github.com/thephpleague/html-to-markdown), configured once and cached in the subscriber:
 
 ```php
 $this->htmlConverter = new HtmlConverter([
@@ -93,7 +93,7 @@ Two small touches after conversion. If the result doesn't start with an `# ` hea
 
 ## The three details that actually matter
 
-Everything above is straightforward. These three are the reason I'd point a colleague at this post instead of just at the package's README.
+**Which implementation details actually bite in production?** Everything above is straightforward. These three are the reason I'd point a colleague at this post instead of just at the package's README.
 
 **`Vary: Accept`, on both renditions.** Two different bodies live at one URL, so every cache between the agent and the app must key on the Accept header. Miss it and a CDN happily caches the markdown rendition, then serves it to the next browser. The subscriber sets it before checking whether markdown was even requested, and before the 200 check, because the URL negotiates regardless of what this particular response turned out to be. Symfony's `setVary('Accept', false)` appends rather than replaces, so an existing `Vary` from another listener survives.
 
@@ -103,7 +103,7 @@ Everything above is straightforward. These three are the reason I'd point a coll
 
 ## Proving it works
 
-Seven `WebTestCase` tests pin the negotiation matrix: browser Accept keeps HTML, `*/*` is not opt-in, `q=0` refuses, `Text/Markdown;variant=GFM` matches, HEAD carries the same headers, and a logged-in request to a private route never converts. The whole suite is boring on purpose — each test is four lines of "send this Accept header, assert this Content-Type".
+**How do you prove the negotiation works?** Seven `WebTestCase` tests pin the negotiation matrix: browser Accept keeps HTML, `*/*` is not opt-in, `q=0` refuses, `Text/Markdown;variant=GFM` matches, HEAD carries the same headers, and a logged-in request to a private route never converts. The whole suite is boring on purpose — each test is four lines of "send this Accept header, assert this Content-Type".
 
 Against production:
 
@@ -125,6 +125,8 @@ $ curl -so /dev/null -w "%{size_download}\n" -H "Accept: text/markdown" https://
 
 ## The honest limits
 
+**When does serving markdown this way fall short?**
+
 **Garbage in, garbage out.** The converter transforms your rendered HTML; it can't add structure your templates don't have. Forgemage's Twig templates use real headings and semantic lists, so the markdown comes out readable. A div-soup frontend would produce markdown soup.
 
 **Almost nobody asks yet.** I haven't seen a mainstream crawler send `Accept: text/markdown` unprompted. Today's agents mostly fetch HTML and convert it client-side — Claude Code's own WebFetch tool does exactly that. This feature is a bet that the convention Cloudflare is pushing becomes the norm, and the stake is small: one dependency, 144 lines, no ongoing cost. Serving the conversion from the origin also means the agent's own converter never sees my cookie banner.
@@ -132,6 +134,8 @@ $ curl -so /dev/null -w "%{size_download}\n" -H "Accept: text/markdown" https://
 **It complements llms.txt, not replaces it.** This very site has an `/llms.txt` — a curated map for agents. Content negotiation answers a different question: "give me *this page*, cheaply". One is a table of contents, the other is the book printed in a readable font.
 
 ## Takeaways
+
+**What carries over to your own stack?**
 
 1. **Cloudflare's Markdown for Agents is a contract, not a product.** `Accept: text/markdown` in, converted body plus `Vary: Accept` out. Any framework with response events can honor it.
 2. **The negotiation edge cases are the feature.** Wildcard is not opt-in, `q=0` means never, matching is case-insensitive and parameter-tolerant. Get these wrong and browsers see markdown.

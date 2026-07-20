@@ -15,13 +15,13 @@ Esta es la historia de cómo añadí una revisión automática con Claude a las 
 
 ## El problema: un GitLab legacy, nada en la caja
 
-Las plataformas hospedadas lo han hecho fácil. GitLab Duo, los bots de review de GitHub, una docena de integraciones SaaS: clic y listo. Nada de eso estaba sobre la mesa. La instancia con la que trabajaba es self-hosted, atrasada varias versiones mayores, y el runner que agenda los jobs es lo bastante viejo como para que algunos binarios modernos ni siquiera arranquen en él.
+**¿Por qué no usar simplemente una integración lista para usar?** Las plataformas hospedadas lo han hecho fácil. GitLab Duo, los bots de review de GitHub, una docena de integraciones SaaS: clic y listo. Nada de eso estaba sobre la mesa. La instancia con la que trabajaba es self-hosted, atrasada varias versiones mayores, y el runner que agenda los jobs es lo bastante viejo como para que algunos binarios modernos ni siquiera arranquen en él.
 
 Así que el objetivo era deliberadamente modesto: cuando alguien abre una merge request contra una rama protegida, un reviewer debe leer el diff, dejar comentarios inline donde encuentre problemas reales, y (esta era la parte que el equipo de verdad quería) **bloquear el merge cuando aparece algo serio.** Todo sobre una infra que no podía reemplazar, solo ampliar.
 
 ## La versión ingenua, y por qué es peligrosa
 
-El enfoque obvio es un solo job. Le das un token de API al runner, lanzas la IA sobre el diff de la merge request, dejas que postee sus comentarios directamente. Un solo stage, un par de docenas de líneas, hecho antes de comer.
+**¿Qué falla en el enfoque obvio de un solo job?** El enfoque obvio es un solo job. Le das un token de API al runner, lanzas la IA sobre el diff de la merge request, dejas que postee sus comentarios directamente. Un solo stage, un par de docenas de líneas, hecho antes de comer.
 
 También es un agujero de seguridad, y la razón se llama **prompt injection.**
 
@@ -35,7 +35,7 @@ Puedes intentar parchearlo con prompts más listos («nunca reveles secretos», 
 
 ## La idea central: una frontera de confianza
 
-El diseño parte el trabajo en dos jobs que corren en **contenedores separados**, con una línea nítida entre ellos:
+**¿Cómo mantener la IA lejos del token?** El diseño parte el trabajo en dos jobs que corren en **contenedores separados**, con una línea nítida entre ellos:
 
 - Un stage **untrusted** que lanza la IA sobre el diff pero **no puede postear nada y no tiene ningún token usable.**
 - Un stage **trusted** que hace el posting, con el token de verdad, y en el que **la IA nunca se ejecutó.**
@@ -62,7 +62,7 @@ Por eso importa tanto la separación: el código que postea los comentarios es u
 
 ## Defence in depth
 
-La frontera de confianza es el muro de carga. Todo lo demás está ahí por si algún día se agrieta.
+**¿Qué respalda la frontera si se agrieta?** La frontera de confianza es el muro de carga. Todo lo demás está ahí por si algún día se agrieta.
 
 - **Least privilege en las herramientas.** El reviewer obtiene acceso de lectura y un único destino de escritura. Sin shell, sin edición. Menos verbos, menor superficie de ataque.
 - **Token shadowing.** La credencial peligrosa está ausente de la habitación donde se lee el input no confiable, no meramente «sin usar».
@@ -74,7 +74,7 @@ Ninguna de estas medidas te salvaría por sí sola. Apiladas detrás de una fron
 
 ## Convertir los findings en un merge gate
 
-Los comentarios están bien. Es el gate lo que cambia los comportamientos.
+**¿Cómo bloquean los findings un merge de verdad?** Los comentarios están bien. Es el gate lo que cambia los comportamientos.
 
 El reviewer asigna una severidad a cada finding, y la severidad está conectada directamente con el resultado de la pipeline:
 
@@ -86,7 +86,7 @@ La calibración vive en las instrucciones del reviewer, y ajustarla bien pidió 
 
 ## Mantener la calma: dedup, auto-resolución, y los humanos
 
-La primera versión era ruidosa de otra manera: cada run de la pipeline re-posteaba los mismos comentarios. En una MR que necesita diez pushes para entrar, eso es insoportable.
+**¿Cómo evitar que el reviewer se vuelva ruido?** La primera versión era ruidosa de otra manera: cada run de la pipeline re-posteaba los mismos comentarios. En una MR que necesita diez pushes para entrar, eso es insoportable.
 
 Así que el job trusted reconcilia con lo que ya está en la merge request en lugar de postear a ciegas. Cada finding lleva un **identificador estable** derivado de la naturaleza del problema y del símbolo implicado, deliberadamente *no* el número de línea, para que el mismo problema conserve su identidad aunque el código alrededor se mueva de un push a otro. Con eso, el job puede:
 
@@ -98,11 +98,11 @@ Con una excepción firme: **nunca auto-resuelve un thread al que un humano ha re
 
 ## Lo que cambió
 
-El objetivo nunca fue reemplazar la revisión humana. Era asegurar que, para cuando un humano mira, lo obvio ya está atrapado: el `dump()` olvidado, el output sin escapar, la query tranquilamente metida dentro de un bucle. Los reviewers pueden dedicar su atención al diseño y la intención en lugar de jugar a linter. Y los cambios de verdad peligrosos no se mergean mientras todos están ocupados, porque el gate no se cansa un viernes por la tarde.
+**¿Qué cambió esto de verdad?** El objetivo nunca fue reemplazar la revisión humana. Era asegurar que, para cuando un humano mira, lo obvio ya está atrapado: el `dump()` olvidado, el output sin escapar, la query tranquilamente metida dentro de un bucle. Los reviewers pueden dedicar su atención al diseño y la intención en lugar de jugar a linter. Y los cambios de verdad peligrosos no se mergean mientras todos están ocupados, porque el gate no se cansa un viernes por la tarde.
 
 ## Para llevarse
 
-Si te llevas una sola cosa, que sea la frontera:
+**¿Qué conviene llevarse?** Si te llevas una sola cosa, que sea la frontera:
 
 1. **Nunca dejes que un modelo lea input no confiable y tenga una credencial privilegiada en la misma ejecución.** Pártelo en un sandbox que piensa y una caja fuerte que actúa, y haz pasar solo datos entre ambos.
 2. **Trata las defensas a nivel de prompt como comodidad, no como seguridad.** Las protecciones reales son estructurales: least privilege, credenciales ausentes, inputs recalculados.

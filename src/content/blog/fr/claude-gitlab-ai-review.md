@@ -15,13 +15,13 @@ Voici comment j'ai ajouté une revue Claude automatique aux merge requests d'un 
 
 ## Le problème : un GitLab legacy, rien dans la boîte
 
-Les plateformes hébergées ont rendu ça trivial. GitLab Duo, les bots de review GitHub, une douzaine d'intégrations SaaS : tu cliques, c'est fait. Rien de tout ça n'était envisageable. L'instance sur laquelle je bossais est self-hosted, en retard de plusieurs versions majeures, et le runner qui ordonnance les jobs est assez vieux pour que certains binaires modernes refusent carrément de démarrer dessus.
+**Pourquoi ne pas simplement utiliser une intégration clé en main ?** Les plateformes hébergées ont rendu ça trivial. GitLab Duo, les bots de review GitHub, une douzaine d'intégrations SaaS : tu cliques, c'est fait. Rien de tout ça n'était envisageable. L'instance sur laquelle je bossais est self-hosted, en retard de plusieurs versions majeures, et le runner qui ordonnance les jobs est assez vieux pour que certains binaires modernes refusent carrément de démarrer dessus.
 
 L'objectif était donc volontairement modeste : quand quelqu'un ouvre une merge request sur une branche protégée, un reviewer doit lire le diff, laisser des commentaires inline là où il trouve de vrais problèmes, et (c'est la partie que l'équipe voulait vraiment) **bloquer le merge quand quelque chose de sérieux apparaît.** Le tout sur une infra que je ne pouvais pas remplacer, seulement compléter.
 
 ## La version naïve, et pourquoi elle est dangereuse
 
-L'approche évidente, c'est un seul job. Tu donnes un token API au runner, tu lances l'IA sur le diff de la merge request, tu la laisses poster ses commentaires directement. Un seul stage, une vingtaine de lignes, plié avant midi.
+**Qu'est-ce qui cloche dans l'approche évidente à un seul job ?** L'approche évidente, c'est un seul job. Tu donnes un token API au runner, tu lances l'IA sur le diff de la merge request, tu la laisses poster ses commentaires directement. Un seul stage, une vingtaine de lignes, plié avant midi.
 
 C'est aussi un trou de sécurité, et la raison s'appelle **prompt injection.**
 
@@ -35,7 +35,7 @@ Tu peux tenter de colmater avec des prompts plus malins (« ne révèle jamais d
 
 ## L'idée centrale : une frontière de confiance
 
-Le design découpe le travail en deux jobs qui tournent dans des **conteneurs séparés**, avec une ligne nette entre les deux :
+**Comment tenir l'IA à l'écart du token ?** Le design découpe le travail en deux jobs qui tournent dans des **conteneurs séparés**, avec une ligne nette entre les deux :
 
 - Un stage **untrusted** qui lance l'IA sur le diff mais **ne peut rien poster et ne détient aucun token exploitable.**
 - Un stage **trusted** qui fait le posting, avec le vrai token, et dans lequel **l'IA n'a jamais tourné.**
@@ -62,7 +62,7 @@ C'est pour ça que la séparation compte autant : le code qui poste les commenta
 
 ## Defence in depth
 
-La frontière de confiance, c'est le mur porteur. Tout le reste est là au cas où il se fissurerait un jour.
+**Qu'est-ce qui protège la frontière si elle se fissure ?** La frontière de confiance, c'est le mur porteur. Tout le reste est là au cas où il se fissurerait un jour.
 
 - **Least privilege sur les outils.** Le reviewer obtient un accès en lecture et une seule cible en écriture. Pas de shell, pas d'édition. Moins de verbes, surface d'attaque plus petite.
 - **Token shadowing.** Le credential dangereux est absent de la pièce où l'input non fiable est lu, pas seulement « non utilisé ».
@@ -74,7 +74,7 @@ Aucune de ces mesures ne te sauverait seule. Empilées derrière une vraie front
 
 ## Transformer les findings en merge gate
 
-Les commentaires, c'est bien. C'est la gate qui change les comportements.
+**Comment les findings bloquent-ils réellement un merge ?** Les commentaires, c'est bien. C'est la gate qui change les comportements.
 
 Le reviewer attribue une sévérité à chaque finding, et la sévérité est branchée directement sur le résultat de la pipeline :
 
@@ -86,7 +86,7 @@ La calibration vit dans les instructions du reviewer, et la régler correctement
 
 ## Garder le calme : dedup, auto-résolution, et les humains
 
-La première version était bruyante d'une autre manière : chaque run de pipeline re-postait les mêmes commentaires. Sur une MR qui demande dix pushes pour passer, c'est insupportable.
+**Comment empêcher le reviewer de devenir du bruit ?** La première version était bruyante d'une autre manière : chaque run de pipeline re-postait les mêmes commentaires. Sur une MR qui demande dix pushes pour passer, c'est insupportable.
 
 Donc le job trusted réconcilie avec ce qui est déjà sur la merge request au lieu de poster aveuglément. Chaque finding porte un **identifiant stable** dérivé de la nature du problème et du symbole concerné, délibérément *pas* le numéro de ligne, pour que le même problème garde son identité même quand le code autour bouge d'un push à l'autre. Avec ça, le job peut :
 
@@ -98,11 +98,11 @@ Avec une exception ferme : **il n'auto-résout jamais un thread auquel un humain
 
 ## Ce que ça a changé
 
-Le but n'a jamais été de remplacer la revue humaine. C'était de s'assurer qu'au moment où un humain regarde, l'évident est déjà attrapé : le `dump()` oublié, l'output non échappé, la requête tranquillement posée à l'intérieur d'une boucle. Les reviewers peuvent consacrer leur attention au design et à l'intention au lieu de jouer au linter. Et les changements vraiment dangereux ne passent pas pendant que tout le monde est occupé, parce que la gate ne fatigue pas un vendredi après-midi.
+**Qu'est-ce que ça a vraiment changé ?** Le but n'a jamais été de remplacer la revue humaine. C'était de s'assurer qu'au moment où un humain regarde, l'évident est déjà attrapé : le `dump()` oublié, l'output non échappé, la requête tranquillement posée à l'intérieur d'une boucle. Les reviewers peuvent consacrer leur attention au design et à l'intention au lieu de jouer au linter. Et les changements vraiment dangereux ne passent pas pendant que tout le monde est occupé, parce que la gate ne fatigue pas un vendredi après-midi.
 
 ## À retenir
 
-S'il faut retenir une chose, que ce soit la frontière :
+**Qu'est-ce qu'il faut en retenir ?** S'il faut retenir une chose, que ce soit la frontière :
 
 1. **Ne laisse jamais un modèle lire un input non fiable et détenir un credential privilégié dans la même exécution.** Découpe en un sandbox qui pense et un coffre qui agit, et ne fais transiter que des données entre les deux.
 2. **Considère les défenses au niveau du prompt comme du confort, pas de la sécurité.** Les vraies protections sont structurelles : least privilege, credentials absents, inputs recalculés.

@@ -15,13 +15,13 @@ This is the story of how I added an automated Claude review to the merge request
 
 ## The problem: a legacy GitLab with nothing in the box
 
-The hosted platforms have made this easy. GitLab Duo, GitHub's review bots, a dozen SaaS integrations: point, click, done. None of that was on the table. The instance I was working with is self-hosted, several major versions behind, and the runner it schedules jobs on is old enough that some modern binaries won't even start on it.
+**Why couldn't I just use an off-the-shelf integration?** The hosted platforms have made this easy. GitLab Duo, GitHub's review bots, a dozen SaaS integrations: point, click, done. None of that was on the table. The instance I was working with is self-hosted, several major versions behind, and the runner it schedules jobs on is old enough that some modern binaries won't even start on it.
 
 So the goal was deliberately modest: when someone opens a merge request against a protected branch, a reviewer should read the diff, leave inline comments where it finds real problems, and (this was the part the team actually wanted) **block the merge when something serious shows up.** All of it on infrastructure I couldn't replace, only build on.
 
 ## The naive version, and why it's dangerous
 
-The obvious approach is a single job. Give the runner an API token, run the AI on the merge-request diff, let it post its comments directly. One stage, a couple of dozen lines, done by lunch.
+**What's wrong with the obvious single-job approach?** The obvious approach is a single job. Give the runner an API token, run the AI on the merge-request diff, let it post its comments directly. One stage, a couple of dozen lines, done by lunch.
 
 It's also a security hole, and the reason is **prompt injection.**
 
@@ -35,7 +35,7 @@ You can try to patch this with cleverer prompts ("never reveal secrets", "ignore
 
 ## The core idea: a trust boundary
 
-The design splits the work into two jobs that run in **separate containers**, with a hard line between them:
+**How do you keep the AI away from the token?** The design splits the work into two jobs that run in **separate containers**, with a hard line between them:
 
 - An **untrusted** stage that runs the AI on the diff but **cannot post anything and holds no usable token.**
 - A **trusted** stage that does the posting, using the real token, and in which **the AI never executed at all.**
@@ -62,7 +62,7 @@ This is why the separation matters so much: the comment-posting code is a pristi
 
 ## Defence in depth
 
-The trust boundary is the load-bearing wall. Everything else is there in case it ever cracks.
+**What backs up the boundary if it cracks?** The trust boundary is the load-bearing wall. Everything else is there in case it ever cracks.
 
 - **Least privilege on tools.** The reviewer gets read access and a single write target. No shell, no editing. Fewer verbs, smaller attack surface.
 - **Token shadowing.** The dangerous credential is absent from the room where untrusted input is read, not merely "not used."
@@ -74,7 +74,7 @@ None of these would save you on their own. Stacked behind a real boundary, they 
 
 ## Turning findings into a merge gate
 
-Comments are nice. A gate is what changes behaviour.
+**How do findings actually block a merge?** Comments are nice. A gate is what changes behaviour.
 
 The reviewer assigns a severity to every finding, and severity is wired directly to the pipeline's outcome:
 
@@ -86,7 +86,7 @@ The calibration lives in the reviewer's instructions, and getting it right took 
 
 ## Keeping it calm: dedup, auto-resolve, and humans
 
-The first version was noisy in a different way: every pipeline run re-posted the same comments. On an MR that takes ten pushes to land, that's unbearable.
+**How do you stop the reviewer becoming noise?** The first version was noisy in a different way: every pipeline run re-posted the same comments. On an MR that takes ten pushes to land, that's unbearable.
 
 So the trusted job reconciles against what's already on the merge request instead of blindly posting. Each finding carries a **stable identifier** derived from the nature of the problem and the symbol involved, deliberately *not* the line number, so the same issue keeps its identity even as the code around it shifts across pushes. With that, the job can:
 
@@ -98,11 +98,11 @@ With one firm exception: **it never auto-resolves a thread a human has replied t
 
 ## What it changed
 
-The point was never to replace human review. It was to make sure that by the time a human looks, the obvious stuff is already caught: the leftover debug statement, the unescaped output, the query quietly sitting inside a loop. Reviewers get to spend their attention on design and intent instead of playing linter. And the genuinely dangerous changes don't merge while everyone's busy, because the gate doesn't get tired on a Friday afternoon.
+**What did this actually change?** The point was never to replace human review. It was to make sure that by the time a human looks, the obvious stuff is already caught: the leftover debug statement, the unescaped output, the query quietly sitting inside a loop. Reviewers get to spend their attention on design and intent instead of playing linter. And the genuinely dangerous changes don't merge while everyone's busy, because the gate doesn't get tired on a Friday afternoon.
 
 ## Takeaways
 
-If you take one thing from this, make it the boundary:
+**What should you take away?** If you take one thing from this, make it the boundary:
 
 1. **Never let a model read untrusted input and hold a privileged credential in the same execution.** Split it into a sandbox that thinks and a vault that acts, and pass only data between them.
 2. **Treat prompt-level defences as comfort, not security.** The real protections are structural: least privilege, absent credentials, recomputed inputs.
