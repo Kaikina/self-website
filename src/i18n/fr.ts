@@ -351,6 +351,7 @@ const fr: Translation = {
     blurb:
       "Des notes de terrain sur PHP, Symfony, PrestaShop, la CI/CD et l'ingénierie peu glamour qui garde la prod silencieuse. Pas de blabla — juste ce qui a vraiment marché, et pourquoi.",
     authorRole: "Senior Lead Dev",
+    authorCredential: "Une décennie à livrer des plateformes PHP, Symfony & PrestaShop en production.",
     writtenBy: "Écrit par",
     backToBlog: "Retour au blog",
     allPosts: "Tous les articles",

@@ -189,6 +189,7 @@ export type Translation = {
     blurb: string;
     /** Author byline */
     authorRole: string;
+    authorCredential: string;
     writtenBy: string;
     /** Post chrome */
     backToBlog: string;

@@ -1,0 +1,97 @@
+---
+import { Image } from "astro:assets";
+import portrait from "../assets/portrait.avif";
+import type { Translation } from "../i18n";
+
+interface Props {
+  t: Translation;
+  rssHref: string;
+}
+
+const { t, rssHref } = Astro.props as Props;
+---
+
+<div class="author-card">
+  <Image class="author-avatar" src={portrait} width={52} height={52} alt="Tom Girou" />
+  <div class="author-meta">
+    <span class="author-name">Tom Girou</span>
+    <span class="author-role mono">{t.blog.authorRole}</span>
+    <p class="author-credential">{t.blog.authorCredential}</p>
+  </div>
+  <div class="author-links">
+    <a href="https://www.linkedin.com/in/tgirou" target="_blank" rel="noopener">LinkedIn</a>
+    <a href="https://github.com/Kaikina" target="_blank" rel="noopener">GitHub</a>
+    <a href={rssHref}>{t.blog.rssLabel}</a>
+  </div>
+</div>
+
+<style>
+  .author-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    padding: 18px 20px;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: var(--bg-2);
+  }
+
+  .author-avatar {
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid var(--line-strong);
+    flex-shrink: 0;
+  }
+
+  .author-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    min-width: 0;
+  }
+
+  .author-name {
+    font-weight: 600;
+  }
+
+  .author-role {
+    color: var(--ink-dim);
+  }
+
+  .author-credential {
+    margin-top: 4px;
+    max-width: 46ch;
+    color: var(--ink-dim);
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .author-links {
+    margin-left: auto;
+    display: flex;
+    gap: 18px;
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: .08em;
+  }
+
+  .author-links a {
+    color: var(--ink-dim);
+    border-bottom: 1px solid transparent;
+    transition: color .25s, border-color .25s;
+    padding-bottom: 2px;
+  }
+
+  .author-links a:hover {
+    color: var(--ink);
+    border-color: var(--red);
+  }
+
+  @media (max-width: 560px) {
+    .author-links {
+      margin-left: 0;
+      width: 100%;
+    }
+  }
+</style>

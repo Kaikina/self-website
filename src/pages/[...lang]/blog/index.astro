@@ -1,8 +1,7 @@
 ---
-import { Image } from "astro:assets";
-import portrait from "../../../assets/portrait.avif";
 import BlogLayout from "../../../layouts/BlogLayout.astro";
 import PostCard from "../../../components/PostCard.astro";
+import AuthorCard from "../../../components/AuthorCard.astro";
 import {
   defaultLocale,
   getTranslation,
@@ -79,17 +78,8 @@ const schemaJson = JSON.stringify(
       <div class="mono blog-label">{t.blog.label}</div>
       <h1 set:html={t.blog.titleHtml}></h1>
       <p class="blog-blurb">{t.blog.blurb}</p>
-      <div class="byline">
-        <Image class="byline-avatar" src={portrait} width={44} height={44} alt="Tom Girou"/>
-        <div class="byline-meta">
-          <span class="byline-name">Tom Girou</span>
-          <span class="byline-role mono">{t.blog.authorRole}</span>
-        </div>
-        <div class="byline-links">
-          <a href="https://www.linkedin.com/in/tgirou" target="_blank" rel="noopener">LinkedIn</a>
-          <a href="https://github.com/Kaikina" target="_blank" rel="noopener">GitHub</a>
-          <a href={rssHref}>{t.blog.rssLabel}</a>
-        </div>
+      <div class="blog-author">
+        <AuthorCard t={t} rssHref={rssHref} />
       </div>
     </div>
   </header>
@@ -132,60 +122,9 @@ const schemaJson = JSON.stringify(
     line-height: 1.6;
   }
 
-  .byline {
+  .blog-author {
     margin-top: 40px;
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    flex-wrap: wrap;
-  }
-
-  .byline-avatar {
-    border-radius: 50%;
-    object-fit: cover;
-    border: 1px solid var(--line-strong);
-  }
-
-  .byline-meta {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-  }
-
-  .byline-name {
-    font-weight: 600;
-  }
-
-  .byline-role {
-    margin: 0;
-  }
-
-  .byline-links {
-    margin-left: auto;
-    display: flex;
-    gap: 18px;
-    font-family: var(--mono);
-    font-size: 12px;
-    letter-spacing: .08em;
-  }
-
-  .byline-links a {
-    color: var(--ink-dim);
-    border-bottom: 1px solid transparent;
-    transition: color .25s, border-color .25s;
-    padding-bottom: 2px;
-  }
-
-  .byline-links a:hover {
-    color: var(--ink);
-    border-color: var(--red);
-  }
-
-  @media (max-width: 560px) {
-    .byline-links {
-      margin-left: 0;
-      width: 100%;
-    }
+    max-width: 620px;
   }
 
   .blog-list {

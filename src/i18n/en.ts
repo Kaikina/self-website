@@ -349,6 +349,7 @@ const en: Translation = {
     blurb:
       "Field notes on PHP, Symfony, PrestaShop, CI/CD, and the unglamorous engineering that keeps production quiet. No fluff — just what actually worked, and why.",
     authorRole: "Senior Lead Dev",
+    authorCredential: "A decade shipping PHP, Symfony & PrestaShop platforms to production.",
     writtenBy: "Written by",
     backToBlog: "Back to the blog",
     allPosts: "All posts",

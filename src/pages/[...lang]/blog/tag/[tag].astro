@@ -1,6 +1,7 @@
 ---
 import BlogLayout from "../../../../layouts/BlogLayout.astro";
 import PostCard from "../../../../components/PostCard.astro";
+import AuthorCard from "../../../../components/AuthorCard.astro";
 import {
   defaultLocale,
   getTranslation,
@@ -113,6 +114,9 @@ const schemaJson = JSON.stringify(
       <a class="back-link mono" href={blogPath(locale)}>← {t.blog.allPosts}</a>
       <div class="mono tag-label">{t.blog.taggedLabel}</div>
       <h1 class="tag-title">#{tag}</h1>
+      <div class="tag-author">
+        <AuthorCard t={t} rssHref={rssHref} />
+      </div>
     </div>
   </header>
 
@@ -151,6 +155,11 @@ const schemaJson = JSON.stringify(
     line-height: 1;
     font-size: clamp(40px, 6.5vw, 82px);
     text-wrap: balance;
+  }
+
+  .tag-author {
+    margin-top: 34px;
+    max-width: 620px;
   }
 
   .blog-list {

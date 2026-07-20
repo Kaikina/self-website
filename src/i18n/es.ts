@@ -351,6 +351,7 @@ const es: Translation = {
     blurb:
       "Notas de campo sobre PHP, Symfony, PrestaShop, CI/CD y la ingeniería poco glamurosa que mantiene la producción en silencio. Sin relleno — solo lo que de verdad funcionó, y por qué.",
     authorRole: "Senior Lead Dev",
+    authorCredential: "Una década entregando plataformas PHP, Symfony y PrestaShop a producción.",
     writtenBy: "Escrito por",
     backToBlog: "Volver al blog",
     allPosts: "Todos los artículos",
