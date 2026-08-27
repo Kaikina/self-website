@@ -1,0 +1,69 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A web page calling navigator.share to open the operating system share sheet, with a clipboard copy fallback underneath for browsers that have no sheet">
+  <defs>
+    <radialGradient id="nsglow" cx="85%" cy="17%" r="63%">
+      <stop offset="0%" stop-color="#A78BFA" stop-opacity="0.26"/>
+      <stop offset="55%" stop-color="#241C3E" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#0C1116" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="nstile" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#A78BFA" stop-opacity="0.85"/>
+      <stop offset="100%" stop-color="#D6C8FF" stop-opacity="0.45"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="#0C1116"/>
+  <rect width="1200" height="630" fill="url(#nsglow)"/>
+
+  <!-- faint grid -->
+  <g stroke="#FFFFFF" stroke-opacity="0.04" stroke-width="1">
+    <path d="M0 158 H1200 M0 315 H1200 M0 472 H1200"/>
+    <path d="M200 0 V630 M400 0 V630 M600 0 V630 M800 0 V630 M1000 0 V630"/>
+  </g>
+
+  <!-- wordmark -->
+  <text x="80" y="92" fill="#EDEAE3" font-family="'IBM Plex Mono','JetBrains Mono',ui-monospace,monospace" font-size="20" letter-spacing="4">TOM&#160;GIROU<tspan fill="#C4B0FF">.</tspan></text>
+
+  <!-- prompt line -->
+  <text x="80" y="190" xml:space="preserve" font-family="'IBM Plex Mono','JetBrains Mono',ui-monospace,monospace" font-size="24" letter-spacing="1">
+    <tspan fill="#C4B0FF">$ </tspan><tspan fill="#EDEAE3">navigator.share(</tspan><tspan fill="#8A9199">{ title, url }</tspan><tspan fill="#EDEAE3">)</tspan><tspan fill="#C4B0FF"> &#9646;</tspan>
+  </text>
+
+  <!-- hero: the call itself -->
+  <text x="76" y="372" fill="#EDEAE3" font-family="'IBM Plex Mono','JetBrains Mono',ui-monospace,monospace" font-size="128" font-weight="700" letter-spacing="-2">share<tspan fill="#C4B0FF">()</tspan></text>
+  <text x="82" y="424" fill="#A78BFA" font-family="'IBM Plex Mono','JetBrains Mono',ui-monospace,monospace" font-size="21" letter-spacing="6">THREE&#160;STRINGS&#160;·&#160;TWO&#160;FALLBACKS</text>
+
+  <!-- fallback chain -->
+  <g font-family="'IBM Plex Mono','JetBrains Mono',ui-monospace,monospace" font-size="21" letter-spacing="1">
+    <text x="82" y="500"><tspan fill="#EDEAE3">share sheet</tspan><tspan fill="#565E66"> &#8594; </tspan><tspan fill="#8A9199">clipboard</tspan><tspan fill="#565E66"> &#8594; </tspan><tspan fill="#565E66">execCommand</tspan></text>
+  </g>
+
+  <!-- the sheet itself -->
+  <g>
+    <rect x="810" y="132" width="310" height="368" rx="18" fill="#0F151B" stroke="#2A2440" stroke-width="1.5"/>
+    <rect x="936" y="152" width="58" height="5" rx="2.5" fill="#3A3560"/>
+    <text x="836" y="196" fill="#565E66" font-family="'IBM Plex Mono','JetBrains Mono',ui-monospace,monospace" font-size="15" letter-spacing="3">SHARE&#160;VIA</text>
+
+    <!-- app tiles, row 1 -->
+    <g fill="url(#nstile)">
+      <rect x="836" y="216" width="52" height="52" rx="14"/>
+      <rect x="905" y="216" width="52" height="52" rx="14"/>
+      <rect x="974" y="216" width="52" height="52" rx="14"/>
+      <rect x="1043" y="216" width="52" height="52" rx="14"/>
+    </g>
+    <!-- app tiles, row 2 (dimmer: the tail of the list) -->
+    <g fill="#A78BFA" fill-opacity="0.22">
+      <rect x="836" y="306" width="52" height="52" rx="14"/>
+      <rect x="905" y="306" width="52" height="52" rx="14"/>
+      <rect x="974" y="306" width="52" height="52" rx="14"/>
+      <rect x="1043" y="306" width="52" height="52" rx="14"/>
+    </g>
+
+    <!-- copy-link row: the fallback, living in the same sheet -->
+    <rect x="836" y="396" width="260" height="1" fill="#28323B"/>
+    <rect x="836" y="420" width="52" height="52" rx="14" fill="#0C1116" stroke="#3A3560" stroke-width="1.5"/>
+    <text x="905" y="452" fill="#8A9199" font-family="'IBM Plex Mono','JetBrains Mono',ui-monospace,monospace" font-size="17" letter-spacing="1">copy link</text>
+  </g>
+
+  <!-- baseline caption -->
+  <text x="82" y="566" fill="#565E66" font-family="'IBM Plex Mono','JetBrains Mono',ui-monospace,monospace" font-size="15" letter-spacing="3">ABORTERROR&#160;IS&#160;NOT&#160;A&#160;FAILURE&#160;·&#160;URL()&#160;NOT&#160;PATH()&#160;·&#160;ONE&#160;BUTTON,&#160;EVERY&#160;BROWSER</text>
+</svg>
