@@ -61,7 +61,7 @@
 
     <!-- markdown half: clean content -->
     <g font-family="'IBM Plex Mono','JetBrains Mono',ui-monospace,monospace" font-size="17">
-      <text x="882" y="356"><tspan fill="#8FBAFF"># </tspan><tspan fill="#EDEAE3">Forgemage</tspan></text>
+      <text x="882" y="356"><tspan fill="#8FBAFF"># </tspan><tspan fill="#EDEAE3">Forgemage.net</tspan></text>
     </g>
     <g fill="#28323B">
       <rect x="882" y="374" width="210" height="10" rx="3"/>

@@ -9,11 +9,11 @@ coverAlt: "Una petición curl con Accept: text/markdown junto a un documento HTM
 translationKey: "markdown-for-agents"
 ---
 
-Una parte creciente del tráfico de mi side project no es humana. [Forgemage](https://forgemage.net) es un marketplace donde los jugadores de Dofus encuentran forjamagos, y desde que despegó la búsqueda asistida por IA, parte de sus «visitantes» son LLMs que descargan una página para responder la pregunta de alguien. Reciben lo mismo que los navegadores: 59 KB de HTML para unas mil palabras de contenido real. El resto son clases de Bootstrap, iconos SVG, un banner de cookies y un footer que el agente tokenizará diligentemente para luego ignorarlo.
+Una parte creciente del tráfico de mi side project no es humana. [Forgemage.net](https://forgemage.net) es un marketplace donde los jugadores de Dofus encuentran forjamagos, y desde que despegó la búsqueda asistida por IA, parte de sus «visitantes» son LLMs que descargan una página para responder la pregunta de alguien. Reciben lo mismo que los navegadores: 59 KB de HTML para unas mil palabras de contenido real. El resto son clases de Bootstrap, iconos SVG, un banner de cookies y un footer que el agente tokenizará diligentemente para luego ignorarlo.
 
 En febrero, Cloudflare lanzó una feature llamada [Markdown for Agents](https://blog.cloudflare.com/markdown-for-agents/): cuando un cliente envía `Accept: text/markdown`, su edge convierte la respuesta HTML a markdown al vuelo. Anuncian alrededor de un 80 % menos de tokens por página. Es un toggle en el dashboard — en planes Pro y superiores.
 
-La cuestión es que no hay ninguna magia de Cloudflare en ese contrato. Es negociación de contenido HTTP, un mecanismo más viejo que la mayoría de los problemas de la web, más un conversor de HTML a markdown. Forgemage es una app Symfony, así que implementé el mismo comportamiento yo mismo: un event subscriber, un paquete de composer, una tarde incluyendo los tests. Este post recorre la implementación y los tres detalles que me habrían mordido en producción si la RFC no me hubiera avisado antes.
+La cuestión es que no hay ninguna magia de Cloudflare en ese contrato. Es negociación de contenido HTTP, un mecanismo más viejo que la mayoría de los problemas de la web, más un conversor de HTML a markdown. Forgemage.net es una app Symfony, así que implementé el mismo comportamiento yo mismo: un event subscriber, un paquete de composer, una tarde incluyendo los tests. Este post recorre la implementación y los tres detalles que me habrían mordido en producción si la RFC no me hubiera avisado antes.
 
 ## El contrato antes del código
 
@@ -87,7 +87,7 @@ $this->htmlConverter = new HtmlConverter([
 $this->htmlConverter->getEnvironment()->addConverter(new TableConverter());
 ```
 
-La lista `remove_nodes` es la decisión editorial escondida en la config. Scripts y estilos, obvio. `nav`, `header` y `footer` son una elección: un agente que pide la versión markdown quiere el contenido de la página, no cuarenta enlaces de navegación y un selector de idioma repetidos en cada URL del sitio. Recortar el envoltorio es gran parte de por qué el output encoge tanto. `TableConverter` es opt-in en el paquete de league, y Forgemage tiene tablas de precios que prefiero que los agentes lean como tablas y no como texto corrido.
+La lista `remove_nodes` es la decisión editorial escondida en la config. Scripts y estilos, obvio. `nav`, `header` y `footer` son una elección: un agente que pide la versión markdown quiere el contenido de la página, no cuarenta enlaces de navegación y un selector de idioma repetidos en cada URL del sitio. Recortar el envoltorio es gran parte de por qué el output encoge tanto. `TableConverter` es opt-in en el paquete de league, y Forgemage.net tiene tablas de precios que prefiero que los agentes lean como tablas y no como texto corrido.
 
 Dos toques pequeños tras la conversión. Si el resultado no empieza con un heading `# `, el subscriber promociona el `<title>` del HTML a H1, para que cada documento markdown se abra con su tema — lo primero que un agente escanea. Y toda la conversión vive en un `try/catch (Throwable)` que recae en servir el HTML intacto. Una versión markdown es un nice-to-have; no tiene derecho a tirar una página pública con un 500.
 
@@ -127,7 +127,7 @@ De 59 432 bytes a 7 670 — una reducción del 87 % en el cable, en línea con e
 
 **¿Cuándo se queda corto servir markdown así?**
 
-**Garbage in, garbage out.** El conversor transforma tu HTML renderizado; no puede añadir una estructura que tus templates no tienen. Los templates Twig de Forgemage usan headings de verdad y listas semánticas, así que el markdown sale legible. Un front-end de sopa de divs produciría sopa de markdown.
+**Garbage in, garbage out.** El conversor transforma tu HTML renderizado; no puede añadir una estructura que tus templates no tienen. Los templates Twig de Forgemage.net usan headings de verdad y listas semánticas, así que el markdown sale legible. Un front-end de sopa de divs produciría sopa de markdown.
 
 **Casi nadie lo pide todavía.** No he visto a ningún crawler mainstream enviar `Accept: text/markdown` por iniciativa propia. Los agentes de hoy descargan HTML y lo convierten en el lado del cliente — la herramienta WebFetch de Claude Code hace exactamente eso. Esta feature es una apuesta a que la convención que empuja Cloudflare se convierta en la norma, y la apuesta es pequeña: una dependencia, 144 líneas, cero coste recurrente. Servir la conversión desde el origin también significa que el conversor del agente nunca ve mi banner de cookies.
 
