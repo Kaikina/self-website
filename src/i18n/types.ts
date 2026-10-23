@@ -74,8 +74,6 @@ export type Translation = {
     menuClose: string;
   };
   hero: {
-    currently: string;
-    available: string;
     portfolioYear: string;
     nameSmall: string;
     titleLine1: string;

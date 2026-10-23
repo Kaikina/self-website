@@ -20,8 +20,6 @@ const fr: Translation = {
     menuClose: "Fermer le menu",
   },
   hero: {
-    currently: "Statut",
-    available: "Disponible",
     portfolioYear: "Portfolio / 2026",
     nameSmall: "Tom Girou",
     titleLine1: "Senior",

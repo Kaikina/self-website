@@ -171,10 +171,6 @@ const schemaJson = JSON.stringify(schemaGraph);
 
     <!-- ───────── HERO ───────── -->
     <header class="hero" id="top">
-        <div class="hero-meta">
-            <span class="label">{t.hero.currently}</span>
-            <span class="val status">{t.hero.available}</span>
-        </div>
         <div class="hero-coords">
             <div>FR · 45.4159939° N</div>
             <div>4.5159721° E</div>
@@ -1255,37 +1251,6 @@ const schemaJson = JSON.stringify(schemaGraph);
             align-items: flex-start;
             text-align: left;
             margin-top: 40px
-        }
-    }
-
-    .hero-meta {
-        position: absolute;
-        left: 56px;
-        top: 120px;
-        z-index: 3;
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-        color: rgba(255, 255, 255, .85);
-    }
-
-    .hero-meta .label {
-        font-family: var(--mono);
-        font-size: 11px;
-        letter-spacing: .18em;
-        text-transform: uppercase
-    }
-
-    .hero-meta .val {
-        font-family: var(--mono);
-        font-size: 13px;
-        color: #fff
-    }
-
-    @media (max-width: 760px) {
-        .hero-meta {
-            left: 24px;
-            top: 90px
         }
     }
 
@@ -2421,28 +2386,6 @@ const schemaJson = JSON.stringify(schemaGraph);
         border-color: var(--red);
         color: #fff;
         transform: translateY(-2px)
-    }
-
-    /* status indicator in nav */
-    .status {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        font-family: var(--mono);
-        font-size: 11px;
-        letter-spacing: .14em;
-        text-transform: uppercase;
-        color: rgba(255, 255, 255, .7)
-    }
-
-    .status::before {
-        content: "";
-        width: 7px;
-        height: 7px;
-        border-radius: 50%;
-        background: #2DD4BF;
-        box-shadow: 0 0 8px #2DD4BF;
-        animation: pulse 2.4s infinite
     }
 </style>
 
