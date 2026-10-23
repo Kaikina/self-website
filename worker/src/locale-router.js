@@ -1,12 +1,12 @@
 // Locale router for tom-girou.dev/
 //
 // Replaces the nginx Accept-Language redirect at `location = /` so the EN
-// homepage can be cached at Cloudflare's edge. fr/es visitors are 302'd to
-// /fr/ or /es/ (which nginx serves directly, no Worker hop).
+// homepage can be cached at Cloudflare's edge. fr/es/pt visitors are 302'd to
+// /fr/, /es/ or /pt/ (which nginx serves directly, no Worker hop).
 //
 // Route binding: tom-girou.dev/  (exact, root only).
 
-const LOCALE_PATHS = { fr: "/fr/", es: "/es/" };
+const LOCALE_PATHS = { fr: "/fr/", es: "/es/", pt: "/pt/" };
 const EDGE_CACHE_TTL_SECONDS = 600;
 
 function isSameOriginReferer(request, origin) {
@@ -30,7 +30,7 @@ export default {
 
     // Auto-detect only on entry from outside the site. A same-origin Referer
     // means the visitor clicked the in-site language switcher (or otherwise
-    // navigated from /fr/ or /es/ to /) and explicitly wants EN — bouncing
+    // navigated from a locale prefix to /) and explicitly wants EN — bouncing
     // them back on Accept-Language would make the switcher unusable.
     if (!isSameOriginReferer(request, url.origin)) {
       const primary = (request.headers.get("Accept-Language") || "")

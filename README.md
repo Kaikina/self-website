@@ -49,7 +49,7 @@ nginx.conf, docker-compose.yml # production runtime
 
 ### i18n
 
-`astro.config.mjs` uses `prefixDefaultLocale: false`, so English lives at `/` and the other locales at `/fr/` and `/es/`. The `Accept-Language` redirect on `/` is performed by nginx, not Astro — the static root must stay reachable for the default locale.
+`astro.config.mjs` uses `prefixDefaultLocale: false`, so English lives at `/` and the other locales at `/fr/`, `/es/` and `/pt/`. The `Accept-Language` redirect on `/` is performed by nginx, not Astro — the static root must stay reachable for the default locale.
 
 UI strings live in `src/i18n/{en,fr,es}.ts` and conform to the `Translation` type in `src/i18n/types.ts`. Adding a field means updating the type and all three locale files; `astro check` catches the diff.
 

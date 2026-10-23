@@ -1,4 +1,4 @@
-export const locales = ["en", "fr", "es"] as const;
+export const locales = ["en", "fr", "es", "pt"] as const;
 export const defaultLocale = "en" as const;
 export type Locale = (typeof locales)[number];
 
@@ -6,18 +6,21 @@ export const localeLabels: Record<Locale, string> = {
   en: "EN",
   fr: "FR",
   es: "ES",
+  pt: "PT",
 };
 
 export const localeHtmlLang: Record<Locale, string> = {
   en: "en",
   fr: "fr",
   es: "es",
+  pt: "pt-BR",
 };
 
 export const localeOgLocale: Record<Locale, string> = {
   en: "en_US",
   fr: "fr_FR",
   es: "es_ES",
+  pt: "pt_BR",
 };
 
 export type WorkItem = {

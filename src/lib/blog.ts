@@ -15,6 +15,7 @@ const LOCALE_TAG: Record<Locale, string> = {
   en: "en-US",
   fr: "fr-FR",
   es: "es-ES",
+  pt: "pt-BR",
 };
 
 /** Split a blog entry id ("<locale>/<slug>") into its parts. */
@@ -25,10 +26,10 @@ export function parsePostId(id: string): { locale: Locale; slug: string } {
 
 /**
  * Locale-aware URL for a post (or the blog index when `slug` is omitted).
- * EN lives at `/blog/...`, fr/es at `/fr/blog/...` — mirrors getLocalizedPath().
+ * EN lives at `/blog/...`, fr/es/pt at `/fr/blog/...` — mirrors getLocalizedPath().
  */
 export function blogPath(locale: Locale, slug?: string): string {
-  const base = getLocalizedPath(locale); // "/" | "/fr/" | "/es/"
+  const base = getLocalizedPath(locale); // "/" | "/fr/" | "/es/" | "/pt/"
   return slug ? `${base}blog/${slug}/` : `${base}blog/`;
 }
 

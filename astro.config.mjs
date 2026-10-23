@@ -7,7 +7,7 @@ import sitemap from "@astrojs/sitemap";
 import { INDEX_TAG_MIN_POSTS, tagSlug } from "./src/lib/tags.ts";
 
 const SITE = "https://tom-girou.dev";
-const LOCALES = ["en", "fr", "es"];
+const LOCALES = ["en", "fr", "es", "pt"];
 
 /**
  * Full URLs of sparse tag archives (< INDEX_TAG_MIN_POSTS posts) to keep out of
@@ -61,7 +61,7 @@ const THIN_TAG_URLS = thinTagUrls();
  *
  * Runs outside the Astro runtime (no `astro:content`), so it parses frontmatter
  * dates from the raw files — same convention as `thinTagUrls()`. Each post's URL
- * follows the `getStaticPaths` shape in blog/[slug].astro (EN unprefixed, fr/es
+ * follows the `getStaticPaths` shape in blog/[slug].astro (EN unprefixed, fr/es/pt
  * prefixed, trailing slash). The blog index per locale gets the newest post date.
  */
 function postLastmods() {
@@ -107,7 +107,7 @@ export default defineConfig({
 
   i18n: {
     defaultLocale: "en",
-    locales: ["en", "fr", "es"],
+    locales: ["en", "fr", "es", "pt"],
     routing: {
       prefixDefaultLocale: false,
     },
@@ -158,7 +158,7 @@ export default defineConfig({
     },
     i18n: {
       defaultLocale: "en",
-      locales: { en: "en", fr: "fr", es: "es" },
+      locales: { en: "en", fr: "fr", es: "es", pt: "pt-BR" },
     },
   })],
 });

@@ -110,7 +110,7 @@ export const GET: APIRoute = async () => {
   lines.push(t.faq.blurb);
   lines.push("");
   lines.push(
-    `Translations available at ${SITE}/fr/#faq (French) and ${SITE}/es/#faq (Spanish).`,
+    `Translations available at ${SITE}/fr/#faq (French), ${SITE}/es/#faq (Spanish) and ${SITE}/pt/#faq (Portuguese).`,
   );
   lines.push("");
   for (const item of t.faq.items) {
@@ -157,6 +157,7 @@ export const GET: APIRoute = async () => {
   lines.push(`- English (default): ${SITE}/`);
   lines.push(`- French: ${SITE}/fr/`);
   lines.push(`- Spanish: ${SITE}/es/`);
+  lines.push(`- Portuguese (Brazil): ${SITE}/pt/`);
   lines.push(`- Sitemap index: ${SITE}/sitemap-index.xml`);
   lines.push(`- LLM index: ${SITE}/llms.txt`);
   lines.push("");

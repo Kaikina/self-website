@@ -266,7 +266,7 @@ export function buildSchemaGraph(
     author: { "@id": PERSON_ID },
     copyrightHolder: { "@id": PERSON_ID },
     copyrightYear: 2026,
-    inLanguage: ["en", "fr", "es"],
+    inLanguage: ["en", "fr", "es", "pt-BR"],
   };
 
   const profilePage: Record<string, unknown> = {
@@ -495,7 +495,7 @@ function websiteNode(t: Translation): Record<string, unknown> {
     author: { "@id": PERSON_ID },
     copyrightHolder: { "@id": PERSON_ID },
     copyrightYear: 2026,
-    inLanguage: ["en", "fr", "es"],
+    inLanguage: ["en", "fr", "es", "pt-BR"],
   };
 }
 
@@ -506,7 +506,7 @@ function blogNode(t: Translation): Record<string, unknown> {
     url: `${SITE}/blog/`,
     name: t.blog.metaTitle,
     description: t.blog.metaDescription,
-    inLanguage: ["en", "fr", "es"],
+    inLanguage: ["en", "fr", "es", "pt-BR"],
     author: { "@id": PERSON_ID },
     publisher: { "@id": PERSON_ID },
   };

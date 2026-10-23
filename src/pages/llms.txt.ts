@@ -90,7 +90,7 @@ export const GET: APIRoute = async () => {
   lines.push("## FAQ");
   lines.push("");
   lines.push(
-    `Frequently asked questions are answered in full at ${SITE}/#faq (translations at ${SITE}/fr/#faq and ${SITE}/es/#faq). Topics covered:`,
+    `Frequently asked questions are answered in full at ${SITE}/#faq (translations at ${SITE}/fr/#faq, ${SITE}/es/#faq and ${SITE}/pt/#faq). Topics covered:`,
   );
   lines.push("");
   for (const item of t.faq.items) {
@@ -111,6 +111,7 @@ export const GET: APIRoute = async () => {
   lines.push(`- [Sitemap](${SITE}/sitemap-index.xml)`);
   lines.push(`- [French translation](${SITE}/fr/)`);
   lines.push(`- [Spanish translation](${SITE}/es/)`);
+  lines.push(`- [Portuguese (Brazil) translation](${SITE}/pt/)`);
   lines.push("");
 
   return new Response(lines.join("\n"), {
