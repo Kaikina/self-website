@@ -13,7 +13,7 @@ export const GET: APIRoute = async () => {
   const lines: string[] = [];
   const posts = await getPostsByLocale("en");
 
-  lines.push("# Tom Girou — Senior Lead Web Developer");
+  lines.push("# Tom Girou — PrestaShop Developer & Tech Lead");
   lines.push("");
   lines.push(`> ${t.meta.description}`);
   lines.push("");
@@ -24,7 +24,7 @@ export const GET: APIRoute = async () => {
   lines.push("## Identity");
   lines.push("");
   lines.push("- Full name: Tom Girou");
-  lines.push("- Role: Senior Lead Web Developer");
+  lines.push("- Role: PrestaShop Developer & Tech Lead (certified PrestaShop Expert, Core and Front)");
   lines.push("- Current employer: Evolutive (https://www.evolutive.com/)");
   lines.push("- Based in: France (Loire region — 45.4159939° N, 4.5159721° E)");
   lines.push("- Working languages: English, French, Spanish");
@@ -35,7 +35,7 @@ export const GET: APIRoute = async () => {
   lines.push("- Reddit: https://www.reddit.com/user/Kaikina/");
   lines.push("- PrestaShop forum: https://forum.prestashop.com/profile/1776632-tom-girou/");
   lines.push("- Personal site: https://tom-girou.dev/");
-  lines.push("- Availability: open to senior & lead roles, freelance briefs, and rescue missions");
+  lines.push("- Availability: open to PrestaShop lead roles, freelance briefs, and rescue missions");
   lines.push("");
 
   lines.push("## Positioning");

@@ -2,10 +2,10 @@ import type { Translation } from "./types";
 
 const en: Translation = {
   meta: {
-    title: "Tom Girou — Senior Lead Dev",
+    title: "Tom Girou · Certified PrestaShop Expert & Lead Dev",
     description:
-      "Senior Lead Dev — PHP, Symfony & PrestaShop. I help companies cut backlogs from 200+ tickets to under 50 and finally breathe between sprints.",
-    ogImageAlt: "Tom Girou — Senior Lead Dev portfolio",
+      "Certified PrestaShop Expert and tech lead based in France. Custom modules, migrations to PrestaShop 9 and ERP integrations for merchants and agencies.",
+    ogImageAlt: "Tom Girou · PrestaShop Lead Dev portfolio",
   },
   nav: {
     about: "About",
@@ -22,19 +22,19 @@ const en: Translation = {
   hero: {
     portfolioYear: "Portfolio / 2026",
     nameSmall: "Tom Girou",
-    titleLine1: "Senior",
+    titleLine1: "PrestaShop",
     titleLine2: "Lead Dev",
     blurb:
-      "I help companies cut their backlog from 200+ tickets to under 50 — and finally breathe between sprints.",
+      "Certified PrestaShop Expert. I build, migrate and fix PrestaShop stores, and get the backlog back under 50 tickets along the way.",
     cta: "Let's Talk",
     portraitAlt: "Portrait of Tom Girou",
   },
   about: {
     label: "[ 01 / About ]",
     quote:
-      "Turning sprawling backlogs into shippable apps — one cleanly factored module at a time.",
+      "Claude writes the code. I decide what good looks like.",
     headingHtml:
-      "Hi, I'm Tom — a <em>Senior Lead Dev</em> who treats clean code as the shortest path between a brief and a shipped feature.",
+      "Hi, I'm Tom. For the last four years I've worked mostly inside <em>PrestaShop</em>: core, modules, migrations, and the ERP sync nobody wants to touch.",
     stats: {
       years: "Years of Experience",
       projects: "Shipped Projects",
@@ -116,14 +116,14 @@ const en: Translation = {
     titleHtml:
       'What I <em style="color:var(--red);font-style:italic">build</em> with.',
     blurb:
-      "A pragmatic stack — PHP at the core, JavaScript at the surface, and the right glue in between. No buzzwords, just tools that ship.",
+      "PrestaShop on top, PHP and Symfony underneath. These days Claude does most of the typing.",
     items: [
+      { glyph: "Ps", name: "PrestaShop" },
       { glyph: "P", name: "PHP" },
       { glyph: "My", name: "MySQL" },
       { glyph: "Pg", name: "Postgres" },
       { glyph: "Sf", name: "Symfony" },
       { glyph: "Js", name: "JavaScript" },
-      { glyph: "Sc", name: "SCSS" },
     ],
   },
   experience: {
@@ -131,7 +131,7 @@ const en: Translation = {
     titleHtml:
       "Where I've <em style=\"color:var(--red);font-style:italic\">built</em>.",
     blurb:
-      "From startup to web agencies. Each role sharpened a different muscle — from cloud infra and CI/CD to leading PrestaShop core integrations.",
+      "A startup, web agencies, an in-house role, and PrestaShop full time since 2022. The early years taught me cloud infra and CI/CD. The last four have been PrestaShop core and modules.",
     nowLabel: "2023 — Now",
     rows: [
       {
@@ -262,7 +262,7 @@ const en: Translation = {
     label: "[ 10 / Get in touch ]",
     headingHtml: "Let's build something <em>worth shipping</em>.",
     sub:
-      "Open to senior & lead roles, freelance briefs, and the occasional rescue mission. The fastest way to me is LinkedIn — I read every message.",
+      "Merchants, agencies looking for a PrestaShop lead, or a project that's stuck: LinkedIn is the fastest way to reach me. I read every message.",
     cta: "Reach out on LinkedIn",
     rights: "© 2026 · Tom Girou · All rights reserved",
     build: "v1.0 / Built in France",
@@ -288,7 +288,7 @@ const en: Translation = {
       {
         q: "What does Tom Girou do?",
         a:
-          "I'm a Senior Lead Web Developer based in France, with 7+ years across PHP, Symfony, and PrestaShop. I help e-commerce companies rescue stalled migrations, integrate ERPs, build custom modules, and bring sprawling backlogs back under control. I'm currently at Evolutive in France; recent client work is listed on this site.",
+          "I'm a PrestaShop developer and tech lead in France, certified PrestaShop Expert (Core and Front). Most of my week goes to PrestaShop 1.7, 8 and 9: custom modules, version migrations, ERP integrations, and stores that need rescuing. I work at Evolutive, a French e-commerce agency, and I'm open to freelance briefs. I've been a developer since 2018, and PrestaShop has been my main job since 2022.",
       },
       {
         q: "What's your background?",
@@ -335,19 +335,24 @@ const en: Translation = {
         a:
           "Yes — I contribute to PrestaShop core under @Kaikina on GitHub. Most of my contributions land where I find friction in client work: bug fixes around invoice numbering concurrency, theme cache issues in multishop, and the kind of long-standing edge cases that aren't worth a full ticket for one team but matter for everyone running PrestaShop. The commit history lives at github.com/PrestaShop/PrestaShop/commits?author=Kaikina.",
       },
+      {
+        q: "Do you still write the code yourself?",
+        a:
+          "Honestly, not much. Claude writes most of it now. My job is making sure what it writes meets my standards. I write down the project conventions and the PrestaShop patterns for each version. I set up review passes for security and core compliance, and tests it has to pass before I even read the diff. All of that comes from eight years of seeing what bad code costs six months later. I also helped build the AI toolkit my agency's PrestaShop team uses. A tool makes its user more of what they already are. Give a fine chisel to someone who doesn't know wood and you get mistakes, faster. Give it to someone who does and the work gets better. I saw this when the agency rolled Claude out to the whole team: the gains were very uneven, and they followed experience more than anything else. For a client, nothing changes: a module that follows PrestaShop's rules and won't need rewriting next year. It just arrives sooner.",
+      },
     ],
   },
   blog: {
     metaTitle: "Blog — Tom Girou",
     metaDescription:
-      "Notes from the trenches on PHP, Symfony, PrestaShop, CI/CD, and shipping production software — by Tom Girou, Senior Lead Dev.",
+      "Notes from the trenches on PHP, Symfony, PrestaShop, CI/CD, and shipping production software — by Tom Girou, PrestaShop Lead Dev.",
     label: "[ Blog ]",
     titleHtml:
       'Notes from the <em style="color:var(--red);font-style:italic">trenches</em>.',
     blurb:
       "Field notes on PHP, Symfony, PrestaShop, CI/CD, and the unglamorous engineering that keeps production quiet. No fluff — just what actually worked, and why.",
-    authorRole: "Senior Lead Dev",
-    authorCredential: "A decade shipping PHP, Symfony & PrestaShop platforms to production.",
+    authorRole: "PrestaShop Lead Dev",
+    authorCredential: "Certified PrestaShop Expert. Four years of PrestaShop modules, migrations and ERP integrations in production.",
     writtenBy: "Written by",
     backToBlog: "Back to the blog",
     allPosts: "All posts",

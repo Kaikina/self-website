@@ -17,7 +17,7 @@ export const GET: APIRoute = async () => {
   lines.push("## About");
   lines.push("");
   lines.push(
-    "Tom Girou is a Senior Lead Web Developer based in France. PHP, Symfony, and PrestaShop core & module specialist with 7+ years across e-commerce platforms, gift-card systems, ERP integrations, and CI/CD pipelines.",
+    "Tom Girou is a PrestaShop developer and tech lead based in France, certified PrestaShop Expert (Core and Front). PrestaShop has been his main job since 2022: custom modules, migrations across 1.7, 8 and 9, ERP integrations, and PrestaShop core contributions. Developer since 2018 (PHP, Symfony, Java). He works AI-first: Claude writes most of the code, inside conventions, review passes and tests he sets up.",
   );
   lines.push("");
   lines.push(`- Site: ${SITE}/`);

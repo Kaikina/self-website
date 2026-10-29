@@ -1114,7 +1114,7 @@ const schemaJson = JSON.stringify(schemaGraph);
         position: relative;
         z-index: 2;
         display: grid;
-        grid-template-columns:1.1fr 1fr;
+        grid-template-columns:minmax(0, 1fr) 340px;
         gap: 40px;
         max-width: 1440px;
         margin: 0 auto;
@@ -1133,13 +1133,20 @@ const schemaJson = JSON.stringify(schemaGraph);
     .hero-title {
         align-self: end;
         margin-bottom: clamp(24px, 8vh, 96px);
-        font-size: clamp(72px, 13vw, 224px);
+        /* "PrestaShop" is ~5.4em wide: fit it in the grid's title column (grid width - padding - gap - 340px) */
+        font-size: clamp(72px, calc((min(100vw, 1440px) - 492px) / 5.6), 224px);
         line-height: .82;
         letter-spacing: -.045em;
         color: #fff;
         font-weight: 800;
         mix-blend-mode: screen;
         position: relative;
+    }
+
+    @media (max-width: 980px) {
+        .hero-title {
+            font-size: 15vw
+        }
     }
 
     .hero-title .lo {
