@@ -41,12 +41,12 @@ for (const [id, key] of [["reset", "reset"], ["fullscreen", "fullscreen"]]) {
   b.setAttribute("aria-label", T[key]);
 }
 
-// Default framing: the central and southern corridors, from Trujillo down to Lake Titicaca.
-// Portrait screens can't fit that box legibly, so they get the whole country instead.
-const WIDE_BOUNDS = [[-82.77, -17.08], [-63.78, -7.76]];
-const TALL_BOUNDS = [[-81.4, -18.4], [-68.6, -3.4]];
-const homeBounds = () => (innerWidth / innerHeight >= 1.2 ? WIDE_BOUNDS : TALL_BOUNDS);
-const HOME_PADDING = { top: 0, left: 0, right: 0, bottom: 52 };
+// Default view: a fixed zoom centred between Lima and Cusco, close enough to show the road network.
+// Narrow screens would only see a sliver at that zoom, so they get the whole country instead.
+const HOME = { center: [-73.875, -13.671], zoom: 6.09 };
+const NARROW_BOUNDS = [[-81.4, -18.4], [-68.6, -3.4]];
+const NARROW_PADDING = { top: 0, left: 0, right: 0, bottom: 52 };
+const narrow = () => innerWidth < 700;
 
 // A typical day repeats: trips running past midnight also appear the morning before.
 function wrap(trips) {
@@ -99,7 +99,8 @@ Promise.all(["trips.json", "trains.json", "cities.json"].map(f => fetch(f).then(
   const map = new maplibregl.Map({
     container: "map",
     style: new URL("basemap-style.json", location.href).href,
-    ...(record ? { center: [-75.6, -10.2], zoom: 5.45 } : { bounds: homeBounds(), fitBoundsOptions: { padding: HOME_PADDING } }),
+    ...(record ? { center: [-75.6, -10.2], zoom: 5.45 }
+      : narrow() ? { bounds: NARROW_BOUNDS, fitBoundsOptions: { padding: NARROW_PADDING } } : HOME),
     interactive: !record,
     // Inside a blog post, plain scrolling must keep scrolling the page.
     cooperativeGestures: params.has("embed"),
@@ -130,7 +131,9 @@ Promise.all(["trips.json", "trains.json", "cities.json"].map(f => fetch(f).then(
   showPlay();
   play.onclick = () => { playing = !playing; showPlay(); };
   scrub.oninput = () => { t = Number(scrub.value); };
-  document.getElementById("reset").onclick = () => map.fitBounds(homeBounds(), { padding: HOME_PADDING, duration: 800 });
+  document.getElementById("reset").onclick = () => (narrow()
+    ? map.fitBounds(NARROW_BOUNDS, { padding: NARROW_PADDING, duration: 800 })
+    : map.easeTo({ ...HOME, duration: 800 }));
   const fs = document.getElementById("fullscreen");
   if (!document.fullscreenEnabled) fs.hidden = true;
   fs.onclick = () => (document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen());
