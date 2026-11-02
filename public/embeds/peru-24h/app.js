@@ -90,6 +90,17 @@ maplibregl.workerUrl = new URL("vendor/maplibre-gl-csp-worker.js", location.href
 
 Promise.all(["trips.json", "trains.json", "cities.json"].map(f => fetch(f).then(r => r.json()))).then(([busData, trains, places]) => {
   let buses = expand(busData);
+  // ?routes: every bus route as a faint line, brighter the more trips use it, so the main corridors show.
+  const usage = new Map();
+  for (const t of busData.trips) usage.set(t.route, (usage.get(t.route) || 0) + 1);
+  const routeLines = params.has("routes") ? new deck.PathLayer({
+    id: "routes", data: [...usage].map(([route, n]) => ({ path: busData.routes[route], n })),
+    getPath: d => d.path, getColor: d => [255, 176, 0, Math.min(25 + 8 * d.n, 150)], widthMinPixels: 1.2,
+    capRounded: true, jointRounded: true,
+  }) : null;
+  const trackLines = params.has("routes") ? new deck.PathLayer({
+    id: "tracks", data: trains, getPath: d => d.path, getColor: [58, 209, 255, 90], widthMinPixels: 1.5,
+  }) : null;
   for (const b of buses) { b.fromName = places.names[b.from] || b.from; b.toName = places.names[b.to] || b.to; }
   for (const r of trains) { r.fromName = r.from; r.toName = r.to; }
   const cities = places.cities.filter(c => c.n >= 5);
@@ -205,7 +216,7 @@ Promise.all(["trips.json", "trains.json", "cities.json"].map(f => fetch(f).then(
     document.getElementById("ntrain").textContent = onTrain.length;
     document.getElementById("ltrain").textContent = onTrain.length === 1 ? T.trainOne : T.trains;
     overlay.setProps({ layers: [
-      trail("bus-trails", buses, BUS), trail("train-trails", trains, TRAIN), ...cityLayers(),
+      routeLines, trackLines, trail("bus-trails", buses, BUS), trail("train-trails", trains, TRAIN), ...cityLayers(),
       dots("buses", onBus, BUS, record ? 3 : 2.6), dots("trains", onTrain, TRAIN, record ? 4.5 : 3.8),
     ] });
     requestAnimationFrame(frame);
