@@ -588,6 +588,32 @@ const prevCard = previous
     border: 1px solid var(--line);
   }
 
+  /* Interactive pages from /embeds/, iframed with raw HTML in the Markdown. */
+  .post-content :global(.embed) {
+    margin: 32px 0;
+  }
+
+  .post-content :global(.embed iframe) {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    border: 1px solid var(--line);
+    background: #0b0e14;
+  }
+
+  .post-content :global(.embed figcaption) {
+    margin-top: 10px;
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--ink-dim);
+  }
+
+  @media (max-width: 560px) {
+    .post-content :global(.embed iframe) {
+      aspect-ratio: 4 / 5;
+    }
+  }
+
   /* ───────── ko-fi support ───────── */
   .kofi {
     margin-top: 64px;

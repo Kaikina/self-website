@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Perú en 24 horas</title>
+<link href="vendor/maplibre-gl.css" rel="stylesheet">
+<script src="vendor/maplibre-gl-csp.js"></script>
+<script src="vendor/deck.gl.min.js"></script>
+<script src="app.js" defer></script>
+<style>
+  :root { --bg: #0b0e14; --fg: #e8e6e3; --muted: #8a8f98; --panel: #1c222c; --line: #2c3440; --bus: #ffb000; --train: #3ad1ff; }
+  html, body { margin: 0; height: 100%; overflow: hidden; background: var(--bg); color: var(--fg); font-family: system-ui, sans-serif; }
+  #map { position: absolute; inset: 0; }
+  #hud { position: absolute; top: 16px; left: 20px; pointer-events: none; text-shadow: 0 1px 6px var(--bg); }
+  #clock { font-size: clamp(34px, 6vw, 64px); font-weight: 600; font-variant-numeric: tabular-nums; letter-spacing: -1px; line-height: 1.05; }
+  #title { font-size: clamp(12px, 1.6vw, 18px); color: var(--muted); }
+  #counts { margin-top: 10px; font-size: clamp(12px, 1.4vw, 15px); line-height: 1.7; font-variant-numeric: tabular-nums; }
+  .dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 8px; }
+  #controls { position: absolute; bottom: 14px; left: 20px; right: 20px; display: flex; gap: 8px; align-items: center; }
+  #controls button, #controls select { background: var(--panel); color: var(--fg); border: 1px solid var(--line); border-radius: 6px; padding: 6px 10px; font: inherit; font-size: 14px; cursor: pointer; }
+  #controls button:hover, #controls select:hover { border-color: var(--muted); }
+  #play { min-width: 76px; }
+  #scrub { flex: 1; min-width: 60px; accent-color: var(--bus); }
+  #source { position: absolute; bottom: 52px; right: 20px; font-size: 11px; color: var(--muted); text-align: right; max-width: 440px; }
+  /* Interactive framing leaves the Pacific (bottom left) and Brazil (top right) empty: overlays go there. */
+  body:not(.record) #hud { top: auto; bottom: 62px; }
+  body:not(.record) #source { bottom: auto; top: 12px; right: 56px; max-width: 300px; }
+  #source a { color: inherit; }
+  .maplibregl-ctrl-group { background: var(--panel); }
+  .maplibregl-ctrl-group button + button { border-top-color: var(--line); }
+  .maplibregl-ctrl button .maplibregl-ctrl-icon { filter: invert(1); }
+  .deck-tooltip { font-size: 13px; line-height: 1.5; border-radius: 6px; }
+  body.record #controls, body.record #source, body.record .maplibregl-ctrl { display: none; }
+  @media (max-width: 640px) {
+    #hud { top: 10px; left: 12px; }
+    body:not(.record) #hud { bottom: 54px; }
+    #controls { left: 10px; right: 10px; bottom: 10px; gap: 6px; }
+    #controls button, #controls select { padding: 5px 7px; font-size: 13px; }
+    #play { min-width: 0; }
+    body:not(.record) #source { top: 10px; right: 52px; max-width: 60%; font-size: 10px; }
+    #source .long { display: none; }
+  }
+</style>
+</head>
+<body>
+<div id="map"></div>
+<div id="hud">
+  <div id="clock">00:00</div>
+  <div id="title"></div>
+  <div id="counts">
+    <div><span class="dot" style="background:var(--bus)"></span><span id="nbus">0</span> <span id="lbus"></span></div>
+    <div><span class="dot" style="background:var(--train)"></span><span id="ntrain">0</span> <span id="ltrain"></span></div>
+  </div>
+</div>
+<div id="controls">
+  <button id="play" type="button"></button>
+  <button id="reset" type="button">⌂</button>
+  <button id="fullscreen" type="button">⛶</button>
+  <input id="scrub" type="range" min="0" max="1440" step="1" value="0">
+  <select id="speed">
+    <option value="5">5 min/s</option>
+    <option value="10">10 min/s</option>
+    <option value="25" selected>25 min/s</option>
+    <option value="60">1 h/s</option>
+  </select>
+</div>
+<div id="source"><span class="long" id="credits"></span> Map © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>, <a href="https://carto.com/attributions" target="_blank" rel="noopener">CARTO</a></div>
+</body>
+</html>
