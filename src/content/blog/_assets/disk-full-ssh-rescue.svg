@@ -1,0 +1,69 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A terminal readout of a 468 GB disk at 100% with 158 MB free, next to a phone running an SSH cleanup session">
+  <defs>
+    <radialGradient id="dfglow" cx="84%" cy="18%" r="64%">
+      <stop offset="0%" stop-color="#5B9DFF" stop-opacity="0.26"/>
+      <stop offset="55%" stop-color="#16283F" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#0C1116" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="dfbars" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#5B9DFF" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#A8CBFF" stop-opacity="0.55"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="#0C1116"/>
+  <rect width="1200" height="630" fill="url(#dfglow)"/>
+
+  <g stroke="#FFFFFF" stroke-opacity="0.04" stroke-width="1">
+    <path d="M0 158 H1200 M0 315 H1200 M0 472 H1200"/>
+    <path d="M200 0 V630 M400 0 V630 M600 0 V630 M800 0 V630 M1000 0 V630"/>
+  </g>
+
+  <text x="80" y="92" fill="#EDEAE3" font-family="'IBM Plex Mono','JetBrains Mono',ui-monospace,monospace" font-size="20" letter-spacing="4">TOM&#160;GIROU<tspan fill="#8FBAFF">.</tspan></text>
+
+  <text xml:space="preserve" x="80" y="190" font-family="'IBM Plex Mono','JetBrains Mono',ui-monospace,monospace" font-size="24" letter-spacing="1"><tspan fill="#8FBAFF">$&#160;</tspan><tspan fill="#EDEAE3">df -h&#160;</tspan><tspan fill="#8A9199">/</tspan><tspan fill="#8FBAFF">&#160;&#9646;</tspan></text>
+
+  <!-- hero figure: what was left -->
+  <text x="76" y="388" fill="#EDEAE3" font-family="'IBM Plex Mono','JetBrains Mono',ui-monospace,monospace" font-size="176" font-weight="700" letter-spacing="-2">158M</text>
+  <text x="82" y="440" fill="#8FBAFF" font-family="'IBM Plex Mono','JetBrains Mono',ui-monospace,monospace" font-size="22" letter-spacing="6">FREE&#160;OF&#160;468G</text>
+
+  <!-- full disk bar -->
+  <rect x="82" y="466" width="560" height="10" rx="3" fill="#EDEAE3" fill-opacity="0.85"/>
+  <rect x="640" y="466" width="2" height="10" fill="#0C1116"/>
+
+  <g font-family="'IBM Plex Mono','JetBrains Mono',ui-monospace,monospace" font-size="22" letter-spacing="1">
+    <text xml:space="preserve" x="82" y="530"><tspan fill="#EDEAE3">100%</tspan><tspan fill="#8A9199">&#160;used</tspan></text>
+    <text x="232" y="530" fill="#565E66">·</text>
+    <text xml:space="preserve" x="268" y="530"><tspan fill="#8A9199">after:&#160;</tspan><tspan fill="#8FBAFF">89G</tspan><tspan fill="#8A9199">&#160;free</tspan></text>
+  </g>
+
+  <!-- phone running the SSH cleanup -->
+  <g>
+    <rect x="866" y="128" width="254" height="392" rx="30" fill="#0F151B" stroke="#28323B" stroke-width="1.5"/>
+    <rect x="962" y="146" width="62" height="8" rx="4" fill="#28323B"/>
+    <g font-family="'IBM Plex Mono','JetBrains Mono',ui-monospace,monospace" font-size="17" letter-spacing="0.5">
+      <text xml:space="preserve" x="892" y="204"><tspan fill="#8FBAFF">$&#160;</tspan><tspan fill="#EDEAE3">du -sh ~/*</tspan></text>
+      <text x="892" y="238" fill="#8A9199">24.5G build cache</text>
+      <text x="892" y="260" fill="#8A9199">6.1G  Trash</text>
+    </g>
+    <g fill="#28323B">
+      <rect x="892" y="286" width="196" height="10" rx="3"/>
+      <rect x="892" y="308" width="150" height="10" rx="3"/>
+      <rect x="892" y="330" width="178" height="10" rx="3"/>
+      <rect x="892" y="352" width="120" height="10" rx="3"/>
+    </g>
+    <rect x="892" y="384" width="176" height="10" rx="3" fill="url(#dfbars)"/>
+    <g font-family="'IBM Plex Mono','JetBrains Mono',ui-monospace,monospace" font-size="17">
+      <text x="892" y="432" fill="#565E66">$ sudo reboot</text>
+      <text x="892" y="482"><tspan fill="#8FBAFF">&#9646;</tspan></text>
+    </g>
+  </g>
+
+  <g stroke="#5B9DFF" stroke-opacity="0.5" stroke-width="1.5" stroke-dasharray="2 7" stroke-linecap="round">
+    <path d="M700 260 C 780 240, 800 240, 862 250"/>
+  </g>
+  <circle cx="700" cy="260" r="4" fill="#8FBAFF"/>
+  <circle cx="862" cy="250" r="4" fill="#8FBAFF"/>
+
+  <text x="82" y="580" fill="#565E66" font-family="'IBM Plex Mono','JetBrains Mono',ui-monospace,monospace" font-size="15" letter-spacing="3">FROZEN&#160;DESKTOP&#160;·&#160;TAILSCALE&#160;SSH&#160;·&#160;TERMIUS&#160;·&#160;DOCKER&#160;PRUNE</text>
+</svg>
