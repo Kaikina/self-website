@@ -1,0 +1,72 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A terminal where grep -c on a settings file prints '0' through rtk, next to the same file read with jq showing 18 matching entries">
+  <defs>
+    <radialGradient id="rkglow" cx="84%" cy="18%" r="64%">
+      <stop offset="0%" stop-color="#5B9DFF" stop-opacity="0.26"/>
+      <stop offset="55%" stop-color="#16283F" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#0C1116" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="rkbars" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#5B9DFF" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#A8CBFF" stop-opacity="0.55"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="#0C1116"/>
+  <rect width="1200" height="630" fill="url(#rkglow)"/>
+
+  <g stroke="#FFFFFF" stroke-opacity="0.04" stroke-width="1">
+    <path d="M0 158 H1200 M0 315 H1200 M0 472 H1200"/>
+    <path d="M200 0 V630 M400 0 V630 M600 0 V630 M800 0 V630 M1000 0 V630"/>
+  </g>
+
+  <text x="80" y="92" fill="#EDEAE3" font-family="'IBM Plex Mono','JetBrains Mono',ui-monospace,monospace" font-size="20" letter-spacing="4">TOM&#160;GIROU<tspan fill="#8FBAFF">.</tspan></text>
+
+  <text xml:space="preserve" x="80" y="190" font-family="'IBM Plex Mono','JetBrains Mono',ui-monospace,monospace" font-size="24" letter-spacing="1"><tspan fill="#8FBAFF">$&#160;</tspan><tspan fill="#EDEAE3">grep -c chrome-devtools&#160;</tspan><tspan fill="#8A9199">settings.json</tspan></text>
+  <text xml:space="preserve" x="80" y="226" font-family="'IBM Plex Mono','JetBrains Mono',ui-monospace,monospace" font-size="18" letter-spacing="1"><tspan fill="#565E66">#&#160;rewritten&#160;to&#160;</tspan><tspan fill="#8A9199">rtk grep</tspan></text>
+
+  <!-- hero figure: the wrong answer -->
+  <text x="76" y="420" fill="#EDEAE3" font-family="'IBM Plex Mono','JetBrains Mono',ui-monospace,monospace" font-size="200" font-weight="700" letter-spacing="-2">0</text>
+  <path d="M70 360 L210 300" stroke="#8FBAFF" stroke-width="6" stroke-linecap="round"/>
+  <text x="250" y="352" fill="#8FBAFF" font-family="'IBM Plex Mono','JetBrains Mono',ui-monospace,monospace" font-size="22" letter-spacing="6">WHAT&#160;THE&#160;AGENT</text>
+  <text x="250" y="386" fill="#8FBAFF" font-family="'IBM Plex Mono','JetBrains Mono',ui-monospace,monospace" font-size="22" letter-spacing="6">WAS&#160;TOLD</text>
+
+  <g font-family="'IBM Plex Mono','JetBrains Mono',ui-monospace,monospace" font-size="22" letter-spacing="1">
+    <text xml:space="preserve" x="82" y="490"><tspan fill="#8A9199">asked&#160;</tspan><tspan fill="#EDEAE3">~10&#215;</tspan><tspan fill="#8A9199">&#160;to&#160;add&#160;it</tspan></text>
+    <text x="384" y="490" fill="#565E66">·</text>
+    <text xml:space="preserve" x="416" y="490"><tspan fill="#8A9199">actual:&#160;</tspan><tspan fill="#8FBAFF">18</tspan></text>
+  </g>
+
+  <!-- the real answer -->
+  <g>
+    <rect x="806" y="128" width="314" height="392" rx="18" fill="#0F151B" stroke="#28323B" stroke-width="1.5"/>
+    <g fill="#28323B">
+      <circle cx="830" cy="152" r="5"/>
+      <circle cx="848" cy="152" r="5"/>
+      <circle cx="866" cy="152" r="5"/>
+    </g>
+    <g font-family="'IBM Plex Mono','JetBrains Mono',ui-monospace,monospace" font-size="16" letter-spacing="0.5">
+      <text xml:space="preserve" x="830" y="204"><tspan fill="#8FBAFF">$&#160;</tspan><tspan fill="#EDEAE3">jq '.permissions</tspan></text>
+      <text x="830" y="228" fill="#EDEAE3">  .allow[]' | grep chrome</text>
+    </g>
+    <g fill="#28323B">
+      <rect x="830" y="254" width="250" height="10" rx="3"/>
+      <rect x="830" y="276" width="210" height="10" rx="3"/>
+      <rect x="830" y="298" width="236" height="10" rx="3"/>
+      <rect x="830" y="320" width="190" height="10" rx="3"/>
+      <rect x="830" y="342" width="226" height="10" rx="3"/>
+    </g>
+    <rect x="830" y="374" width="250" height="10" rx="3" fill="url(#rkbars)"/>
+    <g font-family="'IBM Plex Mono','JetBrains Mono',ui-monospace,monospace">
+      <text x="830" y="456" fill="#EDEAE3" font-size="48" font-weight="700">18</text>
+      <text x="900" y="456" fill="#8A9199" font-size="17">entries</text>
+    </g>
+  </g>
+
+  <g stroke="#5B9DFF" stroke-opacity="0.5" stroke-width="1.5" stroke-dasharray="2 7" stroke-linecap="round">
+    <path d="M560 360 C 660 340, 700 330, 802 330"/>
+  </g>
+  <circle cx="560" cy="360" r="4" fill="#8FBAFF"/>
+  <circle cx="802" cy="330" r="4" fill="#8FBAFF"/>
+
+  <text x="82" y="580" fill="#565E66" font-family="'IBM Plex Mono','JetBrains Mono',ui-monospace,monospace" font-size="15" letter-spacing="3">CLAUDE&#160;CODE&#160;·&#160;PRETOOLUSE&#160;HOOK&#160;·&#160;UNATTENDED&#160;AGENTS&#160;·&#160;RTK&#160;REMOVED</text>
+</svg>
